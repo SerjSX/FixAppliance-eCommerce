@@ -1,0 +1,30 @@
+{
+  "name": "fixappliance-bookingcommerce",
+  "version": "1.0.0",
+  "description": "FixAppliance LB is an eCommerce web development project allowing users to either book technicians or read DIY articles written by freelancers.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SerjSX/FixAppliance-bookingCommerce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SerjSX/FixAppliance-bookingCommerce/issues"
+  },
+  "homepage": "https://github.com/SerjSX/FixAppliance-bookingCommerce#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mssql": "^12.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
