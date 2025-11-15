@@ -1,0 +1,56 @@
+Register User:
+{
+  "firstName": "Serj",
+  "lastName": "Sev",
+  "email": "serj@outlook.com",
+  "phone": "76111111",
+  "password": "1234",
+  "streetAddress": "main street",
+  "buildingName": "Tree",
+  "floor": "6",
+  "city": "Zalka",
+  "postalCode": "0000"
+}
+
+Register works. Login works.
+Logout works both with cookie and after removing the cookie manually (unauthorized error).
+
+
+---
+
+
+Register Technician:
+{
+  "firstName": "Minas",
+  "lastName": "Hag",
+  "email": "minas.hag@gmail.com",
+  "phone": "71222333",
+  "password": "minas111"
+}
+
+Register works. Login works as expected (not verified = 403, verified = success)
+Logout works as expected.
+
+
+---
+
+Register Freelancer:
+{
+  "firstName": "Elina",
+  "lastName": "Hago",
+  "email": "elina@tuta.com",
+  "phone": "70999888",
+  "password": "elina222",
+  "content_type_specialty": "video",
+  "portfolio_url": "https://portfolio.elina.com"
+}
+
+Register works. Login works as expected (not activated = 403 wait, activated = success)
+Logout works as expected.
+
+---
+
+More tests to do:
+- Registering and logging requests with missing required values
+- Invlaid email/password requests - wrong password, non-existent email
+- Email/phone already exists registering requests (duplicate email and phone registering)
