@@ -34,15 +34,7 @@ const registerTechnician = asyncHandler(async (req, res) => {
         // Handling the unique constraints for email and phone numbers
         // 2627 is for violation of the unique key constraint, and 2601 is for unique index violation
         if (error.number === 2627 || error.number === 2601) {
-            if (error.message.includes("Email")) {
-                return res.status(409).send("Another account already exists with this email.");
-            }
-
-            if (error.message.includes("Phone")) {
-                return res.status(409).send("Another account already has this phone number.");
-            }
-
-            return res.status(409).send("Another technician already exists with these details")
+            return res.status(409).send("Another account exists already either with this email address or phone number. If you have another account, please use that one instead.");
         }
 
         console.error("Unexpected error registering a new technician account: ", error);

@@ -49,8 +49,3 @@ Register works. Login works as expected (not activated = 403 wait, activated = s
 Logout works as expected.
 
 ---
-
-More tests to do:
-- Registering and logging requests with missing required values
-- Invlaid email/password requests - wrong password, non-existent email
-- Email/phone already exists registering requests (duplicate email and phone registering)
