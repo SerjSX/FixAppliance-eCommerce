@@ -1,0 +1,68 @@
+All passed as expected.
+
+Should work:
+{
+  "bookingID": 14
+}
+
+WORKED
+
+
+Should not work, because no booking id
+{
+}
+
+
+Should not work because booking id is invalid:
+{
+  "bookingID": 999999
+}
+
+
+Should not work since already assigned to someone else:
+{
+  "bookingID": 14
+}
+
+
+SHould not work since the booking id is not pending:
+{
+  "bookingID": 11
+}
+
+
+Should not work since booking is already completed:
+{
+  "bookingID": 1
+}
+
+Should not work since booking is already cancelled:
+{
+  "bookingID": 16
+}
+
+
+Should not work since booking is already in progress:
+{
+  "bookingID": 9
+}
+
+
+Invalid booking type
+{
+  "bookingID": "abc"
+}
+
+
+Booking id is negative shouldnt work:
+{
+  "bookingID": "-5"
+}
+
+
+Should not work
+{
+  "bookingID": "0"
+}
+
+

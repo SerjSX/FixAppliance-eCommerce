@@ -1,0 +1,26 @@
+Valid, should pass:
+{
+  "applianceTypeID": 1,
+  "issueDescription": "Refrigerator not cooling properly",
+  "bookingDate": "2025-11-20",
+  "bookingTime": "10:00:00"
+}
+
+
+Should fail due to the date:
+{
+  "applianceTypeID": 1,
+  "issueDescription": "Test",
+  "bookingDate": "2025-11-10",
+  "bookingTime": "10:00:00"
+}
+
+
+Invalid appliance ID, should fail:
+{
+  "applianceTypeID": 999,
+  "issueDescription": "Test",
+  "bookingDate": "2025-11-20",
+  "bookingTime": "10:00:00"
+}
+
