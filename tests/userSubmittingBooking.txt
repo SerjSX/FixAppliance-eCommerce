@@ -1,26 +1,88 @@
-Valid, should pass:
+All passed.
+
+Valid booking with cash should pass:
 {
   "applianceTypeID": 1,
-  "issueDescription": "Refrigerator not cooling properly",
-  "bookingDate": "2025-11-20",
-  "bookingTime": "10:00:00"
+  "issueDescription": "Refrigerator not cooling properly. Making strange noises.",
+  "bookingDate": "2025-11-25",
+  "bookingTime": "10:00:00",
+  "paymentMethod": "cash"
 }
 
+Valid booking with credit card should pass:
+{
+  "applianceTypeID": 8,
+  "issueDescription": "Split AC not cooling efficiently",
+  "bookingDate": "2025-11-26",
+  "bookingTime": "14:30:00",
+  "paymentMethod": "credit_card"
+}
 
-Should fail due to the date:
+Valid booking with OMT should pass:
+{
+  "applianceTypeID": 11,
+  "issueDescription": "Front load washer showing error code E3",
+  "bookingDate": "2025-11-27",
+  "bookingTime": "09:00:00",
+  "paymentMethod": "omt"
+}
+
+Missing required fields shouldnt pass:
 {
   "applianceTypeID": 1,
-  "issueDescription": "Test",
-  "bookingDate": "2025-11-10",
-  "bookingTime": "10:00:00"
+  "issueDescription": "Fridge not working"
 }
 
+Invalid payment method shouldnt pass:
+{
+  "applianceTypeID": 1,
+  "issueDescription": "Fridge not working",
+  "bookingDate": "2025-11-25",
+  "bookingTime": "10:00:00",
+  "paymentMethod": "paypal"
+}
 
-Invalid appliance ID, should fail:
+Invalid time format shouldnt pass (no seconds):
+{
+  "applianceTypeID": 1,
+  "issueDescription": "Fridge not working",
+  "bookingDate": "2025-11-25",
+  "bookingTime": "10:00",
+  "paymentMethod": "cash"
+}
+
+Invalid time shouldnt pass:
+{
+  "applianceTypeID": 1,
+  "issueDescription": "Fridge not working",
+  "bookingDate": "2025-11-25",
+  "bookingTime": "25:00:00",
+  "paymentMethod": "cash"
+}
+
+Invalid appliance type shouldnt pass:
 {
   "applianceTypeID": 999,
-  "issueDescription": "Test",
-  "bookingDate": "2025-11-20",
-  "bookingTime": "10:00:00"
+  "issueDescription": "Something not working",
+  "bookingDate": "2025-11-25",
+  "bookingTime": "10:00:00",
+  "paymentMethod": "cash"
 }
 
+Past date shouldnt pass:
+{
+  "applianceTypeID": 1,
+  "issueDescription": "Fridge not working",
+  "bookingDate": "2025-11-10",
+  "bookingTime": "10:00:00",
+  "paymentMethod": "cash"
+}
+
+No authentication token shoulndt pass:
+{
+  "applianceTypeID": 1,
+  "issueDescription": "Fridge not working",
+  "bookingDate": "2025-11-25",
+  "bookingTime": "10:00:00",
+  "paymentMethod": "cash"
+}

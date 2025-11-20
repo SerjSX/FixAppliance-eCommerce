@@ -1,0 +1,30 @@
+Pay with cash should work - no need for transaciton id:
+{
+  "bookingID": 17
+}
+
+
+Pay with credit card should work:
+{
+  "bookingID": 18,
+  "transactionID": "CC-2025-1126-001"
+}
+
+Pay with omt should work:
+{
+  "bookingID": 19,
+  "transactionID": "OMT-2025-1127-002"
+}
+
+missing booking ID shouldnt work:
+{}
+
+A non-existent booking shouldnt work:
+{
+  "bookingID": 999999
+}
+
+Shouldnt wokr since booking ID is to a different user:
+{
+  "bookingID": 1
+}

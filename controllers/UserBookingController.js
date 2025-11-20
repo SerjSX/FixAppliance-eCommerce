@@ -101,13 +101,7 @@ const userRequestBooking = asyncHandler(async (req, res) => {
 
         // Foreign key constraint check
         if (error.number === 547) {
-            return res.status(400).send("Invalid appliance type or user ID.");
-        }
-
-
-        // Date related error check
-        if (error.message.includes("chk_booking_future_date")) {
-            return res.status(400).send("Booking date must be today or in the future.");
+            return res.status(400).send("Invalid booking data. Please check your appliance type, date, and ensure it's today or in the future.");
         }
 
         res.status(500).send("An unexpected error occurred while booking. Make sure the booking date/time is either today or in the future.");
@@ -190,5 +184,96 @@ const userPayBooking = asyncHandler(async (req, res) => {
     }
 })
 
+const userRateBooking = asyncHandler(async (req, res) => {
+    const {bookingID, ratingScore, reviewText} = req.body;
+    const userID = req.userID;
 
-module.exports = { userRequestBooking, userPayBooking};
+    if (!bookingID || !ratingScore || !reviewText) {
+        return res.status(400).send("You have to pass a booking ID, rating score and review text to rate a booking.");
+    }
+
+    if (!Number.isInteger(ratingScore) || ratingScore < 1 || ratingScore > 5) {
+        return res.status(400).send("Rating score must be a number between 1 and 5!");
+    }
+
+    if (reviewText.trim().length < 15) {
+        return res.status(400).send("Please write your review text longer, that's too short.");
+    } 
+
+    try {
+        const pool = getPool();
+
+        const checkBooking = await pool.request()
+            .input("bookingID", sql.Int, bookingID)
+            .input("userID", sql.Int, userID)
+            .query(`
+                SELECT b.Booking_ID, b.UserID, b.Technician_ID, b.[Status]
+                FROM Booking b
+                WHERE b.Booking_ID = @bookingID
+                `);
+
+        if (checkBooking.recordset.length === 0) {
+            return res.status(404).send("Booking not found.");
+        }
+
+        const booking = checkBooking.recordset[0];
+
+        if (booking.UserID !== userID) {
+            return res.status(403).send("You are not authorized to review this booking since it's not yours!");
+        }
+
+        if (!booking.Technician_ID) {
+            return res.status(400).send("Cannot rate a booking without an assigned technician.");
+        }
+
+
+        if (booking.Status !== 'completed') {
+            return res.status(400).send("You can only rate completed bookings.");
+        }
+
+        const existingRating = await pool.request()
+            .input("bookingID", sql.Int, bookingID)
+            .query(`SELECT Rating_ID 
+                    FROM Rating 
+                    WHERE Booking_ID = @bookingID`);
+    
+        if (existingRating.recordset.length > 0) {
+            return res.status(409).send("This booking has already been rated before!");
+        }
+
+        await pool.request()
+            .input("bookingID", sql.Int, bookingID)
+            .input("userID", sql.Int, userID)
+            .input("technicianID", sql.Int, booking.Technician_ID)
+            .input("ratingScore", sql.SmallInt, ratingScore)
+            .input("reviewText", sql.NVarChar, reviewText)
+            .query(`
+                INSERT INTO Rating (Booking_ID, User_ID, Technician_ID, Rating_Score, Review_Text)
+                VALUES(@bookingID, @userID, @technicianID, @ratingScore, @reviewText)
+                `);
+
+        res.status(201).json({
+            message: "Successfully rated this booking!",
+            bookingID: bookingID,
+            technicianID: booking.Technician_ID,
+            ratingScore: ratingScore
+        });
+    } catch (error) {
+        console.error("Unexpected error occurred when trying to rate a booking:", error);
+
+        // Constraint violation handling
+        if (error.number === 547) {
+            return res.status(400).send("Invalid rating data, please check your inputs.");
+        }
+
+        // unique constraint violation (for duplicate ratings)
+        if (error.number === 2627) {
+            return res.status(409).send("This booking has already been rated.");
+        }
+
+        res.status(500).send("Unexpected error occurred when trying to rate a booking.");
+    }
+})
+
+
+module.exports = { userRequestBooking, userPayBooking, userRateBooking};

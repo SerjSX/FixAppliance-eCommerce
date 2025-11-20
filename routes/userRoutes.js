@@ -1,7 +1,7 @@
 const express = require("express");
 const {registerUser, loginUser, logoutUser} = require("../controllers/UserController");
 const {userValidation} = require("../middlewares/auth");
-const {userRequestBooking} = require("../controllers/UserBookingController");
+const {userRequestBooking, userPayBooking} = require("../controllers/UserBookingController");
 
 const router = express.Router();
 
@@ -11,5 +11,6 @@ router.post("/logout", userValidation, logoutUser);
 
 
 router.post("/booking/request", userValidation, userRequestBooking);
+router.post("/booking/pay", userValidation, userPayBooking);
 
 module.exports = router;
