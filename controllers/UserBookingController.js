@@ -196,7 +196,7 @@ const userRateBooking = asyncHandler(async (req, res) => {
         return res.status(400).send("Rating score must be a number between 1 and 5!");
     }
 
-    if (reviewText.trim().length < 15) {
+    if (reviewText.trim().length < 14) {
         return res.status(400).send("Please write your review text longer, that's too short.");
     } 
 

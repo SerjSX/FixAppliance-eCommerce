@@ -1,0 +1,154 @@
+Valid rating for a completed booking should work:
+{
+  "bookingID": 1,
+  "ratingScore": 5,
+  "reviewText": "Excellent service! Very professional and fixed everything quickly."
+}
+
+Rating with minimum length of review text should work:
+{
+  "bookingID": 2,
+  "ratingScore": 4,
+  "reviewText": "Good job done."
+}
+
+rating should work with spaces trimmed:
+{
+  "bookingID": 3,
+  "ratingScore": 3,
+  "reviewText": "   Service was okay, nothing special but got the job done.   "
+}
+
+Shouldnt work because booking id is missing:
+{
+  "ratingScore": 5,
+  "reviewText": "Great service overall!"
+}
+
+Shouldnt work because rating score is missing:
+{
+  "bookingID": 1,
+  "reviewText": "Great service overall!"
+}
+
+Shouldnt work because review text does not exist:
+{
+  "bookingID": 1,
+  "ratingScore": 5
+}
+
+SHouldnt work because rating score is below the range:
+{
+  "bookingID": 4,
+  "ratingScore": 0,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+Shouldnt work because rating score is above the range:
+{
+  "bookingID": 4,
+  "ratingScore": 6,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+
+Shouldnt work because the rating score is a decimal:
+{
+  "bookingID": 4,
+  "ratingScore": 3.5,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+Shouldnt work because the rating score is a string:
+{
+  "bookingID": 4,
+  "ratingScore": "five",
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+
+
+SHouldnt work because the rating text is too short:
+{
+  "bookingID": 4,
+  "ratingScore": 5,
+  "reviewText": "Very good job"
+}
+
+Shouldnt work because review text is too short (after trimming):
+{
+  "bookingID": 4,
+  "ratingScore": 5,
+  "reviewText": "     Good     "
+}
+
+SHouldnt work because the booking does not exist:
+{
+  "bookingID": 999999,
+  "ratingScore": 5,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+Shouldnt work because the rating is for someone else:
+{
+  "bookingID": 5,
+  "ratingScore": 5,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+Shouldnt work because the rating is pending with no technician:
+{
+  "bookingID": 14,
+  "ratingScore": 5,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+shouldn't work because the rating is confirmed but not completed:
+{
+  "bookingID": 11,
+  "ratingScore": 5,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+SHouldnt work because the status of the booking is in progress:
+{
+  "bookingID": 9,
+  "ratingScore": 5,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+Shouldnt work because the rating is cancelled:
+{
+  "bookingID": 16,
+  "ratingScore": 5,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+Shouldnt work because already rated for this booking:
+{
+  "bookingID": 1,
+  "ratingScore": 5,
+  "reviewText": "First rating - excellent service!"
+}
+
+Shouldnt work because already rated (database unique constriant):
+{
+  "bookingID": 1,
+  "ratingScore": 3,
+  "reviewText": "Somehow bypassed app check, trying third rating."
+}
+
+Shouldnt work because negative booking id:
+{
+  "bookingID": -5,
+  "ratingScore": 5,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
+Shouldnt work because 0 booking:
+{
+  "bookingID": 0,
+  "ratingScore": 5,
+  "reviewText": "This is a valid length review text for testing purposes."
+}
+
