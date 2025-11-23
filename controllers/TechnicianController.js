@@ -181,11 +181,11 @@ const settingTechnicianSpecialty = asyncHandler(async (req,res) => {
             return res.status(409).send("You already have this specialty added.");
         }
 
-        const specialtySet = await pool.request()
+        await pool.request()
             .input("technicianID", sql.Int, technicianID)
             .input("applianceCategoryID", sql.Int, applianceCategoryID)
             .input("yearsOfExperience", sql.SmallInt, yearsOfExperience)
-            .input("certificateDate", sql.Date, certificateDate)
+            .input("certificateDate", sql.Date, certificateDate || null)
             .query(`
                 INSERT INTO Technician_Category (Technician_ID, Category_ID, Years_of_Experience, Certification_Date)
                 VALUES (@technicianID, @applianceCategoryID, @yearsOfExperience, @certificateDate)
@@ -198,10 +198,10 @@ const settingTechnicianSpecialty = asyncHandler(async (req,res) => {
             categoryNameAR: category.NameAR,
             yearsOfExperience: yearsOfExperience,
             certificateDate: certificateDate || null
-        })
+        });
 
     } catch (error) {
-        console.log("An unexpected error occurred when trying to set your specialty:", error);
+        console.error("An unexpected error occurred when trying to set your specialty:", error);
 
         // constraint violation
         if (error.number === 547) {
@@ -217,4 +217,86 @@ const settingTechnicianSpecialty = asyncHandler(async (req,res) => {
     }
 })
 
-module.exports = {registerTechnician, loginTechnician, logoutTechnician, settingTechnicianSpecialty}; 
+const settingTechnicianServiceArea = asyncHandler(async (req,res) => {
+    const {serviceAreaID, priority} = req.body;
+    const technicianID = req.technicianID;
+
+    if (!serviceAreaID || !priority) {
+        return res.status(400).send("You have to specify from which service area you are and the priority of it.");
+    }
+
+    if (!Number.isInteger(priority) || priority < 1 || priority > 100) {
+        return res.status(400).send("Priority must be an integer between 1 and 100.");
+    }
+
+    try {
+        const pool = getPool();
+
+        const checkArea = await pool.request()
+            .input("serviceAreaID", sql.Int, serviceAreaID)
+            .query(`
+                SELECT Area_ID, NameEN, NameAR, Region, isActive
+                FROM Service_Area
+                WHERE Area_ID = @serviceAreaID
+                `);
+
+        if (checkArea.recordset.length === 0) {
+            return res.status(404).send("Invalid service area chosen! You have to choose one of the available ones.");
+        }
+
+        const serviceArea = checkArea.recordset[0];
+
+        if (!serviceArea.isActive) {
+            return res.status(400).send("Currently this service area is not active.");
+        }
+
+        const checkDuplicate = await pool.request()
+            .input("technicianID", sql.Int, technicianID)
+            .input("serviceAreaID", sql.Int, serviceAreaID)
+            .query(`
+                SELECT Technician_ID
+                FROM Technician_Service_Area
+                WHERE Technician_ID = @technicianID AND Area_ID = @serviceAreaID
+                `);
+
+        if (checkDuplicate.recordset.length > 0) {
+            return res.status(409).send("You already have set this service area!");
+        }
+
+        await pool.request()
+            .input("technicianID", sql.Int, technicianID)
+            .input("serviceAreaID", sql.Int, serviceAreaID)
+            .input("priority", sql.Int, priority)
+            .query(`
+                INSERT INTO Technician_Service_Area (Technician_ID, Area_ID, Priority_Order)
+                VALUES (@technicianID, @serviceAreaID, @priority)
+                `);
+
+        res.status(201).json({
+            message: "Successfully set your service area.",
+            areaID: serviceArea.Area_ID,
+            areaNameEN: serviceArea.NameEN,
+            areaNameAR: serviceArea.NameAR,
+            areaRegion: serviceArea.Region,
+            priority: priority
+        });
+        
+    } catch (error) {
+        console.error("An unexpected error occurred when trying to set your service area:", error);
+
+        // foreign key constraint violation
+        if (error.number === 547) {
+            return res.status(400).send("Invalid technician or service area ID.");
+        }
+
+        // duplicate entry for safety
+        if (error.number === 2627) {
+            return res.status(409).send("You already have this service area set!");
+        }
+
+        res.status(500).send("An unexpected error occurred when trying to set your service area.");
+    }
+})
+
+
+module.exports = {registerTechnician, loginTechnician, logoutTechnician, settingTechnicianSpecialty, settingTechnicianServiceArea}; 
