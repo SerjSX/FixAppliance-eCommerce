@@ -117,4 +117,104 @@ const logoutTechnician = asyncHandler(async (req, res) => {
     res.status(200).send("Successfully logged out.");
 })
 
-module.exports = {registerTechnician, loginTechnician, logoutTechnician};
+const settingTechnicianSpecialty = asyncHandler(async (req,res) => {
+    const {applianceCategoryID, yearsOfExperience, certificateDate} = req.body;
+    const technicianID = req.technicianID;
+
+    if (!applianceCategoryID || !yearsOfExperience) {
+        return res.status(400).send("Category ID and years of experience are required for you to pass!");
+    }
+
+    if (!Number.isInteger(yearsOfExperience) || yearsOfExperience < 0 || yearsOfExperience > 50) {
+        return res.status(400).send("Your years of experience should be between 0 and 50.");
+    }
+
+    if (certificateDate) {
+        const certDate = new Date(certificateDate);
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
+        if (certDate > today) {
+            return res.status(400).send("Certification date cannot be in the future!");
+        }
+
+        const fiftyYearsAgo = new Date();
+        fiftyYearsAgo.setFullYear(fiftyYearsAgo.getFullYear() - 50);
+
+        if (certDate < fiftyYearsAgo) {
+            return res.status(400).send("Certification date cannot be more than 50 years ago!");
+        }
+    }
+
+    try {
+        const pool = getPool();
+
+        const checkCategory = await pool.request()
+            .input("applianceCategoryID", sql.Int, applianceCategoryID)
+            .query(`
+                SELECT Category_ID, NameEN, NameAR, isActive
+                FROM Appliance_Category
+                WHERE Category_ID = @applianceCategoryID
+                `);
+
+        if (checkCategory.recordset.length === 0) {
+            return res.status(404).send("Invalid category passed! You should pick one of the available category IDs only.");
+        }
+
+        const category = checkCategory.recordset[0];
+
+        if (!category.isActive) {
+            return res.status(400).send("The category chosen is currently not active!");
+        }
+
+        // Checking for duplicate specialty set for the technician
+        const checkDuplicate = await pool.request()
+            .input("technicianID", sql.Int, technicianID)
+            .input("applianceCategoryID", sql.Int, applianceCategoryID)
+            .query(`
+                SELECT Technician_ID
+                FROM Technician_Category
+                WHERE Technician_ID = @technicianID AND Category_ID = @applianceCategoryID
+                `);
+
+        if (checkDuplicate.recordset.length > 0) {
+            return res.status(409).send("You already have this specialty added.");
+        }
+
+        const specialtySet = await pool.request()
+            .input("technicianID", sql.Int, technicianID)
+            .input("applianceCategoryID", sql.Int, applianceCategoryID)
+            .input("yearsOfExperience", sql.SmallInt, yearsOfExperience)
+            .input("certificateDate", sql.Date, certificateDate)
+            .query(`
+                INSERT INTO Technician_Category (Technician_ID, Category_ID, Years_of_Experience, Certification_Date)
+                VALUES (@technicianID, @applianceCategoryID, @yearsOfExperience, @certificateDate)
+                `);
+
+        res.status(201).json({
+            message: "Successfully set your specialty.",
+            categoryID: category.Category_ID,
+            categoryNameEN: category.NameEN,
+            categoryNameAR: category.NameAR,
+            yearsOfExperience: yearsOfExperience,
+            certificateDate: certificateDate || null
+        })
+
+    } catch (error) {
+        console.log("An unexpected error occurred when trying to set your specialty:", error);
+
+        // constraint violation
+        if (error.number === 547) {
+            return res.status(400).send("Invalid technician or category ID.");
+        }
+
+        // duplicates
+        if (error.number === 2627) {
+            return res.status(409).send("You already have this specialty added!");
+        }
+
+        res.status(500).send("An unexpected error occurred when trying to set your specialty.");
+    }
+})
+
+module.exports = {registerTechnician, loginTechnician, logoutTechnician, settingTechnicianSpecialty}; 

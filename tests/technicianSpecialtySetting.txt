@@ -1,0 +1,172 @@
+Valid specialty:
+{
+  "applianceCategoryID": 1,
+  "yearsOfExperience": 10,
+  "certificateDate": "2014-03-15"
+}
+
+Valid without certificate:
+{
+  "applianceCategoryID": 2,
+  "yearsOfExperience": 5
+}
+
+Valid:
+{
+  "applianceCategoryID": 3,
+  "yearsOfExperience": 8,
+  "certificateDate": "2016-06-20"
+}
+
+Valid:
+{
+  "applianceCategoryID": 4,
+  "yearsOfExperience": 15,
+  "certificateDate": "2009-05-01"
+}
+
+Zero year experience, valid:
+{
+  "applianceCategoryID": 6,
+  "yearsOfExperience": 0,
+  "certificateDate": "2024-11-01"
+}
+
+Maximum years 50, valid:
+{
+  "applianceCategoryID": 1,
+  "yearsOfExperience": 50,
+  "certificateDate": "1974-11-23"
+}
+
+Valid date:
+{
+  "applianceCategoryID": 2,
+  "yearsOfExperience": 0,
+  "certificateDate": "2024-11-23"
+}
+
+Missing category:
+{
+  "yearsOfExperience": 5,
+  "certificateDate": "2019-06-15"
+}
+
+Missing years of exp:
+{
+  "applianceCategoryID": 1,
+  "certificateDate": "2019-06-15"
+}
+
+Both required fields missing:
+{
+  "certificateDate": "2019-06-15"
+}
+
+Negative years of exp:
+{
+  "applianceCategoryID": 1,
+  "yearsOfExperience": -5
+}
+
+Invalid year greater than 50:
+{
+  "applianceCategoryID": 1,
+  "yearsOfExperience": 51
+}
+
+Invalid year:
+{
+  "applianceCategoryID": 3,
+  "yearsOfExperience": 100
+}
+
+Invlaid year:
+{
+  "applianceCategoryID": 4,
+  "yearsOfExperience": 5.5
+}
+
+Invalid year:
+{
+  "applianceCategoryID": 5,
+  "yearsOfExperience": "five"
+}
+
+Invlaid certificate date in future:
+{
+  "applianceCategoryID": 1,
+  "yearsOfExperience": 5,
+  "certificateDate": "2030-12-31"
+}
+
+Invalid certificate date:
+{
+  "applianceCategoryID": 2,
+  "yearsOfExperience": 5,
+  "certificateDate": "2024-11-24"
+}
+
+Invalid certificate date  (> 50 years ago):
+{
+  "applianceCategoryID": 3,
+  "yearsOfExperience": 50,
+  "certificateDate": "1970-01-01"
+}
+
+Invalid date format:
+{
+  "applianceCategoryID": 4,
+  "yearsOfExperience": 5,
+  "certificateDate": "not-a-date"
+}
+
+Invalid category id:
+{
+  "applianceCategoryID": 9,
+  "yearsOfExperience": 5
+}
+
+Invlaid category ID:
+{
+  "applianceCategoryID": 999,
+  "yearsOfExperience": 5
+}
+
+Invalid category ID:
+{
+  "applianceCategoryID": 0,
+  "yearsOfExperience": 5
+}
+
+Invalid category ID:
+{
+  "applianceCategoryID": -1,
+  "yearsOfExperience": 5
+}
+
+Duplicate specialty:
+{
+  "applianceCategoryID": 1,
+  "yearsOfExperience": 10
+}
+
+Again:
+{
+  "applianceCategoryID": 1,
+  "yearsOfExperience": 15
+}
+
+Duplicate with different date:
+{
+  "applianceCategoryID": 2,
+  "yearsOfExperience": 10,
+  "certificateDate": "2020-01-01"
+}
+
+Certificate exactly 50 years ago (works):
+{
+  "applianceCategoryID": 8,
+  "yearsOfExperience": 50,
+  "certificateDate": "1974-11-23"
+}

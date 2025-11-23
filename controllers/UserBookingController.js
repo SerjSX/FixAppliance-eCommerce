@@ -71,16 +71,16 @@ const userRequestBooking = asyncHandler(async (req, res) => {
             const bookingID = bookingResult.recordset[0].Booking_ID;
 
             await transaction.request()
-                    .input("bookingID", sql.Int, bookingID)
-                    .input("amount", sql.Decimal(10,2), basePrice)
-                    .input("paymentMethod", sql.VarChar, paymentMethod)
-                    .input("commissionRate", sql.Decimal(5,2), commissionRate)
-                    .input("platformFee", sql.Decimal(10,2), platformFee)
-                    .query(`
+                .input("bookingID", sql.Int, bookingID)
+                .input("amount", sql.Decimal(10, 2), basePrice)
+                .input("paymentMethod", sql.VarChar, paymentMethod)
+                .input("commissionRate", sql.Decimal(5, 2), commissionRate)
+                .input("platformFee", sql.Decimal(10, 2), platformFee)
+                .query(`
                         INSERT INTO Payment (Booking_ID, Amount, Payment_Method, [Status], Commission_Rate, Platform_Fee)
                         VALUES(@bookingID, @amount, @paymentMethod, 'pending', @commissionRate, @platformFee)
                         `);
-                
+
             await transaction.commit();
 
             res.status(201).json({
@@ -99,13 +99,11 @@ const userRequestBooking = asyncHandler(async (req, res) => {
     } catch (error) {
         console.error("Unexpected error occurred when booking:", error);
 
-        // Foreign key constraint check
         if (error.number === 547) {
             return res.status(400).send("Invalid booking data. Please check your appliance type, date, and ensure it's today or in the future.");
         }
 
-        res.status(500).send("An unexpected error occurred while booking. Make sure the booking date/time is either today or in the future.");
-
+        res.status(500).send("An unexpected error occurred while booking.");
     }
 });
 
@@ -157,7 +155,7 @@ const userPayBooking = asyncHandler(async (req, res) => {
             return res.status(400).send("Transaction ID is needed for this payment method!");
         }
 
-        await pool.request() 
+        await pool.request()
             .input("bookingID", sql.Int, bookingID)
             .input("transactionID", sql.VarChar, transactionID || null)
             .query(`
@@ -185,7 +183,7 @@ const userPayBooking = asyncHandler(async (req, res) => {
 })
 
 const userRateBooking = asyncHandler(async (req, res) => {
-    const {bookingID, ratingScore, reviewText} = req.body;
+    const { bookingID, ratingScore, reviewText } = req.body;
     const userID = req.userID;
 
     if (!bookingID || !ratingScore || !reviewText) {
@@ -196,9 +194,9 @@ const userRateBooking = asyncHandler(async (req, res) => {
         return res.status(400).send("Rating score must be a number between 1 and 5!");
     }
 
-    if (reviewText.trim().length < 14) {
+    if (reviewText.trim().length < 15) {
         return res.status(400).send("Please write your review text longer, that's too short.");
-    } 
+    }
 
     try {
         const pool = getPool();
@@ -236,7 +234,7 @@ const userRateBooking = asyncHandler(async (req, res) => {
             .query(`SELECT Rating_ID 
                     FROM Rating 
                     WHERE Booking_ID = @bookingID`);
-    
+
         if (existingRating.recordset.length > 0) {
             return res.status(409).send("This booking has already been rated before!");
         }
@@ -246,7 +244,7 @@ const userRateBooking = asyncHandler(async (req, res) => {
             .input("userID", sql.Int, userID)
             .input("technicianID", sql.Int, booking.Technician_ID)
             .input("ratingScore", sql.SmallInt, ratingScore)
-            .input("reviewText", sql.NVarChar, reviewText)
+            .input("reviewText", sql.NVarChar, reviewText.trim())
             .query(`
                 INSERT INTO Rating (Booking_ID, User_ID, Technician_ID, Rating_Score, Review_Text)
                 VALUES(@bookingID, @userID, @technicianID, @ratingScore, @reviewText)
@@ -275,5 +273,240 @@ const userRateBooking = asyncHandler(async (req, res) => {
     }
 })
 
+const getPendingBookings = asyncHandler(async (req, res) => {
+    const userID = req.userID;
 
-module.exports = { userRequestBooking, userPayBooking, userRateBooking};
+    try {
+        const pool = getPool();
+
+        const bookings = await pool.request()
+            .input("userID", sql.Int, userID)
+            .query(`
+                SELECT 
+                    Booking.Booking_ID, 
+                    Booking.Booking_Date AS "Scheduled Date", 
+                    Booking.Booking_Time AS "Scheduled Time", 
+                    Booking.Total_Price AS "Total Price", 
+                    Appliance_Type.nameEN AS "Appliance's Name (EN)", 
+                    Appliance_Type.nameAR AS "Appliance's Name (AR)",
+                    Booking.Issue_Description AS "Issue Description",
+                    Technician.First_Name AS "Technician's First Name",
+                    Technician.Last_Name AS "Technician's Last Name",
+                    Technician.Phone AS "Technician's Phone Number",
+                    Payment.[Status] AS "Payment Status",
+                    Payment.Payment_Method AS "Payment Method"
+                FROM Booking
+                LEFT JOIN Technician ON Booking.Technician_ID = Technician.Technician_ID
+                LEFT JOIN Payment ON Booking.Booking_ID = Payment.Booking_ID
+                JOIN Appliance_Type ON Booking.Appliance_Type_ID = Appliance_Type.Appliance_Type_ID
+                WHERE Booking.UserID = @userID AND Booking.[Status] = 'pending'
+                ORDER BY Booking.Booking_Date ASC, Booking.Booking_Time ASC
+            `);
+
+        if (bookings.recordset.length === 0) {
+            return res.status(404).send("You don't have any bookings!");
+        }
+
+        res.status(200).json({
+            message: "You have pending bookings!",
+            count: bookings.recordset.length,
+            bookings: bookings.recordset
+        });
+    } catch (error) {
+        console.error("Unexpected error occurred when trying to fetch your pending bookings:", error);
+
+
+        res.status(500).send("Unexpected error occurred when trying to fetch your pending bookings.");
+    }
+})
+
+const getConfirmedBookings = asyncHandler(async (req, res) => {
+    const userID = req.userID;
+
+    try {
+        const pool = getPool();
+
+        const bookings = await pool.request()
+            .input("userID", sql.Int, userID)
+            .query(`
+                SELECT 
+                    Booking.Booking_ID, 
+                    Booking.Booking_Date AS "Scheduled Date", 
+                    Booking.Booking_Time AS "Scheduled Time", 
+                    Booking.Total_Price AS "Total Price", 
+                    Appliance_Type.nameEN AS "Appliance's Name (EN)", 
+                    Appliance_Type.nameAR AS "Appliance's Name (AR)",
+                    Booking.Issue_Description AS "Issue Description",
+                    Technician.First_Name AS "Technician's First Name",
+                    Technician.Last_Name AS "Technician's Last Name",
+                    Technician.Phone AS "Technician's Phone Number",
+                    Payment.[Status] AS "Payment Status",
+                    Payment.Payment_Method AS "Payment Method"
+                FROM Booking
+                JOIN Technician ON Booking.Technician_ID = Technician.Technician_ID
+                LEFT JOIN Payment ON Booking.Booking_ID = Payment.Booking_ID
+                JOIN Appliance_Type ON Booking.Appliance_Type_ID = Appliance_Type.Appliance_Type_ID
+                WHERE Booking.UserID = @userID AND Booking.[Status] = 'confirmed'
+                ORDER BY Booking.Booking_Date ASC, Booking.Booking_Time ASC
+            `);
+
+        if (bookings.recordset.length === 0) {
+            return res.status(404).send("You don't have any bookings!");
+        }
+
+        res.status(200).json({
+            message: "You have confirmed bookings!",
+            count: bookings.recordset.length,
+            bookings: bookings.recordset
+        });
+    } catch (error) {
+        console.error("Unexpected error occurred when trying to fetch your confirmed bookings:", error);
+
+
+        res.status(500).send("Unexpected error occurred when trying to fetch your confirmed bookings.");
+    }
+})
+
+const getInProgressBookings = asyncHandler(async (req, res) => {
+    const userID = req.userID;
+
+    try {
+        const pool = getPool();
+
+        const bookings = await pool.request()
+            .input("userID", sql.Int, userID)
+            .query(`
+                SELECT 
+                    Booking.Booking_ID, 
+                    Booking.Booking_Date AS "Scheduled Date", 
+                    Booking.Booking_Time AS "Scheduled Time", 
+                    Booking.Total_Price AS "Total Price", 
+                    Appliance_Type.nameEN AS "Appliance's Name (EN)", 
+                    Appliance_Type.nameAR AS "Appliance's Name (AR)",
+                    Booking.Issue_Description AS "Issue Description",
+                    Technician.First_Name AS "Technician's First Name",
+                    Technician.Last_Name AS "Technician's Last Name",
+                    Technician.Phone AS "Technician's Phone Number",
+                    Payment.[Status] AS "Payment Status",
+                    Payment.Payment_Method AS "Payment Method"
+                FROM Booking
+                JOIN Technician ON Booking.Technician_ID = Technician.Technician_ID
+                LEFT JOIN Payment ON Booking.Booking_ID = Payment.Booking_ID
+                JOIN Appliance_Type ON Booking.Appliance_Type_ID = Appliance_Type.Appliance_Type_ID
+                WHERE Booking.UserID = @userID AND Booking.[Status] = 'in_progress'
+                ORDER BY Booking.Booking_Date ASC, Booking.Booking_Time ASC
+            `);
+
+        if (bookings.recordset.length === 0) {
+            return res.status(404).send("You don't have any bookings!");
+        }
+
+        res.status(200).json({
+            message: "You have in progress bookings!",
+            count: bookings.recordset.length,
+            bookings: bookings.recordset
+        });
+    } catch (error) {
+        console.error("Unexpected error occurred when trying to fetch your in progress bookings:", error);
+
+
+        res.status(500).send("Unexpected error occurred when trying to fetch your in progress bookings.");
+    }
+})
+
+const getCompletedBookings = asyncHandler(async (req, res) => {
+    const userID = req.userID;
+
+    try {
+        const pool = getPool();
+
+        const bookings = await pool.request()
+            .input("userID", sql.Int, userID)
+            .query(`
+                SELECT 
+                    Booking.Booking_ID, 
+                    Booking.Booking_Date AS "Scheduled Date", 
+                    Booking.Booking_Time AS "Scheduled Time", 
+                    Booking.Total_Price AS "Total Price", 
+                    Appliance_Type.nameEN AS "Appliance's Name (EN)", 
+                    Appliance_Type.nameAR AS "Appliance's Name (AR)",
+                    Booking.Issue_Description AS "Issue Description",
+                    Technician.First_Name AS "Technician's First Name",
+                    Technician.Last_Name AS "Technician's Last Name",
+                    Technician.Phone AS "Technician's Phone Number",
+                    Payment.[Status] AS "Payment Status",
+                    Payment.Payment_Method AS "Payment Method"
+                FROM Booking
+                JOIN Technician ON Booking.Technician_ID = Technician.Technician_ID
+                LEFT JOIN Payment ON Booking.Booking_ID = Payment.Booking_ID
+                JOIN Appliance_Type ON Booking.Appliance_Type_ID = Appliance_Type.Appliance_Type_ID
+                WHERE Booking.UserID = @userID AND Booking.[Status] = 'completed'
+                ORDER BY Booking.Booking_Date ASC, Booking.Booking_Time ASC
+            `);
+
+        if (bookings.recordset.length === 0) {
+            return res.status(404).send("You don't have any bookings!");
+        }
+
+        res.status(200).json({
+            message: "You have completed bookings!",
+            count: bookings.recordset.length,
+            bookings: bookings.recordset
+        });
+    } catch (error) {
+        console.error("Unexpected error occurred when trying to fetch your completed bookings:", error);
+
+
+        res.status(500).send("Unexpected error occurred when trying to fetch your completed bookings.");
+    }
+})
+
+const getCancelledBookings = asyncHandler(async (req, res) => {
+    const userID = req.userID;
+
+    try {
+        const pool = getPool();
+
+        const bookings = await pool.request()
+            .input("userID", sql.Int, userID)
+            .query(`
+                SELECT 
+                    Booking.Booking_ID, 
+                    Booking.Booking_Date AS "Scheduled Date", 
+                    Booking.Booking_Time AS "Scheduled Time", 
+                    Booking.Total_Price AS "Total Price", 
+                    Appliance_Type.nameEN AS "Appliance's Name (EN)", 
+                    Appliance_Type.nameAR AS "Appliance's Name (AR)",
+                    Booking.Issue_Description AS "Issue Description",
+                    Technician.First_Name AS "Technician's First Name",
+                    Technician.Last_Name AS "Technician's Last Name",
+                    Technician.Phone AS "Technician's Phone Number",
+                    Payment.[Status] AS "Payment Status",
+                    Payment.Payment_Method AS "Payment Method"
+                FROM Booking
+                LEFT JOIN Technician ON Booking.Technician_ID = Technician.Technician_ID
+                LEFT JOIN Payment ON Booking.Booking_ID = Payment.Booking_ID
+                JOIN Appliance_Type ON Booking.Appliance_Type_ID = Appliance_Type.Appliance_Type_ID
+                WHERE Booking.UserID = @userID AND Booking.[Status] = 'cancelled'
+                ORDER BY Booking.Booking_Date ASC, Booking.Booking_Time ASC
+            `);
+
+        if (bookings.recordset.length === 0) {
+            return res.status(404).send("You don't have any bookings!");
+        }
+
+        res.status(200).json({
+            message: "You have cancelled bookings!",
+            count: bookings.recordset.length,
+            bookings: bookings.recordset
+        });
+    } catch (error) {
+        console.error("Unexpected error occurred when trying to fetch your cancelled bookings:", error);
+
+
+        res.status(500).send("Unexpected error occurred when trying to fetch your cancelled bookings.");
+    }
+})
+
+
+module.exports = { userRequestBooking, userPayBooking, userRateBooking, getPendingBookings, getConfirmedBookings, getInProgressBookings, getCompletedBookings, getCancelledBookings };
