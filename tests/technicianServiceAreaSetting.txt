@@ -1,0 +1,77 @@
+Valid:
+{
+  "serviceAreaID": 1,
+  "priority": 1
+}
+
+Valid:
+{
+  "serviceAreaID": 10,
+  "priority": 10
+}
+
+Valid:
+{
+  "serviceAreaID": 16,
+  "priority": 100
+}
+
+Multiple areas, same priority allowed:
+First: { "serviceAreaID": 6, "priority": 3 }
+Second: { "serviceAreaID": 7, "priority": 3 }
+
+Missing service id:
+{
+  "priority": 5
+}
+
+No priority:
+{
+  "serviceAreaID": 1
+}
+
+Priority below minimum:
+{
+  "serviceAreaID": 1,
+  "priority": 0
+}
+
+Priority above maximum:
+{
+  "serviceAreaID": 3,
+  "priority": 101
+}
+
+Decimal priority:
+{
+  "serviceAreaID": 5,
+  "priority": 5.5
+}
+
+Priority as string:
+{
+  "serviceAreaID": 6,
+  "priority": "high"
+}
+
+Invalid service area:
+{
+  "serviceAreaID": 18,
+  "priority": 1
+}
+
+{
+  "serviceAreaID": 999,
+  "priority": 1
+}
+
+{
+  "serviceAreaID": 0,
+  "priority": 1
+}
+
+
+Duplicate service area:
+First: { "serviceAreaID": 1, "priority": 1 }
+Second: { "serviceAreaID": 1, "priority": 5 }
+
