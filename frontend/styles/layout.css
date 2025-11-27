@@ -1,0 +1,521 @@
+/*
+ * ============================================================================
+ * FixAppliance - Layout Styles
+ * ============================================================================
+ * Layout containers, grids, sections, and structural utilities.
+ * Defines consistent page structure across the application.
+ */
+
+@layer components {
+
+  /* ==========================================================================
+   * CONTAINERS
+   * Page-level layout containers with responsive max-widths
+   * ========================================================================== */
+
+  .container-narrow {
+    @apply max-w-3xl mx-auto px-4 sm:px-6;
+  }
+
+  .container-default {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-full {
+    @apply w-full px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ==========================================================================
+   * PAGE SECTIONS
+   * Standard section spacing and styling
+   * ========================================================================== */
+
+  .section {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+
+  .section-sm {
+    @apply py-8 md:py-10 lg:py-12;
+  }
+
+  .section-lg {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  .section-hero {
+    @apply py-16 md:py-24 lg:py-32 min-h-[60vh] flex items-center;
+  }
+
+  /* Section backgrounds */
+  .section-light {
+    @apply bg-neutral-50 dark:bg-neutral-900;
+  }
+
+  .section-dark {
+    @apply bg-neutral-900 text-neutral-100;
+  }
+
+  .section-primary {
+    @apply bg-primary-600 text-white;
+  }
+
+  .section-gradient {
+    @apply bg-gradient-to-br from-primary-600 to-primary-800 text-white;
+  }
+
+  /* ==========================================================================
+   * GRID LAYOUTS
+   * Common grid patterns for content organization
+   * ========================================================================== */
+
+  /* Responsive grid with auto-fill */
+  .grid-auto-fill {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    @apply gap-6;
+  }
+
+  .grid-auto-fill-sm {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    @apply gap-4;
+  }
+
+  .grid-auto-fill-lg {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    @apply gap-8;
+  }
+
+  /* Fixed column grids */
+  .grid-2-cols {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+  }
+
+  .grid-3-cols {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  .grid-4-cols {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6;
+  }
+
+  /* Content with sidebar layout */
+  .layout-sidebar {
+    @apply grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8;
+  }
+
+  .layout-sidebar-right {
+    @apply grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8;
+  }
+
+  /* Dashboard layout */
+  .layout-dashboard {
+    @apply grid grid-cols-1 lg:grid-cols-[260px_1fr] min-h-screen;
+  }
+
+  /* ==========================================================================
+   * FLEX UTILITIES
+   * Common flex patterns
+   * ========================================================================== */
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+
+  .flex-start {
+    @apply flex items-center justify-start;
+  }
+
+  .flex-end {
+    @apply flex items-center justify-end;
+  }
+
+  .flex-col-center {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  /* Stack (vertical flex with gap) */
+  .stack {
+    @apply flex flex-col gap-4;
+  }
+
+  .stack-sm {
+    @apply flex flex-col gap-2;
+  }
+
+  .stack-lg {
+    @apply flex flex-col gap-6;
+  }
+
+  .stack-xl {
+    @apply flex flex-col gap-8;
+  }
+
+  /* Cluster (horizontal flex with wrap) */
+  .cluster {
+    @apply flex flex-wrap items-center gap-4;
+  }
+
+  .cluster-sm {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .cluster-lg {
+    @apply flex flex-wrap items-center gap-6;
+  }
+
+  /* ==========================================================================
+   * SIDEBAR COMPONENT
+   * Dashboard and filter sidebars
+   * ========================================================================== */
+
+  .sidebar {
+    @apply bg-white border-r border-neutral-200 
+           dark:bg-neutral-800 dark:border-neutral-700;
+  }
+
+  .sidebar-fixed {
+    @apply fixed left-0 top-0 h-screen w-64 z-40;
+  }
+
+  .sidebar-header {
+    @apply flex items-center h-16 px-4 border-b border-neutral-200
+           dark:border-neutral-700;
+  }
+
+  .sidebar-content {
+    @apply p-4 overflow-y-auto;
+  }
+
+  .sidebar-footer {
+    @apply p-4 border-t border-neutral-200 mt-auto
+           dark:border-neutral-700;
+  }
+
+  /* Sidebar navigation */
+  .sidebar-nav {
+    @apply space-y-1;
+  }
+
+  .sidebar-nav-item {
+    @apply flex items-center gap-3 
+           px-3 py-2.5 
+           rounded-lg 
+           text-sm font-medium 
+           text-neutral-700 
+           hover:bg-neutral-100
+           transition-colors
+           dark:text-neutral-300 dark:hover:bg-neutral-700;
+  }
+
+  .sidebar-nav-item-active {
+    @apply bg-primary-50 text-primary-600 
+           dark:bg-primary-900/50 dark:text-primary-400;
+  }
+
+  .sidebar-nav-icon {
+    @apply w-5 h-5 text-neutral-500 dark:text-neutral-400;
+  }
+
+  .sidebar-nav-item-active .sidebar-nav-icon {
+    @apply text-primary-600 dark:text-primary-400;
+  }
+
+  .sidebar-nav-group {
+    @apply pt-4;
+  }
+
+  .sidebar-nav-group-label {
+    @apply px-3 mb-2 text-xs font-semibold uppercase tracking-wider 
+           text-neutral-500 dark:text-neutral-400;
+  }
+
+  /* ==========================================================================
+   * HEADER/NAVBAR
+   * Site navigation header
+   * ========================================================================== */
+
+  .header {
+    @apply sticky top-0 z-40 
+           bg-white/95 backdrop-blur-sm 
+           border-b border-neutral-200
+           dark:bg-neutral-900/95 dark:border-neutral-800;
+  }
+
+  .header-inner {
+    @apply flex items-center justify-between h-16;
+  }
+
+  .header-logo {
+    @apply text-xl font-bold text-primary-600 dark:text-primary-400;
+  }
+
+  .header-nav {
+    @apply hidden md:flex items-center gap-8;
+  }
+
+  .header-nav-link {
+    @apply text-sm font-medium text-neutral-600 
+           hover:text-neutral-900 
+           transition-colors
+           dark:text-neutral-400 dark:hover:text-neutral-200;
+  }
+
+  .header-nav-link-active {
+    @apply text-primary-600 dark:text-primary-400;
+  }
+
+  .header-actions {
+    @apply flex items-center gap-4;
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    @apply fixed inset-0 z-50 bg-white dark:bg-neutral-900;
+  }
+
+  .mobile-menu-header {
+    @apply flex items-center justify-between h-16 px-4 border-b border-neutral-200
+           dark:border-neutral-800;
+  }
+
+  .mobile-menu-nav {
+    @apply p-4 space-y-2;
+  }
+
+  .mobile-menu-link {
+    @apply block px-4 py-3 text-base font-medium rounded-lg
+           text-neutral-900 hover:bg-neutral-100
+           dark:text-neutral-100 dark:hover:bg-neutral-800;
+  }
+
+  /* ==========================================================================
+   * FOOTER
+   * Site footer layout
+   * ========================================================================== */
+
+  .footer {
+    @apply bg-neutral-50 border-t border-neutral-200
+           dark:bg-neutral-900 dark:border-neutral-800;
+  }
+
+  .footer-dark {
+    @apply bg-neutral-900 text-neutral-300 border-neutral-800;
+  }
+
+  .footer-content {
+    @apply py-12 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8;
+  }
+
+  .footer-brand {
+    @apply col-span-2 md:col-span-4 lg:col-span-1;
+  }
+
+  .footer-column {
+    @apply space-y-4;
+  }
+
+  .footer-title {
+    @apply text-sm font-semibold uppercase tracking-wider 
+           text-neutral-900 dark:text-neutral-100;
+  }
+
+  .footer-links {
+    @apply space-y-3;
+  }
+
+  .footer-link {
+    @apply block text-sm text-neutral-600 hover:text-neutral-900
+           transition-colors
+           dark:text-neutral-400 dark:hover:text-neutral-200;
+  }
+
+  .footer-bottom {
+    @apply py-6 border-t border-neutral-200 
+           flex flex-col md:flex-row items-center justify-between gap-4
+           dark:border-neutral-800;
+  }
+
+  .footer-copyright {
+    @apply text-sm text-neutral-500 dark:text-neutral-400;
+  }
+
+  .footer-social {
+    @apply flex items-center gap-4;
+  }
+
+  .footer-social-link {
+    @apply text-neutral-500 hover:text-neutral-900
+           dark:text-neutral-400 dark:hover:text-neutral-200
+           transition-colors;
+  }
+
+  /* ==========================================================================
+   * BREADCRUMBS
+   * Navigation trail
+   * ========================================================================== */
+
+  .breadcrumb {
+    @apply flex items-center flex-wrap gap-2 text-sm;
+  }
+
+  .breadcrumb-item {
+    @apply flex items-center gap-2 text-neutral-500 dark:text-neutral-400;
+  }
+
+  .breadcrumb-link {
+    @apply text-neutral-600 hover:text-primary-600
+           transition-colors
+           dark:text-neutral-400 dark:hover:text-primary-400;
+  }
+
+  .breadcrumb-current {
+    @apply text-neutral-900 font-medium dark:text-neutral-200;
+  }
+
+  .breadcrumb-separator {
+    @apply text-neutral-400 dark:text-neutral-600;
+  }
+
+  /* ==========================================================================
+   * DIVIDERS
+   * Section separators
+   * ========================================================================== */
+
+  .divider {
+    @apply border-t border-neutral-200 dark:border-neutral-700;
+  }
+
+  .divider-with-text {
+    @apply flex items-center gap-4;
+  }
+
+  .divider-with-text::before,
+  .divider-with-text::after {
+    content: '';
+    @apply flex-1 border-t border-neutral-200 dark:border-neutral-700;
+  }
+
+  .divider-text {
+    @apply text-sm text-neutral-500 dark:text-neutral-400;
+  }
+
+  /* ==========================================================================
+   * EMPTY STATES
+   * Empty content placeholders
+   * ========================================================================== */
+
+  .empty-state {
+    @apply flex flex-col items-center justify-center 
+           py-12 px-4 text-center;
+  }
+
+  .empty-state-icon {
+    @apply w-16 h-16 text-neutral-300 mb-4 dark:text-neutral-600;
+  }
+
+  .empty-state-title {
+    @apply text-lg font-semibold text-neutral-900 mb-2 dark:text-neutral-100;
+  }
+
+  .empty-state-description {
+    @apply text-sm text-neutral-500 max-w-sm mb-6 dark:text-neutral-400;
+  }
+
+  /* ==========================================================================
+   * STICKY ELEMENTS
+   * Fixed position utilities
+   * ========================================================================== */
+
+  .sticky-top {
+    @apply sticky top-0 z-30;
+  }
+
+  .sticky-bottom {
+    @apply sticky bottom-0 z-30;
+  }
+
+  .sticky-sidebar {
+    @apply sticky top-20;
+  }
+
+  .sticky-cta {
+    @apply fixed bottom-0 left-0 right-0 z-40
+           bg-white border-t border-neutral-200 p-4
+           dark:bg-neutral-800 dark:border-neutral-700
+           lg:hidden;
+  }
+
+  /* ==========================================================================
+   * OVERLAY
+   * Backdrop overlays
+   * ========================================================================== */
+
+  .overlay {
+    @apply fixed inset-0 bg-black/50 z-40;
+  }
+
+  .overlay-light {
+    @apply bg-black/30;
+  }
+
+  .overlay-dark {
+    @apply bg-black/70;
+  }
+
+  .overlay-blur {
+    @apply backdrop-blur-sm;
+  }
+
+  /* ==========================================================================
+   * SCROLL AREAS
+   * Scrollable containers
+   * ========================================================================== */
+
+  .scroll-area {
+    @apply overflow-y-auto;
+  }
+
+  .scroll-area-x {
+    @apply overflow-x-auto;
+  }
+
+  .scroll-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scroll-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ==========================================================================
+   * ASPECT RATIOS
+   * Common aspect ratio containers
+   * ========================================================================== */
+
+  .aspect-hero {
+    @apply aspect-[16/9];
+  }
+
+  .aspect-card {
+    @apply aspect-[4/3];
+  }
+
+  .aspect-profile {
+    @apply aspect-square;
+  }
+
+  .aspect-thumbnail {
+    @apply aspect-[3/2];
+  }
+}

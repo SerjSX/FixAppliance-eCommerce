@@ -1,0 +1,104 @@
+/*
+ * ============================================================================
+ * FixAppliance - Main Stylesheet Entry Point
+ * ============================================================================
+ * 
+ * Import this file in your Vue.js application's main.js or main.ts:
+ * 
+ *   import './styles/main.css'
+ * 
+ * This file imports all modular stylesheets in the correct order.
+ * The load order matters for proper CSS cascade.
+ * 
+ * Structure:
+ * 1. base.css      - TailwindCSS directives, CSS variables, base resets
+ * 2. typography.css - Text styles, headings, links, prose
+ * 3. components.css - Reusable UI components (buttons, cards, forms, etc.)
+ * 4. layout.css    - Page structure, containers, grids, navigation
+ * 5. utilities.css - Animation states, loading indicators, interactions
+ * 
+ * ============================================================================
+ */
+
+/* Core TailwindCSS setup and base styles */
+@import './base.css';
+
+/* Typography system */
+@import './typography.css';
+
+/* UI Components */
+@import './components.css';
+
+/* Layout structure */
+@import './layout.css';
+
+/* Utility classes */
+@import './utilities.css';
+
+/*
+ * ============================================================================
+ * USAGE GUIDE
+ * ============================================================================
+ * 
+ * COLOR PALETTE:
+ * - primary-*   : Blue tones for trust/reliability (50-950 shades)
+ * - secondary-* : Orange tones for CTAs and highlights (50-950 shades)
+ * - success-*   : Green for verified, completed states (50-950 shades)
+ * - warning-*   : Amber for pending, attention states (50-950 shades)
+ * - error-*     : Red for errors, cancellations (50-950 shades)
+ * - neutral-*   : Gray for text, backgrounds, borders (50-950 shades)
+ * 
+ * DARK MODE:
+ * - Add 'dark' class to <html> element to enable dark mode
+ * - All components have dark: variants pre-configured
+ * 
+ * BUTTONS:
+ * - .btn         : Base button (combine with variant)
+ * - .btn-primary : Primary action
+ * - .btn-secondary : Secondary action
+ * - .btn-outline : Outlined style
+ * - .btn-ghost   : Minimal style
+ * - .btn-success, .btn-danger, .btn-warning : Semantic colors
+ * - Sizes: .btn-xs, .btn-sm, .btn-lg, .btn-xl
+ * 
+ * CARDS:
+ * - .card        : Base card container
+ * - .card-hover  : Adds hover lift effect
+ * - .card-header, .card-body, .card-footer : Card sections
+ * 
+ * FORMS:
+ * - .form-label  : Form labels
+ * - .form-input  : Text inputs
+ * - .form-select : Dropdowns
+ * - .form-textarea : Multi-line inputs
+ * - .form-checkbox, .form-radio : Checkboxes/radios
+ * - Validation: .form-input-error, .form-input-success
+ * 
+ * BADGES:
+ * - .badge       : Base badge (combine with variant)
+ * - Variants: .badge-primary, .badge-success, .badge-warning, .badge-error
+ * 
+ * LAYOUT:
+ * - .container-narrow, .container-default, .container-wide
+ * - .section, .section-sm, .section-lg : Page sections
+ * - .grid-2-cols, .grid-3-cols, .grid-4-cols : Responsive grids
+ * - .layout-sidebar, .layout-dashboard : Page layouts
+ * 
+ * TYPOGRAPHY:
+ * - .heading-1 through .heading-6 : Headings
+ * - .text-body, .text-lead, .text-muted : Body text
+ * - .link, .link-subtle : Link styles
+ * 
+ * STATES:
+ * - .loading-spinner : Loading indicator
+ * - .skeleton : Loading placeholder
+ * - .empty-state : Empty content placeholder
+ * - .alert-* : Alert/notification messages
+ * 
+ * RTL/ARABIC:
+ * - .font-arabic : Arabic font family
+ * - .rtl-text : Right-to-left text
+ * - Add dir="rtl" to container for Arabic content
+ * 
+ * ============================================================================
+ */
