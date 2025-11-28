@@ -1,3 +1,9 @@
+/**
+ * This controller handles everything related to booking and the technician:
+ *  1. Technician accepting a pending booking
+ *  2. Technician getting all pending bookings available to accept
+ */
+
 const asyncHandler = require("express-async-handler");
 
 
@@ -6,10 +12,13 @@ const asyncHandler = require("express-async-handler");
 const { getPool, sql } = require("../config/database");
 
 
+// Technician accepting a pending booking
 const acceptPendingBooking = asyncHandler(async (req, res) => {
+        // Getting the booking ID from the body and the technician ID passed from the middleware
         const { bookingID } = req.body;
         const technicianID = req.technicianID;
 
+        // If no booking ID is passed, throw a 400 error
         if (!bookingID) {
             return res.status(400).send("You need to pass a booking ID.");
         }
@@ -17,6 +26,7 @@ const acceptPendingBooking = asyncHandler(async (req, res) => {
         try {
             const pool = getPool();
 
+            // Check if the booking exists and get its current status and assigned technician
             const checkBooking = await pool.request()
                 .input("bookingID", sql.Int, bookingID)
                 .query(`
@@ -25,19 +35,24 @@ const acceptPendingBooking = asyncHandler(async (req, res) => {
                     WHERE Booking_ID = @bookingID
                     `);
 
+            // If no result returned, the booking doesn't exist
             if (checkBooking.recordset.length === 0) {
                 return res.status(404).send("Booking not found.");
             }
 
             const booking = checkBooking.recordset[0];
+
+            // Check if booking is already assigned to another technician
             if (booking.Technician_ID !== null) {
                 return res.status(409).send("This booking is already assigned to another technician.");
             }
 
+            // Check if booking status is pending - only pending bookings can be accepted
             if (booking.Status !== 'pending') {
                 return res.status(400).send(`This booking is ${booking.Status} and cannot be accepted.`);
             }
 
+            // Update the booking - assign technician and change status to confirmed
             const result = await pool.request()
                 .input("bookingID", sql.Int, bookingID)
                 .input("technicianID", sql.Int, technicianID)
@@ -49,6 +64,7 @@ const acceptPendingBooking = asyncHandler(async (req, res) => {
                     WHERE Booking_ID = @bookingID
                     `);
 
+            // Return success response with booking and technician details
             res.status(200).json({
                 message: "Booking accepted successfully.",
                 bookingID: bookingID,
@@ -59,6 +75,7 @@ const acceptPendingBooking = asyncHandler(async (req, res) => {
         } catch (error) {
             console.error("Unexpected error occurred when trying to apply booking to technician: ", error);
             
+            // Foreign key constraint violation
             if (error.number === 547) {
                 return res.status(400).send("Invalid booking or technician ID.");
             }
@@ -68,10 +85,13 @@ const acceptPendingBooking = asyncHandler(async (req, res) => {
 })
 
 
+// Get all pending bookings available for technicians to accept
 const getPendingBookings = asyncHandler(async (req, res) => {
     try {
         const pool = getPool();
        
+        // Query all pending bookings with user and appliance details
+        // Ordered by date and time (earliest first)
         const result = await pool.request()
             .query(`
                 SELECT 
@@ -97,6 +117,7 @@ const getPendingBookings = asyncHandler(async (req, res) => {
                 ORDER BY Booking.Booking_Date ASC, Booking.Booking_Time ASC
             `);
 
+        // If no pending bookings found, return empty array with informative message
         if (result.recordset.length === 0) {
             return res.status(200).json({
                 message: "No pending bookings found.",
@@ -104,6 +125,7 @@ const getPendingBookings = asyncHandler(async (req, res) => {
             });
         }
 
+        // Return pending bookings with count
         res.status(200).json({
             message: "There are pending bookings.",
             count: result.recordset.length,

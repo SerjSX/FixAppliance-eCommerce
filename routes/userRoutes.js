@@ -1,3 +1,16 @@
+/**
+ * This express file sets up the routes of the user, which consist of:
+ *      Non-validation required routes: register and login
+ *      Validation required routes: logout, booking-related (requesting, paying, rating and getting bookings)
+ * 
+ * Validation requirement is to have the cookie with the right credintials without being expired.
+ * 
+ * The functionalities for the routes themselves can be found in 3 files:
+ *      1. controllers/UserController.js for register, login, logout
+ *      2. controllers/UserBookingController.js for booking-related functonalities
+ *      3. middlewares/auth.js for authenticating the user's credentials that are either stored or not stored
+ */
+
 const express = require("express");
 const {registerUser, loginUser, logoutUser} = require("../controllers/UserController");
 const {userValidation} = require("../middlewares/auth");
