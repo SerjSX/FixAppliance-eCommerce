@@ -95,7 +95,8 @@
            focus-visible:ring-success-500;
   }
 
-  /* Danger button */
+  /* Error/Danger button - .btn-error is the primary name, .btn-danger is an alias */
+  .btn-error,
   .btn-danger {
     @apply bg-error-500 text-white 
            hover:bg-error-600 
@@ -220,6 +221,11 @@
     background-position: right 0.75rem center;
     background-size: 1.25em 1.25em;
     padding-right: 2.5rem;
+  }
+
+  /* Dark mode select arrow with lighter color */
+  .dark .form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d4d4d4' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   }
 
   /* Checkbox & Radio base */
@@ -651,8 +657,7 @@
   }
 
   .tabs-pills {
-    @apply flex gap-2 p-1 bg-neutral-100 rounded-lg dark:bg-neutral-800;
-    border: none;
+    @apply flex gap-2 p-1 bg-neutral-100 rounded-lg dark:bg-neutral-800 border-0;
   }
 
   .tab {

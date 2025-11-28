@@ -25,7 +25,7 @@
   }
 
   .loading-spinner-lg {
-    @apply w-8 h-8 border-3;
+    @apply w-8 h-8 border-4;
   }
 
   .loading-spinner-primary {
@@ -86,7 +86,14 @@
   }
 
   .visible-on-focus:focus {
-    @apply not-sr-only;
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
   }
 
   /* Hide scrollbar but keep functionality */

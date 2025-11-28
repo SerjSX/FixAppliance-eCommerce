@@ -263,7 +263,8 @@
   }
 
   .list-numbered {
-    @apply space-y-3 counter-reset: item;
+    counter-reset: item;
+    @apply space-y-3;
   }
 
   .list-numbered li {
@@ -353,9 +354,14 @@
     @apply select-all;
   }
 
-  /* Text balance (for headings) */
+  /* Text balance (for headings)
+   * Uses text-wrap: balance for improved heading appearance.
+   * Fallback to text-wrap: wrap for browsers without support.
+   * Supported in Chrome 114+, Edge 114+, Safari 17.5+.
+   */
   .text-balance {
-    text-wrap: balance;
+    text-wrap: wrap;    /* Fallback for older browsers */
+    text-wrap: balance; /* Modern browsers */
   }
 
   /* Text gradient */

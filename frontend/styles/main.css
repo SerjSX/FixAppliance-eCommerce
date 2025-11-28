@@ -76,7 +76,7 @@
  * 
  * BADGES:
  * - .badge       : Base badge (combine with variant)
- * - Variants: .badge-primary, .badge-success, .badge-warning, .badge-error
+ * - Variants: .badge-primary, .badge-secondary, .badge-success, .badge-warning, .badge-error, .badge-neutral
  * 
  * LAYOUT:
  * - .container-narrow, .container-default, .container-wide
