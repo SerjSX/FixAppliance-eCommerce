@@ -1,0 +1,490 @@
+/*
+ * ============================================================================
+ * FixAppliance - Utility Styles
+ * ============================================================================
+ * General utility classes for states, animations, and interactions.
+ * Provides additional utilities beyond TailwindCSS defaults.
+ */
+
+@layer utilities {
+
+  /* ==========================================================================
+   * LOADING STATES
+   * Visual indicators for loading content
+   * ========================================================================== */
+
+  /* Spinner */
+  .loading-spinner {
+    @apply inline-block w-5 h-5 
+           border-2 border-current border-t-transparent 
+           rounded-full animate-spin;
+  }
+
+  .loading-spinner-sm {
+    @apply w-4 h-4 border-2;
+  }
+
+  .loading-spinner-lg {
+    @apply w-8 h-8 border-4;
+  }
+
+  .loading-spinner-primary {
+    @apply border-primary-500 border-t-transparent;
+  }
+
+  .loading-spinner-white {
+    @apply border-white border-t-transparent;
+  }
+
+  /* Dots loader */
+  .loading-dots {
+    @apply inline-flex gap-1;
+  }
+
+  .loading-dots > span {
+    @apply w-2 h-2 bg-current rounded-full animate-pulse;
+  }
+
+  .loading-dots > span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .loading-dots > span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  /* Pulse overlay */
+  .loading-pulse {
+    @apply relative overflow-hidden;
+  }
+
+  .loading-pulse::after {
+    content: '';
+    @apply absolute inset-0 bg-neutral-200/50 animate-pulse
+           dark:bg-neutral-700/50;
+  }
+
+  /* Skeleton shimmer */
+  .loading-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+  }
+
+  /* ==========================================================================
+   * VISIBILITY UTILITIES
+   * Control element visibility
+   * ========================================================================== */
+
+  .invisible-accessible {
+    @apply sr-only;
+  }
+
+  .visible-on-focus:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ==========================================================================
+   * INTERACTION UTILITIES
+   * Click, hover, and focus states
+   * ========================================================================== */
+
+  .clickable {
+    @apply cursor-pointer select-none;
+  }
+
+  .disabled {
+    @apply opacity-50 pointer-events-none cursor-not-allowed;
+  }
+
+  .interactive {
+    @apply transition-all duration-200 
+           hover:opacity-80 
+           active:scale-[0.98];
+  }
+
+  .interactive-lift {
+    @apply transition-all duration-200 
+           hover:-translate-y-0.5 hover:shadow-md;
+  }
+
+  .interactive-glow:hover {
+    @apply shadow-glow-primary;
+  }
+
+  /* Focus ring styles */
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 
+           focus-visible:ring-primary-500 focus-visible:ring-offset-2;
+  }
+
+  .focus-ring-inset {
+    @apply focus:outline-none focus-visible:ring-2 
+           focus-visible:ring-primary-500 focus-visible:ring-inset;
+  }
+
+  /* ==========================================================================
+   * TRANSITION UTILITIES
+   * Animation timing and easing
+   * ========================================================================== */
+
+  .transition-fast {
+    @apply transition-all duration-150 ease-out;
+  }
+
+  .transition-normal {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .transition-slow {
+    @apply transition-all duration-500 ease-in-out;
+  }
+
+  /* Custom easings */
+  .ease-bounce {
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .ease-smooth {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ==========================================================================
+   * ENTER/EXIT ANIMATIONS
+   * For Vue/React transitions
+   * ========================================================================== */
+
+  /* Fade */
+  .enter-fade {
+    @apply transition-opacity duration-300;
+  }
+
+  .enter-fade-from {
+    @apply opacity-0;
+  }
+
+  .enter-fade-to {
+    @apply opacity-100;
+  }
+
+  .leave-fade-from {
+    @apply opacity-100;
+  }
+
+  .leave-fade-to {
+    @apply opacity-0;
+  }
+
+  /* Slide up */
+  .enter-slide-up {
+    @apply transition-all duration-300;
+  }
+
+  .enter-slide-up-from {
+    @apply opacity-0 translate-y-4;
+  }
+
+  .enter-slide-up-to {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Slide down */
+  .enter-slide-down-from {
+    @apply opacity-0 -translate-y-4;
+  }
+
+  .enter-slide-down-to {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Scale */
+  .enter-scale {
+    @apply transition-all duration-200;
+  }
+
+  .enter-scale-from {
+    @apply opacity-0 scale-95;
+  }
+
+  .enter-scale-to {
+    @apply opacity-100 scale-100;
+  }
+
+  /* ==========================================================================
+   * Z-INDEX LAYERS
+   * Consistent layering system
+   * ========================================================================== */
+
+  .z-dropdown {
+    z-index: 1000;
+  }
+
+  .z-sticky {
+    z-index: 1020;
+  }
+
+  .z-fixed {
+    z-index: 1030;
+  }
+
+  .z-modal-backdrop {
+    z-index: 1040;
+  }
+
+  .z-modal {
+    z-index: 1050;
+  }
+
+  .z-popover {
+    z-index: 1060;
+  }
+
+  .z-tooltip {
+    z-index: 1070;
+  }
+
+  .z-toast {
+    z-index: 1080;
+  }
+
+  /* ==========================================================================
+   * BACKDROP UTILITIES
+   * Blur and overlay effects
+   * ========================================================================== */
+
+  .backdrop-blur-light {
+    @apply backdrop-blur-sm bg-white/70 dark:bg-neutral-900/70;
+  }
+
+  .backdrop-blur-medium {
+    @apply backdrop-blur-md bg-white/80 dark:bg-neutral-900/80;
+  }
+
+  .backdrop-blur-heavy {
+    @apply backdrop-blur-lg bg-white/90 dark:bg-neutral-900/90;
+  }
+
+  /* ==========================================================================
+   * GRADIENT UTILITIES
+   * Background gradients
+   * ========================================================================== */
+
+  .gradient-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-500;
+  }
+
+  .gradient-primary-dark {
+    @apply bg-gradient-to-r from-primary-700 to-primary-600;
+  }
+
+  .gradient-secondary {
+    @apply bg-gradient-to-r from-secondary-500 to-secondary-400;
+  }
+
+  .gradient-hero {
+    @apply bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800;
+  }
+
+  .gradient-subtle {
+    @apply bg-gradient-to-b from-neutral-50 to-white
+           dark:from-neutral-900 dark:to-neutral-800;
+  }
+
+  /* Overlay gradients */
+  .gradient-overlay-dark {
+    @apply bg-gradient-to-t from-black/60 to-transparent;
+  }
+
+  .gradient-overlay-light {
+    @apply bg-gradient-to-t from-white/60 to-transparent;
+  }
+
+  /* ==========================================================================
+   * HOVER EFFECT UTILITIES
+   * Decorative hover effects
+   * ========================================================================== */
+
+  /* Underline animation */
+  .hover-underline {
+    @apply relative;
+  }
+
+  .hover-underline::after {
+    content: '';
+    @apply absolute left-0 bottom-0 w-0 h-0.5 
+           bg-current transition-all duration-300;
+  }
+
+  .hover-underline:hover::after {
+    @apply w-full;
+  }
+
+  /* Background fill */
+  .hover-fill {
+    @apply relative overflow-hidden;
+  }
+
+  .hover-fill::before {
+    content: '';
+    @apply absolute inset-0 bg-primary-600 
+           transform -translate-x-full 
+           transition-transform duration-300
+           dark:bg-primary-500;
+  }
+
+  .hover-fill:hover::before {
+    @apply translate-x-0;
+  }
+
+  .hover-fill > * {
+    @apply relative z-10;
+  }
+
+  /* ==========================================================================
+   * RESPONSIVE UTILITIES
+   * Mobile-first responsive helpers
+   * ========================================================================== */
+
+  /* Hide on mobile */
+  .hide-mobile {
+    @apply hidden md:block;
+  }
+
+  /* Show only on mobile */
+  .show-mobile-only {
+    @apply block md:hidden;
+  }
+
+  /* Hide on desktop */
+  .hide-desktop {
+    @apply block lg:hidden;
+  }
+
+  /* Show only on desktop */
+  .show-desktop-only {
+    @apply hidden lg:block;
+  }
+
+  /* Touch device utilities */
+  @media (hover: none) {
+    .touch-scroll {
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .touch-action-none {
+      touch-action: none;
+    }
+
+    .touch-action-pan-x {
+      touch-action: pan-x;
+    }
+
+    .touch-action-pan-y {
+      touch-action: pan-y;
+    }
+  }
+
+  /* ==========================================================================
+   * PRINT UTILITIES
+   * Print-specific styles
+   * ========================================================================== */
+
+  @media print {
+    .print-hidden {
+      display: none !important;
+    }
+
+    .print-only {
+      display: block !important;
+    }
+
+    .print-break-before {
+      page-break-before: always;
+    }
+
+    .print-break-after {
+      page-break-after: always;
+    }
+
+    .print-no-break {
+      page-break-inside: avoid;
+    }
+  }
+
+  /* ==========================================================================
+   * IMAGE UTILITIES
+   * Image display helpers
+   * ========================================================================== */
+
+  .img-cover {
+    @apply w-full h-full object-cover;
+  }
+
+  .img-contain {
+    @apply w-full h-full object-contain;
+  }
+
+  .img-grayscale {
+    @apply grayscale transition-all duration-300;
+  }
+
+  .img-grayscale:hover {
+    @apply grayscale-0;
+  }
+
+  .img-blur-load {
+    @apply blur-lg transition-all duration-500;
+  }
+
+  .img-blur-load.loaded {
+    @apply blur-0;
+  }
+
+  /* ==========================================================================
+   * SAFE AREA UTILITIES
+   * For devices with notches/safe areas
+   * ========================================================================== */
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .safe-all {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right)
+             env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+}
