@@ -22,8 +22,7 @@ const userValidation = asyncHandler(async(req, res, next) => {
 
     // Check if token exists, if not send a 401 with a please login message
     if (!token) {
-        res.status(401).send("Please login to your account.")
-        return;
+        return res.status(401).json({message: "Please login to your account."});
     }
 
     // If token exists try to decode it.
@@ -37,9 +36,8 @@ const userValidation = asyncHandler(async(req, res, next) => {
         req.userEmail = decoded.email;
         next();
     } catch (err) {
-        res.clearCookie('user_access_token')
-        res.status(401).send("Please login to your account.")
-        return;
+        res.clearCookie('user_access_token');
+        return res.status(401).json({message: "Please login to your account."});
     }
 })
 
@@ -48,8 +46,7 @@ const technicianValidation = asyncHandler(async(req, res, next) => {
     const token = req.cookies.technician_access_token;
 
     if (!token) {
-        res.status(401).send("Please login to your account.")
-        return;
+        return res.status(401).json({message: "Please login to your account."});
     }
 
     try {
@@ -60,9 +57,8 @@ const technicianValidation = asyncHandler(async(req, res, next) => {
         req.technicianEmail = decoded.email;
         next();
     } catch (err) {
-        res.clearCookie('technician_access_token')
-        res.status(401).send("Please login to your account.")
-        return;
+        res.clearCookie('technician_access_token');
+        return res.status(401).json({message: "Please login to your account."});
     }
 })
 
@@ -71,8 +67,7 @@ const freelancerValidation = asyncHandler(async(req, res, next) => {
     const token = req.cookies.freelancer_access_token;
 
     if (!token) {
-        res.status(401).send("Please login to your account.")
-        return;
+        return res.status(401).json({message: "Please login to your account."});
     }
 
     try {
@@ -83,9 +78,8 @@ const freelancerValidation = asyncHandler(async(req, res, next) => {
         req.freelancerEmail = decoded.email;
         next();
     } catch (err) {
-        res.clearCookie('freelancer_access_token')
-        res.status(401).send("Please login to your account.")
-        return;
+        res.clearCookie('freelancer_access_token');
+        return res.status(401).json({message: "Please login to your account."});
     }
 })
 

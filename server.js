@@ -10,12 +10,22 @@ const { connectDB } = require("./config/database");
 const app = express();
 const port = process.env.PORT || 5000;
 
+// CORS configuration - restrict origins in production
+const corsOptions = {
+    origin: process.env.NODE_ENV === "production" 
+        ? process.env.ALLOWED_ORIGINS?.split(',') || ['https://yourdomain.com']  // Should replace with actual domain in .env
+        : ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:3000'], // Development origins
+    credentials: true,  // Required for cookies to work cross-origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+
 // Applying the middlewares for json, cookie, public files, cors, url embedding
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));  // Limit body size to prevent large payload attacks
 app.use(cookieParser());
 app.use(express.static("public"));
-app.use(cors());
-app.use(express.urlencoded({extended: false}));
+app.use(cors(corsOptions));
+app.use(express.urlencoded({extended: false, limit: '10kb'}));
 
 // Setting the 3 main routes: user, technician and freelancer
 app.use("/api/user", require("./routes/userRoutes"));
