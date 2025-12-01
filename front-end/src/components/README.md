@@ -400,6 +400,53 @@ export default {
 
 ---
 
+## UI Patterns
+
+### Empty State Pattern
+
+Use empty states when there's no data to display. Example from MyBookingsView:
+
+```vue
+<template>
+  <div>
+    <!-- Show empty state when no data -->
+    <div v-if="bookings.length === 0" class="empty-state">
+      <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+        </path>
+      </svg>
+      <h3 class="empty-state-title">No bookings yet</h3>
+      <p class="empty-state-description">
+        You haven't made any bookings yet. Book a technician to get started.
+      </p>
+      <a href="/book-technician" class="btn btn-primary">Book a Technician</a>
+    </div>
+
+    <!-- Show list when data exists -->
+    <div v-else>
+      <BookingCard 
+        v-for="booking in bookings" 
+        :key="booking.id" 
+        :booking="booking" 
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      bookings: [] // Empty array shows empty state
+    }
+  }
+}
+</script>
+```
+
+---
+
 ## Best Practices
 
 1. **Import Components**: Always import components from their path:

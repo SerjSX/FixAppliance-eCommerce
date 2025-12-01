@@ -56,8 +56,8 @@ const routes = [
     name: 'Articles',
     component: ComingSoonView,
     meta: {
-      title: 'Coming Soon - DIY Guides - FixAppliance',
-      description: 'DIY troubleshooting guides are coming soon. Learn to fix common appliance problems yourself.'
+      title: 'Coming Soon - FixAppliance',
+      description: 'This feature is coming soon. Stay tuned for updates!'
     }
   },
 
