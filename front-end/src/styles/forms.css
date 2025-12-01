@@ -1,0 +1,307 @@
+/**
+ * FixAppliance - Form Styles
+ * 
+ * Form inputs, labels, validation states, and form layouts.
+ */
+
+@layer components {
+  /* ==========================================================================
+     FORM GROUPS
+     ========================================================================== */
+  
+  .form-group {
+    @apply mb-5;
+  }
+
+  .form-group-inline {
+    @apply flex items-center gap-4 mb-5;
+  }
+
+  .form-row {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  /* ==========================================================================
+     LABELS
+     ========================================================================== */
+  
+  .form-label {
+    @apply block text-sm font-medium text-neutral-700 mb-1.5;
+  }
+
+  .form-label-required::after {
+    content: " *";
+    @apply text-error-500;
+  }
+
+  .form-hint {
+    @apply text-xs text-neutral-500 mt-1;
+  }
+
+  /* ==========================================================================
+     INPUTS
+     ========================================================================== */
+  
+  .form-input {
+    @apply w-full px-4 py-2.5 text-sm text-neutral-900 bg-white
+           border border-neutral-300 rounded-lg
+           placeholder:text-neutral-400
+           focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100
+           disabled:bg-neutral-100 disabled:cursor-not-allowed
+           transition-all duration-200;
+  }
+
+  .form-input-sm {
+    @apply py-2 text-xs;
+  }
+
+  .form-input-lg {
+    @apply py-3.5 text-base;
+  }
+
+  /* Input with icon */
+  .form-input-icon-left {
+    @apply pl-10;
+  }
+
+  .form-input-icon-right {
+    @apply pr-10;
+  }
+
+  .form-input-wrapper {
+    @apply relative;
+  }
+
+  .form-input-icon {
+    @apply absolute top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none;
+  }
+
+  .form-input-icon-left-position {
+    @apply left-3;
+  }
+
+  .form-input-icon-right-position {
+    @apply right-3;
+  }
+
+  /* ==========================================================================
+     TEXTAREA
+     ========================================================================== */
+  
+  .form-textarea {
+    @apply form-input resize-none min-h-[120px];
+  }
+
+  .form-textarea-auto {
+    @apply form-textarea resize-y;
+  }
+
+  /* ==========================================================================
+     SELECT
+     ========================================================================== */
+  
+  .form-select {
+    @apply form-input pr-10 appearance-none cursor-pointer
+           bg-no-repeat bg-right;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-size: 1.25rem;
+    background-position: right 0.75rem center;
+  }
+
+  /* ==========================================================================
+     CHECKBOX & RADIO
+     ========================================================================== */
+  
+  .form-checkbox {
+    @apply w-4 h-4 text-primary-600 bg-white border-neutral-300 rounded
+           focus:ring-2 focus:ring-primary-100 focus:ring-offset-0
+           cursor-pointer transition-all duration-200;
+  }
+
+  .form-radio {
+    @apply w-4 h-4 text-primary-600 bg-white border-neutral-300
+           focus:ring-2 focus:ring-primary-100 focus:ring-offset-0
+           cursor-pointer transition-all duration-200;
+  }
+
+  .form-check-label {
+    @apply ml-2 text-sm text-neutral-700 cursor-pointer select-none;
+  }
+
+  .form-check {
+    @apply flex items-center;
+  }
+
+  .form-check-group {
+    @apply space-y-2;
+  }
+
+  /* ==========================================================================
+     SWITCH / TOGGLE
+     ========================================================================== */
+  
+  .form-switch {
+    @apply relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer
+           rounded-full border-2 border-transparent
+           transition-colors duration-200 ease-in-out
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
+  }
+
+  .form-switch-off {
+    @apply bg-neutral-200;
+  }
+
+  .form-switch-on {
+    @apply bg-primary-600;
+  }
+
+  .form-switch-knob {
+    @apply pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0
+           transition duration-200 ease-in-out;
+  }
+
+  .form-switch-knob-off {
+    @apply translate-x-0;
+  }
+
+  .form-switch-knob-on {
+    @apply translate-x-5;
+  }
+
+  /* ==========================================================================
+     VALIDATION STATES
+     ========================================================================== */
+  
+  /* Error state */
+  .form-input-error {
+    @apply border-error-500 focus:border-error-500 focus:ring-error-100;
+  }
+
+  .form-error-message {
+    @apply flex items-center gap-1 text-xs text-error-600 mt-1;
+  }
+
+  /* Success state */
+  .form-input-success {
+    @apply border-success-500 focus:border-success-500 focus:ring-success-100;
+  }
+
+  .form-success-message {
+    @apply flex items-center gap-1 text-xs text-success-600 mt-1;
+  }
+
+  /* ==========================================================================
+     FILE INPUT
+     ========================================================================== */
+  
+  .form-file {
+    @apply block w-full text-sm text-neutral-500
+           file:mr-4 file:py-2 file:px-4
+           file:rounded-lg file:border-0
+           file:text-sm file:font-medium
+           file:bg-primary-50 file:text-primary-700
+           hover:file:bg-primary-100
+           cursor-pointer;
+  }
+
+  .form-file-drop {
+    @apply flex flex-col items-center justify-center
+           w-full h-40 px-4
+           border-2 border-dashed border-neutral-300 rounded-lg
+           hover:border-primary-400 hover:bg-primary-50/30
+           cursor-pointer transition-all duration-200;
+  }
+
+  .form-file-drop-active {
+    @apply border-primary-500 bg-primary-50;
+  }
+
+  /* ==========================================================================
+     SEARCH INPUT
+     ========================================================================== */
+  
+  .form-search {
+    @apply form-input pl-10;
+  }
+
+  .form-search-wrapper {
+    @apply relative;
+  }
+
+  .form-search-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400;
+  }
+
+  .form-search-clear {
+    @apply absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400
+           hover:text-neutral-600 cursor-pointer;
+  }
+
+  /* ==========================================================================
+     INPUT GROUPS
+     ========================================================================== */
+  
+  .input-group {
+    @apply flex;
+  }
+
+  .input-group .form-input {
+    @apply rounded-none first:rounded-l-lg last:rounded-r-lg;
+  }
+
+  .input-group-text {
+    @apply flex items-center px-4 text-sm text-neutral-500 bg-neutral-100 border border-neutral-300;
+  }
+
+  .input-group-text:first-child {
+    @apply rounded-l-lg border-r-0;
+  }
+
+  .input-group-text:last-child {
+    @apply rounded-r-lg border-l-0;
+  }
+
+  /* ==========================================================================
+     DATE/TIME PICKER
+     ========================================================================== */
+  
+  .form-date {
+    @apply form-input;
+  }
+
+  .form-time {
+    @apply form-input;
+  }
+
+  /* ==========================================================================
+     FORM SECTIONS
+     ========================================================================== */
+  
+  .form-section {
+    @apply mb-8;
+  }
+
+  .form-section-title {
+    @apply text-lg font-semibold text-neutral-900 mb-4 pb-2 border-b border-neutral-200;
+  }
+
+  .form-section-description {
+    @apply text-sm text-neutral-500 mb-4;
+  }
+
+  /* ==========================================================================
+     FORM ACTIONS
+     ========================================================================== */
+  
+  .form-actions {
+    @apply flex items-center justify-end gap-3 pt-6 mt-6 border-t border-neutral-200;
+  }
+
+  .form-actions-left {
+    @apply justify-start;
+  }
+
+  .form-actions-between {
+    @apply justify-between;
+  }
+}

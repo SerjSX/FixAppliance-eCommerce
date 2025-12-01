@@ -1,0 +1,19 @@
+/**
+ * FixAppliance - Main Styles Entry Point
+ * 
+ * This file imports all modular CSS files in the correct order.
+ * Use this as the single import point for all styles.
+ */
+
+/* Tailwind base, components, and utilities */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom modular styles */
+@import './base.css';
+@import './typography.css';
+@import './components.css';
+@import './layout.css';
+@import './utilities.css';
+@import './forms.css';
