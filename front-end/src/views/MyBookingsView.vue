@@ -254,6 +254,25 @@
           </div>
         </div>
 
+        <!-- 
+          EMPTY STATE USAGE:
+          ====================
+          Show this section when the user has no bookings.
+          
+          In your script, use a condition like:
+          
+          <template v-if="bookings.length === 0">
+            <!-- Empty state content here -->
+          </template>
+          <template v-else>
+            <!-- Bookings list content here -->
+          </template>
+          
+          Or use v-show for simple toggle:
+          <div v-show="bookings.length === 0" class="empty-state">
+            ...
+          </div>
+        -->
         <!-- Empty State (when no bookings) -->
         <!--
         <div class="empty-state">

@@ -13,7 +13,7 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import BookTechnicianView from '@/views/BookTechnicianView.vue'
 import MyBookingsView from '@/views/MyBookingsView.vue'
-import ArticlesView from '@/views/ArticlesView.vue'
+import ComingSoonView from '@/views/ComingSoonView.vue'
 import TechnicianLoginView from '@/views/TechnicianLoginView.vue'
 import TechnicianRegisterView from '@/views/TechnicianRegisterView.vue'
 import TechnicianDashboardView from '@/views/TechnicianDashboardView.vue'
@@ -54,10 +54,10 @@ const routes = [
   {
     path: '/articles',
     name: 'Articles',
-    component: ArticlesView,
+    component: ComingSoonView,
     meta: {
-      title: 'DIY Troubleshooting Guides - FixAppliance',
-      description: 'Learn to fix common appliance problems yourself with our step-by-step guides in Arabic and English.'
+      title: 'Coming Soon - DIY Guides - FixAppliance',
+      description: 'DIY troubleshooting guides are coming soon. Learn to fix common appliance problems yourself.'
     }
   },
 

@@ -19,11 +19,11 @@
             </svg>
             Book a Technician
           </a>
-          <a href="/articles" class="btn btn-white btn-lg">
+          <a href="/register" class="btn btn-white btn-lg">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
             </svg>
-            Browse DIY Guides
+            Create Free Account
           </a>
         </div>
         <!-- Trust Indicators -->
@@ -195,45 +195,44 @@
       </div>
     </section>
 
-    <!-- DIY Section -->
+    <!-- Why Choose Us Section -->
     <section class="section bg-white">
       <div class="container-wide">
         <div class="flex flex-col md:flex-row items-center gap-12">
           <div class="flex-1">
-            <span class="badge badge-secondary mb-4">DIY Resources</span>
-            <h2 class="h2 mb-4">Try Fixing It Yourself First</h2>
+            <span class="badge badge-secondary mb-4">Why FixAppliance</span>
+            <h2 class="h2 mb-4">Reliable Appliance Repairs You Can Trust</h2>
             <p class="text-lg text-neutral-600 mb-6">
-              Many appliance issues have simple solutions. Browse our free troubleshooting guides 
-              available in both Arabic and English.
+              We connect you with verified, skilled technicians who can fix your appliances quickly and professionally.
             </p>
             <ul class="space-y-3 mb-8">
               <li class="flex items-center gap-3 text-neutral-700">
                 <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                Step-by-step video tutorials
+                Verified and experienced technicians
               </li>
               <li class="flex items-center gap-3 text-neutral-700">
                 <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                Arabic troubleshooting guides
+                Transparent pricing with no hidden fees
               </li>
               <li class="flex items-center gap-3 text-neutral-700">
                 <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                Common problems and solutions
+                Easy online booking system
               </li>
               <li class="flex items-center gap-3 text-neutral-700">
                 <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                Save money on simple repairs
+                Customer ratings and reviews
               </li>
             </ul>
-            <a href="/articles" class="btn btn-primary">
-              Browse DIY Guides
+            <a href="/book-technician" class="btn btn-primary">
+              Book a Technician
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
               </svg>
@@ -241,8 +240,8 @@
           </div>
           <div class="flex-1">
             <img 
-              src="/images/home/diy-guides-illustration.svg" 
-              alt="DIY Repair Guides" 
+              src="/images/home/technician-at-work.svg" 
+              alt="Professional Technician at Work" 
               class="w-full max-w-md mx-auto"
             >
           </div>
@@ -295,7 +294,7 @@
                 <svg class="star star-filled" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
               </div>
               <p class="text-neutral-600 mb-4">
-                "I fixed my AC issue myself using their Arabic troubleshooting guide. Saved me a lot of money!"
+                "The technician was very knowledgeable about my AC system. He fixed it quickly and explained what was wrong!"
               </p>
               <div class="flex items-center gap-3">
                 <span class="avatar avatar-sm bg-primary-100 text-primary-600">MK</span>
@@ -338,7 +337,7 @@
       <div class="container-wide text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
         <p class="text-lg text-white/90 max-w-2xl mx-auto mb-8">
-          Book a verified technician now or browse our free DIY guides.
+          Book a verified technician now and get your appliance fixed quickly.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="/book-technician" class="btn btn-white btn-lg">

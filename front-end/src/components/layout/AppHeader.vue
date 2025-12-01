@@ -16,7 +16,6 @@
         <a href="/" class="header-nav-link active">Home</a>
         <a href="/services" class="header-nav-link">Services</a>
         <a href="/book-technician" class="header-nav-link">Book a Technician</a>
-        <a href="/articles" class="header-nav-link">DIY Articles</a>
         <a href="/about" class="header-nav-link">About Us</a>
         <a href="/contact" class="header-nav-link">Contact</a>
       </nav>
@@ -71,7 +70,6 @@
         <a href="/" class="block px-4 py-3 text-base font-medium text-neutral-900 rounded-lg hover:bg-neutral-50">Home</a>
         <a href="/services" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50">Services</a>
         <a href="/book-technician" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50">Book a Technician</a>
-        <a href="/articles" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50">DIY Articles</a>
         <a href="/about" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50">About Us</a>
         <a href="/contact" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50">Contact</a>
       </nav>

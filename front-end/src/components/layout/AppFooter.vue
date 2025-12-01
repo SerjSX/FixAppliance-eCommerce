@@ -15,7 +15,7 @@
               FixAppliance
             </div>
             <p class="footer-description">
-              Your trusted partner for appliance repairs in Lebanon. Book verified technicians or learn to fix it yourself with our Arabic and English guides.
+              Your trusted partner for appliance repairs in Lebanon. Book verified technicians to fix your appliances quickly and professionally.
             </p>
             <!-- Contact Info -->
             <div class="mt-6 space-y-3">
@@ -58,12 +58,8 @@
           <div>
             <h3 class="footer-heading">Resources</h3>
             <ul class="footer-links">
-              <li><a href="/articles" class="footer-link">DIY Articles</a></li>
-              <li><a href="/articles/videos" class="footer-link">Video Guides</a></li>
-              <li><a href="/troubleshooting" class="footer-link">Troubleshooting Guides</a></li>
-              <li><a href="/parts" class="footer-link">Spare Parts</a></li>
+              <li><a href="/articles" class="footer-link">DIY Articles <span class="text-xs text-secondary-400">(Coming Soon)</span></a></li>
               <li><a href="/faq" class="footer-link">FAQ</a></li>
-              <li><a href="/blog" class="footer-link">Blog</a></li>
             </ul>
           </div>
 

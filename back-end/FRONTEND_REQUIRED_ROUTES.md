@@ -2,51 +2,6 @@
 
 This document outlines the additional backend API routes needed to support the frontend functionality for Phase 1 of the FixAppliance eCommerce platform.
 
-## Articles / DIY Content Routes
-
-### GET `/api/articles`
-Get a list of published DIY articles with filtering and pagination.
-
-**Query Parameters:**
-- `page` (number) - Page number for pagination
-- `limit` (number) - Number of articles per page (default: 12)
-- `category` (string) - Filter by appliance category (e.g., washing-machine, refrigerator)
-- `language` (string) - Filter by language (en, ar)
-- `sort` (string) - Sort by: newest, popular
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "articles": [
-      {
-        "id": 1,
-        "title": "How to Troubleshoot Your Washing Machine",
-        "titleAR": "كيفية استكشاف أعطال غسالة الملابس",
-        "slug": "how-to-troubleshoot-washing-machine",
-        "excerpt": "Learn the most common washing machine problems...",
-        "category": "washing-machine",
-        "imageUrl": "/images/articles/washing-machine-guide.jpg",
-        "hasVideo": true,
-        "videoDuration": "5:30",
-        "author": { "name": "Ahmad Hassan", "avatar": "..." },
-        "readTime": "8 min",
-        "createdAt": "2024-12-01"
-      }
-    ],
-    "pagination": {
-      "page": 1,
-      "totalPages": 5,
-      "totalCount": 48
-    }
-  }
-}
-```
-
-### GET `/api/articles/:slug`
-Get a single article by its slug.
-
 ---
 
 ## Appliance Categories Routes
@@ -248,21 +203,6 @@ Submit a contact form message.
   "phone": "+961 71 234 567",
   "subject": "booking",
   "message": "I have a question about my booking..."
-}
-```
-
----
-
-## Newsletter Subscription
-
-### POST `/api/newsletter/subscribe`
-Subscribe to the newsletter.
-
-**Request Body:**
-```json
-{
-  "email": "john@example.com",
-  "language": "en"
 }
 ```
 
