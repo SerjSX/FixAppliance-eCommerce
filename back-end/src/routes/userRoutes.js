@@ -12,7 +12,7 @@
  */
 
 const express = require("express");
-const {registerUser, loginUser, logoutUser} = require("../controllers/UserController");
+const {registerUser, loginUser, logoutUser, getProfile, updateProfile} = require("../controllers/UserController");
 const {userValidation} = require("../middlewares/auth");
 const {userRequestBooking, userPayBooking, userRateBooking, getPendingBookings, getConfirmedBookings, getInProgressBookings, getCompletedBookings, getCancelledBookings} = require("../controllers/UserBookingController");
 
@@ -32,5 +32,8 @@ router.get("/booking/confirmed", userValidation, getConfirmedBookings);
 router.get("/booking/in-progress", userValidation, getInProgressBookings);
 router.get("/booking/completed", userValidation, getCompletedBookings);
 router.get("/booking/cancelled", userValidation, getCancelledBookings);
+
+router.get("/profile", userValidation, getProfile);
+router.put("/profile", userValidation, updateProfile);
 
 module.exports = router;

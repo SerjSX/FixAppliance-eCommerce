@@ -5,3 +5,5 @@
 front-end/todo.md
 /front-end/node_modules
 /back-end/node_modules
+back-end/node_modules/.cache/@babel/register/.babel.7.28.5.development.json
+/back-end/node_modules

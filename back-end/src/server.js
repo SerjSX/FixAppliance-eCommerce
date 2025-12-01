@@ -6,6 +6,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { connectDB } = require("./config/database");
 
+
 // Setting up the express app and its port to use
 const app = express();
 const port = process.env.PORT || 5000;
@@ -31,6 +32,9 @@ app.use(express.urlencoded({extended: false, limit: '10kb'}));
 app.use("/api/user", require("./routes/userRoutes"));
 app.use("/api/technician", require("./routes/technicianRoutes"));
 app.use("/api/freelancer", require("./routes/freelancerRoutes"));
+
+app.use('/api/appliances', require('./routes/applianceRoutes'));
+app.use('/api/service-areas', require('./routes/serviceAreaRoutes'));
 
 // 404 handling
 app.use((req, res) => {
