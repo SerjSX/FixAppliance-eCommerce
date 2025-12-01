@@ -3,4 +3,4 @@
 .env
 /back-end/node_modules
 front-end/todo.md
-/back-end/node_modules
+/front-end/node_modules
