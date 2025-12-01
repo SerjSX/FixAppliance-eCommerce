@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex">
     <!-- Sidebar -->
-    <aside class="fixed left-0 top-0 bottom-0 w-64 bg-primary-800 text-white overflow-y-auto">
+    <aside class="fixed left-0 top-0 bottom-0 w-64 bg-primary-800 text-white overflow-y-auto" role="navigation" aria-label="Technician dashboard navigation">
       <!-- Logo -->
       <div class="p-6 border-b border-primary-700">
         <div class="flex items-center gap-3">

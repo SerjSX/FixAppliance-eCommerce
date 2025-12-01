@@ -1,57 +1,53 @@
 <template>
-  <!-- Booking Status Badge Component -->
+  <!-- 
+    Booking Status Badge Component
+    
+    Usage: Pass a status prop to display the appropriate badge
+    Available statuses: pending, confirmed, in-progress, completed, cancelled
+    
+    Example: <BookingStatusBadge status="pending" />
+  -->
   
-  <!-- Pending Status -->
-  <span class="badge badge-pending">
+  <!-- Dynamic Status Badge - The actual status will be passed as a prop -->
+  <span class="badge" :class="badgeClass">
     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 8 8">
       <circle cx="4" cy="4" r="3"></circle>
     </svg>
-    Pending
+    {{ statusText }}
   </span>
-
-  <!-- Confirmed Status -->
-  <!--
-  <span class="badge badge-confirmed">
-    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 8 8">
-      <circle cx="4" cy="4" r="3"></circle>
-    </svg>
-    Confirmed
-  </span>
-  -->
-
-  <!-- In Progress Status -->
-  <!--
-  <span class="badge badge-in-progress">
-    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 8 8">
-      <circle cx="4" cy="4" r="3"></circle>
-    </svg>
-    In Progress
-  </span>
-  -->
-
-  <!-- Completed Status -->
-  <!--
-  <span class="badge badge-completed">
-    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 8 8">
-      <circle cx="4" cy="4" r="3"></circle>
-    </svg>
-    Completed
-  </span>
-  -->
-
-  <!-- Cancelled Status -->
-  <!--
-  <span class="badge badge-cancelled">
-    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 8 8">
-      <circle cx="4" cy="4" r="3"></circle>
-    </svg>
-    Cancelled
-  </span>
-  -->
 </template>
 
 <script>
 export default {
-  name: 'BookingStatusBadge'
+  name: 'BookingStatusBadge',
+  props: {
+    status: {
+      type: String,
+      default: 'pending',
+      validator: (value) => ['pending', 'confirmed', 'in-progress', 'completed', 'cancelled'].includes(value)
+    }
+  },
+  computed: {
+    badgeClass() {
+      const statusClasses = {
+        'pending': 'badge-pending',
+        'confirmed': 'badge-confirmed',
+        'in-progress': 'badge-in-progress',
+        'completed': 'badge-completed',
+        'cancelled': 'badge-cancelled'
+      }
+      return statusClasses[this.status] || 'badge-pending'
+    },
+    statusText() {
+      const statusTexts = {
+        'pending': 'Pending',
+        'confirmed': 'Confirmed',
+        'in-progress': 'In Progress',
+        'completed': 'Completed',
+        'cancelled': 'Cancelled'
+      }
+      return statusTexts[this.status] || 'Pending'
+    }
+  }
 }
 </script>

@@ -195,8 +195,8 @@
             </div>
           </article>
 
-          <!-- Article Card 4 - Arabic -->
-          <article class="card-hover" dir="rtl">
+          <!-- Article Card 4 - Arabic (RTL direction based on article language) -->
+          <article class="card-hover rtl-text">
             <div class="relative aspect-video">
               <img 
                 src="/images/articles/washing-machine-noise-ar.jpg" 

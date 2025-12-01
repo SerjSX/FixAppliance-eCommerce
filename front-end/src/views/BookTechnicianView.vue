@@ -44,75 +44,75 @@
                   <div class="form-section">
                     <h3 class="form-section-title">Select Your Appliance</h3>
                     
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3" role="radiogroup" aria-label="Select appliance type">
                       <!-- Washing Machine -->
                       <label class="relative cursor-pointer">
-                        <input type="radio" name="appliance-type" value="1" class="peer sr-only">
+                        <input type="radio" name="appliance-type" value="1" class="peer sr-only" aria-label="Washing Machine">
                         <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <img src="/images/icons/washing-machine.svg" alt="Washing Machine" class="w-10 h-10 mx-auto mb-2">
+                          <img src="/images/icons/washing-machine.svg" alt="" class="w-10 h-10 mx-auto mb-2" aria-hidden="true">
                           <span class="text-sm font-medium block">Washing Machine</span>
                         </div>
                       </label>
 
                       <!-- Refrigerator -->
                       <label class="relative cursor-pointer">
-                        <input type="radio" name="appliance-type" value="2" class="peer sr-only">
+                        <input type="radio" name="appliance-type" value="2" class="peer sr-only" aria-label="Refrigerator">
                         <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <img src="/images/icons/refrigerator.svg" alt="Refrigerator" class="w-10 h-10 mx-auto mb-2">
+                          <img src="/images/icons/refrigerator.svg" alt="" class="w-10 h-10 mx-auto mb-2" aria-hidden="true">
                           <span class="text-sm font-medium block">Refrigerator</span>
                         </div>
                       </label>
 
                       <!-- Air Conditioner -->
                       <label class="relative cursor-pointer">
-                        <input type="radio" name="appliance-type" value="3" class="peer sr-only">
+                        <input type="radio" name="appliance-type" value="3" class="peer sr-only" aria-label="Air Conditioner">
                         <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <img src="/images/icons/air-conditioner.svg" alt="Air Conditioner" class="w-10 h-10 mx-auto mb-2">
+                          <img src="/images/icons/air-conditioner.svg" alt="" class="w-10 h-10 mx-auto mb-2" aria-hidden="true">
                           <span class="text-sm font-medium block">Air Conditioner</span>
                         </div>
                       </label>
 
                       <!-- Oven -->
                       <label class="relative cursor-pointer">
-                        <input type="radio" name="appliance-type" value="4" class="peer sr-only">
+                        <input type="radio" name="appliance-type" value="4" class="peer sr-only" aria-label="Oven and Stove">
                         <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <img src="/images/icons/oven.svg" alt="Oven & Stove" class="w-10 h-10 mx-auto mb-2">
+                          <img src="/images/icons/oven.svg" alt="" class="w-10 h-10 mx-auto mb-2" aria-hidden="true">
                           <span class="text-sm font-medium block">Oven & Stove</span>
                         </div>
                       </label>
 
                       <!-- Dishwasher -->
                       <label class="relative cursor-pointer">
-                        <input type="radio" name="appliance-type" value="5" class="peer sr-only">
+                        <input type="radio" name="appliance-type" value="5" class="peer sr-only" aria-label="Dishwasher">
                         <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <img src="/images/icons/dishwasher.svg" alt="Dishwasher" class="w-10 h-10 mx-auto mb-2">
+                          <img src="/images/icons/dishwasher.svg" alt="" class="w-10 h-10 mx-auto mb-2" aria-hidden="true">
                           <span class="text-sm font-medium block">Dishwasher</span>
                         </div>
                       </label>
 
                       <!-- Dryer -->
                       <label class="relative cursor-pointer">
-                        <input type="radio" name="appliance-type" value="6" class="peer sr-only">
+                        <input type="radio" name="appliance-type" value="6" class="peer sr-only" aria-label="Dryer">
                         <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <img src="/images/icons/dryer.svg" alt="Dryer" class="w-10 h-10 mx-auto mb-2">
+                          <img src="/images/icons/dryer.svg" alt="" class="w-10 h-10 mx-auto mb-2" aria-hidden="true">
                           <span class="text-sm font-medium block">Dryer</span>
                         </div>
                       </label>
 
                       <!-- Microwave -->
                       <label class="relative cursor-pointer">
-                        <input type="radio" name="appliance-type" value="7" class="peer sr-only">
+                        <input type="radio" name="appliance-type" value="7" class="peer sr-only" aria-label="Microwave">
                         <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <img src="/images/icons/microwave.svg" alt="Microwave" class="w-10 h-10 mx-auto mb-2">
+                          <img src="/images/icons/microwave.svg" alt="" class="w-10 h-10 mx-auto mb-2" aria-hidden="true">
                           <span class="text-sm font-medium block">Microwave</span>
                         </div>
                       </label>
 
                       <!-- Water Heater -->
                       <label class="relative cursor-pointer">
-                        <input type="radio" name="appliance-type" value="8" class="peer sr-only">
+                        <input type="radio" name="appliance-type" value="8" class="peer sr-only" aria-label="Water Heater">
                         <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <img src="/images/icons/water-heater.svg" alt="Water Heater" class="w-10 h-10 mx-auto mb-2">
+                          <img src="/images/icons/water-heater.svg" alt="" class="w-10 h-10 mx-auto mb-2" aria-hidden="true">
                           <span class="text-sm font-medium block">Water Heater</span>
                         </div>
                       </label>
