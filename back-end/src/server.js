@@ -36,6 +36,8 @@ app.use("/api/freelancer", require("./routes/freelancerRoutes"));
 app.use('/api/appliances', require('./routes/applianceRoutes'));
 app.use('/api/service-areas', require('./routes/serviceAreaRoutes'));
 
+app.use('/api/contact', require('./routes/contactRoutes'));
+
 // 404 handling
 app.use((req, res) => {
     res.status(404).json({message: "Route not found"});

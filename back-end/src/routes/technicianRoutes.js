@@ -15,6 +15,7 @@ const express = require("express");
 const {registerTechnician, loginTechnician, logoutTechnician, getProfile, updateProfile, settingTechnicianSpecialty, getSpecialties, removeSpecialty, settingTechnicianServiceArea, getServiceAreas, removeServiceArea} = require("../controllers/TechnicianController");
 const {technicianValidation} = require("../middlewares/auth");
 const {getPendingBookings, acceptPendingBooking, startBooking, completeBooking, declineBooking} = require("../controllers/TechnicianBookingController");
+const { getTechnicianEarnings } = require("../controllers/EarningsController.js");
 
 const router = express.Router();
 
@@ -39,5 +40,6 @@ router.post("/booking/start", technicianValidation, startBooking);
 router.post("/booking/complete", technicianValidation, completeBooking);
 router.post("/booking/decline", technicianValidation, declineBooking);
 
+router.get("/earnings", technicianValidation, getTechnicianEarnings);
 
 module.exports = router;
