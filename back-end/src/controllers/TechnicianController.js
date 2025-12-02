@@ -186,6 +186,195 @@ const logoutTechnician = asyncHandler(async (req, res) => {
     res.status(200).json({message: "Successfully logged out."});
 })
 
+// Getting technician's profile
+const getProfile = asyncHandler(async (req, res) => {
+    const technicianID = req.technicianID;
+
+    try {
+        const pool = getPool();
+
+        const technicianResult = await pool.request()
+            .input("technicianId", sql.Int, technicianID)
+            .query(`
+            SELECT tec.Technician_ID, tec.First_Name, tec.Last_Name, tec.Email, tec.Phone, tec.isActive, tec.Verified, tec.Average_Rating, tec.Total_Jobs
+            FROM [Technician] AS tec
+            WHERE tec.Technician_ID = @technicianId
+            `);
+
+
+        if (technicianResult.recordset.length === 0) {
+            return res.status(404).json({message: "Technician not found."});
+        }
+
+        const applianceResult = await pool.request()
+            .input("technicianId", sql.Int, technicianID)
+            .query(`
+            SELECT tec_cat.Category_ID, cat.NameEN, cat.NameAR, cat.Description, tec_cat.Years_Of_Experience, tec_cat.Certification_Date
+            FROM Technician_Category AS tec_cat
+            JOIN Appliance_Category AS cat ON tec_cat.Category_ID = cat.Category_ID
+            WHERE tec_cat.Technician_ID = @technicianId
+            `);
+
+        const serviceAreaResult = await pool.request()
+            .input("technicianId", sql.Int, technicianID)
+            .query(`
+            SELECT area.Area_ID, area.NameEN, area.NameAR, area.Region, tec_area.Priority_Order
+            FROM Technician_Service_Area AS tec_area
+            JOIN Service_Area AS area ON tec_area.Area_ID = area.Area_ID
+            WHERE tec_area.Technician_ID = @technicianId
+            ORDER BY tec_area.Priority_Order ASC, area.NameEN ASC
+            `);
+
+        const technicianData = technicianResult.recordset[0];
+
+        const applianceCategories = applianceResult.recordset.map(record => ({
+            categoryId: record.Category_ID,
+            nameEN: record.NameEN,
+            nameAR: record.NameAR,
+            description: record.Description,
+            yearsOfExperience: record.Years_Of_Experience,
+            certificationDate: record.Certification_Date
+        }));
+
+        const serviceAreas = serviceAreaResult.recordset.map(record => ({
+            areaId: record.Area_ID,
+            nameEN: record.NameEN,
+            nameAR: record.NameAR,
+            region: record.Region,
+            priority: record.Priority_Order
+        }));
+
+        res.status(200).json({ 
+            firstName: technicianData.First_Name,
+            lastName: technicianData.Last_Name,
+            email: technicianData.Email,
+            phone: technicianData.Phone,
+            isActive: technicianData.isActive,
+            verified: technicianData.Verified,
+            averageRating: technicianData.Average_Rating,
+            totalJobs: technicianData.Total_Jobs,
+            applianceCategories: applianceCategories,
+            serviceAreas: serviceAreas,
+        });
+    } catch (error) {
+        // Throwing the console error and 500 status in case something goes wrong.
+        console.error("Unexpected error occurred when trying to get profile: ", error);
+        res.status(500).json({ message: "An unexpected error occurred while getting profile." });
+    }
+})
+
+// Updating technician's profile information
+const updateProfile = asyncHandler(async (req, res) => {
+    const { firstName, lastName, email, phone } = req.body;
+    const technicianID = req.technicianID;
+
+    // Checking if any of them is empty, if yes then we throw a 400
+    if (!firstName || !lastName || !email || !phone) {
+        return res.status(400).json({ message: "You have to insert all profile data to update." });
+    }
+
+    // Validate first name format
+    if (!isValidName(firstName)) {
+        return res.status(400).json({ message: "First name must be 2-30 characters and contain only letters." });
+    }
+
+    // Validate last name format
+    if (!isValidName(lastName)) {
+        return res.status(400).json({ message: "Last name must be 2-30 characters and contain only letters." });
+    }
+
+    // Validate email format
+    if (!isValidEmail(email)) {
+        return res.status(400).json({ message: "Please enter a valid email address." });
+    }
+
+    // Validate phone format
+    if (!isValidPhone(phone)) {
+        return res.status(400).json({ message: "Please enter a valid phone number." });
+    }
+
+    try {
+        const pool = getPool();
+
+        // Updating the technician data
+        const result = await pool.request()
+            .input("technicianId", sql.Int, technicianID)
+            .input("firstName", sql.VarChar, sanitizeString(firstName))
+            .input("lastName", sql.VarChar, sanitizeString(lastName))
+            .input("email", sql.VarChar, sanitizeString(email).toLowerCase())
+            .input("phone", sql.VarChar, sanitizeString(phone))
+            .query(`
+                UPDATE [Technician] 
+                SET First_Name = @firstName, Last_Name = @lastName, Email = @email, 
+                    Phone = @phone, modifiedAt = GETDATE()
+                WHERE Technician_ID = @technicianId
+            `);
+
+        // Check if update affected any rows
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: "Technician not found or no changes made." });
+        }
+
+        // Sending success message
+        res.status(200).json({ message: "Technician profile updated successfully!" });
+    } catch (error) {
+        // Handling the unique constraints for email and phone numbers
+        if (error.number === 2627 || error.number === 2601) {
+            return res.status(409).json({ message: "Another account exists already either with this email address or phone number. If you have another account, please use that one instead." });
+        }
+
+        // Throwing the console error and 500 status in case something goes wrong
+        console.error("Unexpected error when updating technician profile: ", error);
+        res.status(500).json({ message: "An unexpected error occurred while updating the technician's profile." });
+    }
+});
+
+// Getting technician's specialties (appliance categories)
+const getSpecialties = asyncHandler(async (req, res) => {
+    const technicianID = req.technicianID;
+
+    try {
+        const pool = getPool();
+
+        // Get all specialties for this technician
+        const result = await pool.request()
+            .input("technicianId", sql.Int, technicianID)
+            .query(`
+                SELECT 
+                    tec_cat.Category_ID, 
+                    cat.NameEN, 
+                    cat.NameAR, 
+                    cat.Description,
+                    tec_cat.Years_Of_Experience, 
+                    tec_cat.Certification_Date,
+                    tec_cat.createdAt
+                FROM Technician_Category AS tec_cat
+                JOIN Appliance_Category AS cat ON tec_cat.Category_ID = cat.Category_ID
+                WHERE tec_cat.Technician_ID = @technicianId
+                ORDER BY cat.NameEN ASC
+            `);
+
+        // Format the response by camelCase
+        const specialties = result.recordset.map(record => ({
+            categoryId: record.Category_ID,
+            nameEN: record.NameEN,
+            nameAR: record.NameAR,
+            description: record.Description,
+            yearsOfExperience: record.Years_Of_Experience,
+            certificationDate: record.Certification_Date,
+            addedAt: record.createdAt
+        }));
+
+        res.status(200).json({
+            message: "Specialties retrieved successfully.",
+            count: specialties.length,
+            specialties: specialties
+        });
+    } catch (error) {
+        console.error("Unexpected error occurred when trying to get specialties: ", error);
+        res.status(500).json({ message: "An unexpected error occurred while retrieving specialties." });
+    }
+});
 
 // Setting technician specialty - allows technicians to add appliance categories they specialize in
 const settingTechnicianSpecialty = asyncHandler(async (req,res) => {
@@ -301,6 +490,95 @@ const settingTechnicianSpecialty = asyncHandler(async (req,res) => {
     }
 })
 
+// Removing a specialty from technician's profile
+const removeSpecialty = asyncHandler(async (req, res) => {
+    const { categoryId } = req.params;  // Get from URL parameter
+    const technicianID = req.technicianID;
+
+    // Validate categoryId
+    const parsedCategoryId = parseInt(categoryId, 10);
+    if (isNaN(parsedCategoryId)) {
+        return res.status(400).json({ message: "Invalid category ID. Must be a number." });
+    }
+
+    try {
+        const pool = getPool();
+
+        // Check if the specialty exists before deleting
+        const checkExists = await pool.request()
+            .input("technicianId", sql.Int, technicianID)
+            .input("categoryId", sql.Int, parsedCategoryId)
+            .query(`
+                SELECT Category_ID
+                FROM Technician_Category
+                WHERE Technician_ID = @technicianId AND Category_ID = @categoryId
+            `);
+
+        if (checkExists.recordset.length === 0) {
+            return res.status(404).json({ message: "Specialty not found or not assigned to you." });
+        }
+
+        // Delete the specialty
+        const result = await pool.request()
+            .input("technicianId", sql.Int, technicianID)
+            .input("categoryId", sql.Int, parsedCategoryId)
+            .query(`
+                DELETE FROM Technician_Category
+                WHERE Technician_ID = @technicianId AND Category_ID = @categoryId
+            `);
+
+        res.status(200).json({ message: "Specialty removed successfully." });
+    } catch (error) {
+        console.error("Unexpected error occurred when trying to remove specialty: ", error);
+        res.status(500).json({ message: "An unexpected error occurred while removing the specialty." });
+    }
+});
+
+// Getting technician's service areas
+const getServiceAreas = asyncHandler(async (req, res) => {
+    const technicianID = req.technicianID;
+
+    try {
+        const pool = getPool();
+
+        // Get all service areas for this technician, sorted by priority
+        const result = await pool.request()
+            .input("technicianId", sql.Int, technicianID)
+            .query(`
+                SELECT 
+                    tec_area.Area_ID,
+                    area.NameEN,
+                    area.NameAR,
+                    area.Region,
+                    tec_area.Priority_Order,
+                    tec_area.createdAt
+                FROM Technician_Service_Area AS tec_area
+                JOIN Service_Area AS area ON tec_area.Area_ID = area.Area_ID
+                WHERE tec_area.Technician_ID = @technicianId
+                ORDER BY tec_area.Priority_Order ASC, area.NameEN ASC
+            `);
+
+        // Format the response with consistent camelCase
+        const serviceAreas = result.recordset.map(record => ({
+            areaId: record.Area_ID,
+            nameEN: record.NameEN,
+            nameAR: record.NameAR,
+            region: record.Region,
+            priority: record.Priority_Order,
+            addedAt: record.createdAt
+        }));
+
+        res.status(200).json({
+            message: "Service areas retrieved successfully.",
+            count: serviceAreas.length,
+            serviceAreas: serviceAreas
+        });
+    } catch (error) {
+        console.error("Unexpected error occurred when trying to get service areas: ", error);
+        res.status(500).json({ message: "An unexpected error occurred while retrieving service areas." });
+    }
+});
+
 // Setting technician service area - allows technicians to add areas they work in with priority
 const settingTechnicianServiceArea = asyncHandler(async (req,res) => {
     // Getting the service area data from the body and the technicianID passed from the middleware
@@ -393,5 +671,49 @@ const settingTechnicianServiceArea = asyncHandler(async (req,res) => {
     }
 })
 
+// Removing a service area from technician's profile
+const removeServiceArea = asyncHandler(async (req, res) => {
+    const { areaId } = req.params;  // Get from URL parameter
+    const technicianID = req.technicianID;
 
-module.exports = {registerTechnician, loginTechnician, logoutTechnician, settingTechnicianSpecialty, settingTechnicianServiceArea}; 
+    // Validate areaId
+    const parsedAreaId = parseInt(areaId, 10);
+    if (isNaN(parsedAreaId)) {
+        return res.status(400).json({ message: "Invalid area ID. Must be a number." });
+    }
+
+    try {
+        const pool = getPool();
+
+        // Check if the service area exists before deleting
+        const checkExists = await pool.request()
+            .input("technicianId", sql.Int, technicianID)
+            .input("areaId", sql.Int, parsedAreaId)
+            .query(`
+                SELECT Area_ID
+                FROM Technician_Service_Area
+                WHERE Technician_ID = @technicianId AND Area_ID = @areaId
+            `);
+
+        if (checkExists.recordset.length === 0) {
+            return res.status(404).json({ message: "Service area not found or not assigned to you." });
+        }
+
+        // Delete the service area
+        const result = await pool.request()
+            .input("technicianId", sql.Int, technicianID)
+            .input("areaId", sql.Int, parsedAreaId)
+            .query(`
+                DELETE FROM Technician_Service_Area
+                WHERE Technician_ID = @technicianId AND Area_ID = @areaId
+            `);
+
+        res.status(200).json({ message: "Service area removed successfully." });
+    } catch (error) {
+        console.error("Unexpected error occurred when trying to remove service area: ", error);
+        res.status(500).json({ message: "An unexpected error occurred while removing the service area." });
+    }
+});
+
+
+module.exports = {registerTechnician, loginTechnician, logoutTechnician, getProfile, updateProfile, settingTechnicianSpecialty, getSpecialties, removeSpecialty, settingTechnicianServiceArea, getServiceAreas, removeServiceArea}; 

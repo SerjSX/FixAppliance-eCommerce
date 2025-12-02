@@ -12,7 +12,7 @@
  */
 
 const express = require("express");
-const {registerTechnician, loginTechnician, logoutTechnician, settingTechnicianSpecialty, settingTechnicianServiceArea} = require("../controllers/TechnicianController");
+const {registerTechnician, loginTechnician, logoutTechnician, getProfile, updateProfile, settingTechnicianSpecialty, getSpecialties, removeSpecialty, settingTechnicianServiceArea, getServiceAreas, removeServiceArea} = require("../controllers/TechnicianController");
 const {technicianValidation} = require("../middlewares/auth");
 const {getPendingBookings, acceptPendingBooking} = require("../controllers/TechnicianBookingController");
 
@@ -22,8 +22,16 @@ router.post("/register", registerTechnician);
 router.post("/login", loginTechnician);
 router.post("/logout", technicianValidation, logoutTechnician);
 
-router.post("/set-specialty", technicianValidation, settingTechnicianSpecialty);
-router.post("/set-service-area", technicianValidation, settingTechnicianServiceArea);
+router.get("/profile", technicianValidation, getProfile);
+router.put("/profile", technicianValidation, updateProfile);
+
+router.post("/specialty", technicianValidation, settingTechnicianSpecialty)
+router.get("/specialties", technicianValidation, getSpecialties);
+router.delete("/specialty/:categoryId", technicianValidation, removeSpecialty);
+
+router.post("/service-area", technicianValidation, settingTechnicianServiceArea);
+router.get("/service-areas", technicianValidation, getServiceAreas);
+router.delete("/service-area/:areaId", technicianValidation, removeServiceArea);
 
 router.get("/booking/get-pendings", technicianValidation, getPendingBookings);
 router.post("/booking/accept", technicianValidation, acceptPendingBooking);

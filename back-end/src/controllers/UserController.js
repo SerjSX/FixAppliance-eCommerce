@@ -297,7 +297,7 @@ const updateProfile = asyncHandler(async (req, res) => {
             .query(`
             UPDATE [User] 
             SET First_Name = @firstName, Last_Name = @lastName, Email = @email, Phone = @phone, Street_Address = @streetAddress, Building_Name = @buildingName,
-                Floor = @floor, City = @city, Postal_Code = @postalCode
+                Floor = @floor, City = @city, Postal_Code = @postalCode, modifiedAt = GETDATE()
             WHERE User_ID = @userId
                 `);
 
