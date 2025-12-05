@@ -301,6 +301,40 @@
   }
 
   /* ==========================================================================
+     FILTER TABS (pill-style)
+     ========================================================================== */
+  
+  .filter-tab {
+    @apply px-4 py-2 rounded-lg text-sm font-medium transition-colors
+           bg-white text-neutral-600 hover:bg-neutral-100;
+  }
+
+  .filter-tab.active {
+    @apply bg-primary-600 text-white hover:bg-primary-700 hover:text-white;
+  }
+
+  /* ==========================================================================
+     TECHNICIAN SIDEBAR
+     ========================================================================== */
+  
+  .tech-sidebar {
+    @apply fixed left-0 top-0 bottom-0 w-64 bg-primary-800 text-white overflow-y-auto;
+  }
+
+  .tech-sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
+           text-primary-200 hover:bg-primary-700 hover:text-white;
+  }
+
+  .tech-sidebar-link.active {
+    @apply bg-primary-700 text-white hover:bg-primary-600 hover:text-white;
+  }
+
+  .tech-sidebar-badge {
+    @apply ml-auto text-white text-xs px-2 py-0.5 rounded-full;
+  }
+
+  /* ==========================================================================
      EMPTY STATE
      ========================================================================== */
   
@@ -319,3 +353,56 @@
   .empty-state-description {
     @apply text-neutral-500 mb-6;
   }
+
+  /* ==========================================================================
+     LOADING CONTAINER
+     ========================================================================== */
+  
+  .loading-container {
+    @apply flex justify-center py-12;
+  }
+
+  .loading-container-sm {
+    @apply flex justify-center py-8;
+  }
+
+  /* ==========================================================================
+     TECHNICIAN PORTAL HEADER
+     ========================================================================== */
+  
+  .tech-header {
+    @apply bg-white border-b border-neutral-100 px-6 py-4;
+  }
+
+  .tech-header-content {
+    @apply flex items-center justify-between;
+  }
+
+  .tech-header-title {
+    @apply text-xl font-semibold text-neutral-900;
+  }
+
+  .tech-header-subtitle {
+    @apply text-sm text-neutral-500;
+  }
+
+  /* ==========================================================================
+     STAT CARD
+     ========================================================================== */
+  
+  .stat-card {
+    @apply bg-white rounded-xl border border-neutral-100 shadow-sm p-5;
+  }
+
+  .stat-card-value {
+    @apply text-3xl font-bold text-neutral-900;
+  }
+
+  .stat-card-label {
+    @apply text-sm text-neutral-500;
+  }
+
+  .stat-card-link {
+    @apply text-sm text-primary-600 hover:text-primary-700 font-medium inline-flex items-center gap-1;
+  }
+

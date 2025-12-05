@@ -240,10 +240,11 @@ const declineBooking = asyncHandler(async (req, res) => {
         const pool = getPool();
 
         // Check if the booking exists and is assigned to this technician
+        // Also get Booking_Date to determine if we should set to 'pending' or 'cancelled'
         const checkBooking = await pool.request()
             .input("bookingID", sql.Int, bookingID)
             .query(`
-                SELECT Booking_ID, [Status], Technician_ID
+                SELECT Booking_ID, [Status], Technician_ID, Booking_Date
                 FROM Booking
                 WHERE Booking_ID = @bookingID
             `);
@@ -265,22 +266,34 @@ const declineBooking = asyncHandler(async (req, res) => {
             return res.status(400).json({ message: `This booking is ${booking.Status} and cannot be declined. Only confirmed bookings can be declined.` });
         }
 
-        // Update the booking - remove technician assignment and change status back to pending
+        // Determine new status based on booking date
+        // Constraint: pending bookings MUST have Booking_Date >= today's date
+        const bookingDate = new Date(booking.Booking_Date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        bookingDate.setHours(0, 0, 0, 0);
+        
+        const newStatus = bookingDate >= today ? 'pending' : 'cancelled';
+
+        // Update the booking - remove technician assignment and change status
         await pool.request()
             .input("bookingID", sql.Int, bookingID)
+            .input("newStatus", sql.VarChar, newStatus)
             .query(`
                 UPDATE Booking
                 SET Technician_ID = NULL,
-                    [Status] = 'pending',
+                    [Status] = @newStatus,
                     modifiedAt = GETDATE()
                 WHERE Booking_ID = @bookingID
             `);
 
         // Return success response
         res.status(200).json({
-            message: "Booking declined successfully. It is now available for other technicians.",
+            message: newStatus === 'pending' 
+                ? "Booking declined successfully. It is now available for other technicians."
+                : "Booking declined successfully. It has been cancelled as the scheduled date has passed.",
             bookingID: bookingID,
-            status: "pending"
+            status: newStatus
         });
 
     } catch (error) {

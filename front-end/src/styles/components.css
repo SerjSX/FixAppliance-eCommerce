@@ -221,6 +221,10 @@
     @apply w-16 h-16 text-xl;
   }
 
+  .avatar-2xl {
+    @apply w-24 h-24 text-3xl;
+  }
+
   /* ==========================================================================
      DIVIDERS
      ========================================================================== */
@@ -251,6 +255,10 @@
 
   .spinner-lg {
     @apply w-8 h-8;
+  }
+
+  .spinner-xl {
+    @apply w-12 h-12;
   }
 
   /* ==========================================================================
@@ -354,3 +362,80 @@
   .service-card-description {
     @apply text-sm text-neutral-500;
   }
+
+  /* ==========================================================================
+     ICON BOX
+     ========================================================================== */
+  
+  .icon-box {
+    @apply w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0;
+  }
+
+  .icon-box-round {
+    @apply icon-box rounded-full;
+  }
+
+  .icon-box-sm {
+    @apply w-10 h-10;
+  }
+
+  .icon-box-lg {
+    @apply w-16 h-16 rounded-2xl;
+  }
+
+  .icon-box-xl {
+    @apply w-20 h-20 rounded-2xl;
+  }
+
+  .icon-box-primary {
+    @apply bg-primary-100 text-primary-600;
+  }
+
+  .icon-box-secondary {
+    @apply bg-secondary-100 text-secondary-600;
+  }
+
+  .icon-box-success {
+    @apply bg-success-100 text-success-600;
+  }
+
+  .icon-box-warning {
+    @apply bg-warning-100 text-warning-600;
+  }
+
+  .icon-box-error {
+    @apply bg-error-100 text-error-600;
+  }
+
+  /* ==========================================================================
+     TAG / PILL
+     ========================================================================== */
+  
+  .tag {
+    @apply px-3 py-1 text-sm rounded-full inline-flex items-center;
+  }
+
+  .tag-sm {
+    @apply px-2.5 py-0.5 text-xs;
+  }
+
+  .tag-primary {
+    @apply bg-primary-100 text-primary-700;
+  }
+
+  .tag-secondary {
+    @apply bg-secondary-100 text-secondary-700;
+  }
+
+  .tag-success {
+    @apply bg-success-100 text-success-700;
+  }
+
+  .tag-warning {
+    @apply bg-warning-100 text-warning-700;
+  }
+
+  .tag-error {
+    @apply bg-error-100 text-error-700;
+  }
+

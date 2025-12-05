@@ -126,16 +126,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.alert-fade-enter-active,
-.alert-fade-leave-active {
-  transition: all 0.3s ease;
-}
-
-.alert-fade-enter-from,
-.alert-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-</style>

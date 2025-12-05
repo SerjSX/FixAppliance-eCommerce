@@ -20,7 +20,7 @@
     <!-- Loading State -->
     <section v-if="loading" class="section-sm">
       <div class="container-wide text-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+        <div class="spinner spinner-xl mx-auto"></div>
         <p class="mt-4 text-neutral-600">Loading booking details...</p>
       </div>
     </section>
@@ -85,8 +85,8 @@
               <div class="card-body">
                 <h3 class="text-lg font-semibold text-neutral-900 mb-4">Assigned Technician</h3>
                 <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center">
-                    <span class="text-lg font-bold text-primary-600">{{ technicianInitials }}</span>
+                  <div class="avatar avatar-lg bg-primary-100 text-primary-600">
+                    <span class="text-lg font-bold">{{ technicianInitials }}</span>
                   </div>
                   <div>
                     <p class="font-medium">{{ technicianName }}</p>

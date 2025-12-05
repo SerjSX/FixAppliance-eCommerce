@@ -61,8 +61,8 @@
                     <h3 class="form-section-title">Select Your Appliance</h3>
                     
                     <!-- Loading -->
-                    <div v-if="loadingAppliances" class="flex justify-center py-8">
-                      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+                    <div v-if="loadingAppliances" class="loading-container-sm">
+                      <div class="spinner spinner-lg"></div>
                     </div>
 
                     <div v-else class="grid grid-cols-2 md:grid-cols-4 gap-3" role="radiogroup" aria-label="Select appliance type">

@@ -17,8 +17,8 @@
     <section class="section-sm">
       <div class="container-wide">
         <!-- Loading State -->
-        <div v-if="loading" class="flex justify-center py-12">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div v-if="loading" class="loading-container">
+          <div class="spinner spinner-lg"></div>
         </div>
 
         <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -27,8 +27,8 @@
             <div class="card">
               <div class="card-body text-center py-8">
                 <!-- Avatar -->
-                <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center">
-                  <span class="text-3xl font-bold text-primary-600">{{ userInitials }}</span>
+                <div class="avatar avatar-2xl bg-primary-100 text-primary-600 mx-auto mb-4">
+                  <span class="font-bold">{{ userInitials }}</span>
                 </div>
                 <h3 class="text-lg font-semibold text-neutral-900">{{ userName }}</h3>
                 <p class="text-sm text-neutral-500">{{ user.email }}</p>

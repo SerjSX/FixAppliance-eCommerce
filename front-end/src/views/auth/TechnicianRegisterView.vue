@@ -26,7 +26,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <!-- Benefit 1 -->
           <div class="card p-6 text-center">
-            <div class="w-12 h-12 mx-auto mb-4 bg-success-100 rounded-full flex items-center justify-center">
+            <div class="icon-box-round icon-box-success mx-auto mb-4">
               <svg class="w-6 h-6 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
@@ -39,7 +39,7 @@
 
           <!-- Benefit 2 -->
           <div class="card p-6 text-center">
-            <div class="w-12 h-12 mx-auto mb-4 bg-primary-100 rounded-full flex items-center justify-center">
+            <div class="icon-box-round icon-box-primary mx-auto mb-4">
               <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
               </svg>
@@ -52,7 +52,7 @@
 
           <!-- Benefit 3 -->
           <div class="card p-6 text-center">
-            <div class="w-12 h-12 mx-auto mb-4 bg-secondary-100 rounded-full flex items-center justify-center">
+            <div class="icon-box-round icon-box-secondary mx-auto mb-4">
               <svg class="w-6 h-6 text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
               </svg>
