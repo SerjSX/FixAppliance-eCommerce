@@ -9,11 +9,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Custom modular styles */
-@import './base.css';
-@import './typography.css';
-@import './components.css';
-@import './layout.css';
-@import './utilities.css';
-@import './forms.css';

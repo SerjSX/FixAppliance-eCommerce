@@ -4,7 +4,7 @@
     <div class="page-header bg-primary-700 text-white">
       <div class="container-wide">
         <nav class="breadcrumb mb-4 text-primary-200">
-          <a href="/" class="breadcrumb-link text-primary-200 hover:text-white">Home</a>
+          <router-link to="/" class="breadcrumb-link text-primary-200 hover:text-white">Home</router-link>
           <span class="breadcrumb-separator text-primary-400">/</span>
           <span class="breadcrumb-current text-white">Become a Technician</span>
         </nav>
@@ -75,7 +75,23 @@
               <h3 class="font-semibold text-neutral-900">Technician Registration</h3>
             </div>
             <div class="card-body">
-              <form class="space-y-6">
+              <form @submit.prevent="handleRegister" class="space-y-6">
+                <!-- Error Alert -->
+                <AlertMessage 
+                  v-if="error" 
+                  type="error" 
+                  :message="error"
+                  @dismiss="error = null"
+                />
+
+                <!-- Success Alert -->
+                <AlertMessage 
+                  v-if="success" 
+                  type="success" 
+                  :message="success"
+                  :dismissible="false"
+                />
+
                 <!-- Personal Information Section -->
                 <div class="form-section">
                   <h3 class="form-section-title">Personal Information</h3>
@@ -87,9 +103,11 @@
                       <input 
                         type="text" 
                         id="tech-first-name" 
+                        v-model="form.firstName"
                         class="form-input" 
                         placeholder="Ahmad"
                         autocomplete="given-name"
+                        required
                       >
                     </div>
 
@@ -99,9 +117,11 @@
                       <input 
                         type="text" 
                         id="tech-last-name" 
+                        v-model="form.lastName"
                         class="form-input" 
                         placeholder="Hassan"
                         autocomplete="family-name"
+                        required
                       >
                     </div>
                   </div>
@@ -113,9 +133,11 @@
                       <input 
                         type="email" 
                         id="tech-email" 
+                        v-model="form.email"
                         class="form-input" 
                         placeholder="ahmad@example.com"
                         autocomplete="email"
+                        required
                       >
                     </div>
 
@@ -127,9 +149,11 @@
                         <input 
                           type="tel" 
                           id="tech-phone" 
+                          v-model="form.phone"
                           class="form-input" 
                           placeholder="71 234 567"
                           autocomplete="tel"
+                          required
                         >
                       </div>
                     </div>
@@ -148,9 +172,11 @@
                         <input 
                           type="password" 
                           id="tech-password" 
+                          v-model="form.password"
                           class="form-input" 
                           placeholder="Create a strong password"
                           autocomplete="new-password"
+                          required
                         >
                         <button type="button" class="form-input-icon form-input-icon-right-position text-neutral-400 hover:text-neutral-600" aria-label="Toggle password visibility">
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,6 +185,7 @@
                           </svg>
                         </button>
                       </div>
+                      <p class="form-hint">Minimum 8 characters with uppercase, lowercase, number, and special character</p>
                     </div>
 
                     <!-- Confirm Password -->
@@ -167,9 +194,11 @@
                       <input 
                         type="password" 
                         id="tech-confirm-password" 
+                        v-model="form.confirmPassword"
                         class="form-input" 
                         placeholder="Confirm your password"
                         autocomplete="new-password"
+                        required
                       >
                     </div>
                   </div>
@@ -189,27 +218,21 @@
                   </div>
                 </div>
 
-                <!-- Terms Agreement -->
-                <div class="form-check">
-                  <input type="checkbox" id="tech-terms" class="form-checkbox">
-                  <label for="tech-terms" class="form-check-label">
-                    I agree to the <a href="/terms" class="text-primary-600 hover:underline">Terms of Service</a>, 
-                    <a href="/privacy" class="text-primary-600 hover:underline">Privacy Policy</a>, and 
-                    <a href="/technician-agreement" class="text-primary-600 hover:underline">Technician Agreement</a>
-                  </label>
-                </div>
-
                 <!-- Background Check -->
                 <div class="form-check">
-                  <input type="checkbox" id="background-check" class="form-checkbox">
+                  <input type="checkbox" id="background-check" v-model="form.backgroundCheck" class="form-checkbox" required>
                   <label for="background-check" class="form-check-label">
                     I consent to a background check as part of the verification process
                   </label>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-full btn-lg">
-                  Submit Application
+                <button type="submit" class="btn btn-primary w-full btn-lg" :disabled="loading || !isFormValid">
+                  <svg v-if="loading" class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  {{ loading ? 'Submitting Application...' : 'Submit Application' }}
                 </button>
               </form>
             </div>
@@ -218,7 +241,7 @@
           <!-- Already registered -->
           <p class="text-center text-sm text-neutral-600 mt-6">
             Already have a technician account? 
-            <a href="/technician-login" class="text-primary-600 font-medium hover:underline">Sign in</a>
+            <router-link to="/technician-login" class="text-primary-600 font-medium hover:underline">Sign in</router-link>
           </p>
         </div>
       </div>
@@ -227,7 +250,75 @@
 </template>
 
 <script>
+import { useTechnicianAuthStore } from '@/store/technicianAuth'
+import AlertMessage from '@/components/common/AlertMessage.vue'
+
 export default {
-  name: 'TechnicianRegisterView'
+  name: 'TechnicianRegisterView',
+  components: {
+    AlertMessage
+  },
+  data() {
+    return {
+      form: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        password: '',
+        confirmPassword: '',
+        backgroundCheck: false
+      },
+      loading: false,
+      error: null,
+      success: null
+    }
+  },
+  computed: {
+    isFormValid() {
+      return this.form.firstName && 
+             this.form.lastName && 
+             this.form.email && 
+             this.form.phone && 
+             this.form.password && 
+             this.form.confirmPassword &&
+             this.form.backgroundCheck
+    }
+  },
+  methods: {
+    async handleRegister() {
+      // Validate passwords match
+      if (this.form.password !== this.form.confirmPassword) {
+        this.error = 'Passwords do not match'
+        return
+      }
+      
+      this.loading = true
+      this.error = null
+      this.success = null
+      
+      try {
+        const registerData = {
+          firstName: this.form.firstName,
+          lastName: this.form.lastName,
+          email: this.form.email,
+          phone: this.form.phone,
+          password: this.form.password
+        }
+        
+        await useTechnicianAuthStore().register(registerData)
+        this.success = 'Registration successful! Redirecting to login...'
+        
+        // Redirect to login page after a short delay
+        setTimeout(() => {
+          this.$router.push('/technician-login')
+        }, 2000)
+      } catch (err) {
+        this.error = err.response?.data?.message || err.message || 'Registration failed'
+      } finally {
+        this.loading = false
+      }
+    }
+  }
 }
 </script>

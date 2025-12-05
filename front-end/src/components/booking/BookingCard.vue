@@ -54,7 +54,7 @@
 
       <!-- Actions -->
       <div class="flex items-center gap-3 pt-4 border-t border-neutral-100">
-        <a href="/booking/12345" class="btn btn-outline btn-sm flex-1">View Details</a>
+        <router-link to="/booking/12345" class="btn btn-outline btn-sm flex-1">View Details</router-link>
         <button type="button" class="btn btn-primary btn-sm flex-1">Pay Now</button>
       </div>
     </div>

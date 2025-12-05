@@ -15,7 +15,7 @@ const port = process.env.PORT || 5000;
 const corsOptions = {
     origin: process.env.NODE_ENV === "production" 
         ? process.env.ALLOWED_ORIGINS?.split(',') || ['https://yourdomain.com']  // Should replace with actual domain in .env
-        : ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:3000'], // Development origins
+        : ['http://localhost:8080', 'http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:8080'], // Development origins
     credentials: true,  // Required for cookies to work cross-origin
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']

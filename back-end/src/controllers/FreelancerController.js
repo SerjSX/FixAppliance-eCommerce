@@ -170,7 +170,7 @@ const loginFreelancer = asyncHandler(async (req,res) => {
         res.cookie('freelancer_access_token', freelancerToken, 
             {httpOnly: true, 
             secure: process.env.NODE_ENV === "production",
-            sameSite: 'strict',
+            sameSite: process.env.NODE_ENV === "production" ? 'strict' : 'lax',
             maxAge: 24 * 60 * 60 * 1000});
         res.status(200).json({
             message: "Successfully logged in.",

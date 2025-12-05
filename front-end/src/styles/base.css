@@ -4,8 +4,6 @@
  * Core HTML element styling, resets, and global defaults.
  * This provides the foundation for all other styles.
  */
-
-@layer base {
   /* Root variables */
   :root {
     --header-height: 4rem;
@@ -85,4 +83,3 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-}

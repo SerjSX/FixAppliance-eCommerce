@@ -12,7 +12,7 @@
     <p class="service-card-description">
       Quick description of the service offered.
     </p>
-    <a href="/services/service-name" class="btn btn-outline btn-sm mt-4">Learn More</a>
+    <router-link to="/book-technician" class="btn btn-outline btn-sm mt-4">Learn More</router-link>
   </div>
 </template>
 

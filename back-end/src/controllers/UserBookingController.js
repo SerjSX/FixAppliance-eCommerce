@@ -35,6 +35,7 @@ const getBookingsByStatus = async (userID, status, statusDisplayName) => {
                     Booking.Booking_Date AS "Scheduled Date", 
                     Booking.Booking_Time AS "Scheduled Time", 
                     Booking.Total_Price AS "Total Price", 
+                    Booking.createdAt AS "Created At",
                     Appliance_Type.nameEN AS "Appliance's Name (EN)", 
                     Appliance_Type.nameAR AS "Appliance's Name (AR)",
                     Booking.Issue_Description AS "Issue Description",
@@ -42,10 +43,13 @@ const getBookingsByStatus = async (userID, status, statusDisplayName) => {
                     Technician.Last_Name AS "Technician's Last Name",
                     Technician.Phone AS "Technician's Phone Number",
                     Payment.[Status] AS "Payment Status",
-                    Payment.Payment_Method AS "Payment Method"
+                    Payment.Payment_Method AS "Payment Method",
+                    Rating.Rating_Score AS "Rating Score",
+                    Rating.Review_Text AS "Review Text"
                 FROM Booking
                 LEFT JOIN Technician ON Booking.Technician_ID = Technician.Technician_ID
                 LEFT JOIN Payment ON Booking.Booking_ID = Payment.Booking_ID
+                LEFT JOIN Rating ON Booking.Booking_ID = Rating.Booking_ID
                 JOIN Appliance_Type ON Booking.Appliance_Type_ID = Appliance_Type.Appliance_Type_ID
                 WHERE Booking.UserID = @userID AND Booking.[Status] = @status
                 ORDER BY Booking.Booking_Date ASC, Booking.Booking_Time ASC
@@ -445,5 +449,91 @@ const getCancelledBookings = asyncHandler(async (req, res) => {
     return res.status(result.statusCode).json({ message: result.error });
 });
 
+// User cancelling a booking functionality
+const userCancelBooking = asyncHandler(async (req, res) => {
+    const { bookingID } = req.body;
+    const userID = req.userID;
 
-module.exports = { userRequestBooking, userPayBooking, userRateBooking, getPendingBookings, getConfirmedBookings, getInProgressBookings, getCompletedBookings, getCancelledBookings };
+    // If no bookingID is passed then throw a 400 error
+    if (!bookingID) {
+        return res.status(400).json({message: "Booking ID must be passed."});
+    }
+
+    try {
+        const pool = getPool();
+
+        // Checking if the bookingID passed is valid and belongs to the user
+        const checkBooking = await pool.request()
+            .input("bookingID", sql.Int, bookingID)
+            .input("userID", sql.Int, userID)
+            .query(`
+                SELECT b.Booking_ID, b.[Status], b.UserID, p.Payment_ID, p.[Status] AS Payment_Status
+                FROM Booking b
+                LEFT JOIN Payment p ON b.Booking_ID = p.Booking_ID
+                WHERE b.Booking_ID = @bookingID
+            `);
+
+        // If no result returned then the booking is not found
+        if (checkBooking.recordset.length === 0) {
+            return res.status(404).json({message: "Booking not found."});
+        }
+
+        const booking = checkBooking.recordset[0];
+
+        // Checking if the booking belongs to the logged in user
+        if (booking.UserID !== userID) {
+            return res.status(403).json({message: "You are not authorized to cancel this booking since it's not yours."});
+        }
+
+        // Can only cancel pending bookings
+        if (booking.Status !== 'pending') {
+            return res.status(400).json({message: `Cannot cancel a booking that is ${booking.Status}. Only pending bookings can be cancelled.`});
+        }
+
+        // If payment is already completed, cannot cancel
+        if (booking.Payment_Status === 'completed') {
+            return res.status(400).json({message: "Cannot cancel a booking that has already been paid."});
+        }
+
+        // Start a transaction to update booking and delete payment
+        const transaction = pool.transaction();
+        await transaction.begin();
+
+        try {
+            // Update booking status to cancelled
+            await transaction.request()
+                .input("bookingID", sql.Int, bookingID)
+                .query(`
+                    UPDATE Booking
+                    SET [Status] = 'cancelled',
+                        modifiedAt = GETDATE()
+                    WHERE Booking_ID = @bookingID
+                `);
+
+            // Delete the payment record since booking is cancelled
+            await transaction.request()
+                .input("bookingID", sql.Int, bookingID)
+                .query(`
+                    DELETE FROM Payment
+                    WHERE Booking_ID = @bookingID
+                `);
+
+            await transaction.commit();
+
+            res.status(200).json({
+                message: "Booking cancelled successfully.",
+                bookingID: bookingID,
+                status: "cancelled"
+            });
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
+    } catch (error) {
+        console.error("Unexpected error occurred when cancelling booking:", error);
+        res.status(500).json({message: "An unexpected error occurred while cancelling the booking."});
+    }
+});
+
+
+module.exports = { userRequestBooking, userPayBooking, userRateBooking, userCancelBooking, getPendingBookings, getConfirmedBookings, getInProgressBookings, getCompletedBookings, getCancelledBookings };

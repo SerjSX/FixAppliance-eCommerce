@@ -203,12 +203,12 @@
           Join thousands of satisfied homeowners or become a verified technician on our platform.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/book-technician" class="btn btn-white btn-lg">
+          <router-link to="/book-technician" class="btn btn-white btn-lg">
             Book a Technician
-          </a>
-          <a href="/technician-register" class="btn btn-lg bg-white/10 text-white border-2 border-white/30 hover:bg-white/20">
+          </router-link>
+          <router-link to="/technician-register" class="btn btn-lg bg-white/10 text-white border-2 border-white/30 hover:bg-white/20">
             Join as Technician
-          </a>
+          </router-link>
         </div>
       </div>
     </section>

@@ -13,18 +13,18 @@
           Serving homeowners across Mount Lebanon.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/book-technician" class="btn btn-secondary btn-lg shadow-secondary">
+          <router-link to="/book-technician" class="btn btn-secondary btn-lg shadow-secondary">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
             Book a Technician
-          </a>
-          <a href="/register" class="btn btn-white btn-lg">
+          </router-link>
+          <router-link to="/register" class="btn btn-white btn-lg">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
             </svg>
             Create Free Account
-          </a>
+          </router-link>
         </div>
         <!-- Trust Indicators -->
         <div class="flex flex-wrap justify-center gap-8 mt-12">
@@ -62,81 +62,98 @@
           <!-- Washing Machine -->
           <div class="service-card">
             <div class="service-card-icon">
-              <img src="/images/icons/washing-machine.svg" alt="Washing Machine" class="w-8 h-8">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1zm8 10a3 3 0 100-6 3 3 0 000 6z"></path>
+              </svg>
             </div>
             <h3 class="service-card-title">Washing Machine</h3>
             <p class="service-card-description">Repairs for all brands and types</p>
-            <a href="/services/washing-machine" class="btn btn-outline btn-sm mt-4">Learn More</a>
+            <router-link to="/book-technician" class="btn btn-outline btn-sm mt-4">Book Repair</router-link>
           </div>
 
           <!-- Refrigerator -->
           <div class="service-card">
             <div class="service-card-icon">
-              <img src="/images/icons/refrigerator.svg" alt="Refrigerator" class="w-8 h-8">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3h14a1 1 0 011 1v16a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1zm0 8h14M8 7h2"></path>
+              </svg>
             </div>
             <h3 class="service-card-title">Refrigerator</h3>
             <p class="service-card-description">Cooling issues and repairs</p>
-            <a href="/services/refrigerator" class="btn btn-outline btn-sm mt-4">Learn More</a>
+            <router-link to="/book-technician" class="btn btn-outline btn-sm mt-4">Book Repair</router-link>
           </div>
 
           <!-- Air Conditioner -->
           <div class="service-card">
             <div class="service-card-icon">
-              <img src="/images/icons/air-conditioner.svg" alt="Air Conditioner" class="w-8 h-8">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
             </div>
             <h3 class="service-card-title">Air Conditioner</h3>
             <p class="service-card-description">Installation and maintenance</p>
-            <a href="/services/air-conditioner" class="btn btn-outline btn-sm mt-4">Learn More</a>
+            <router-link to="/book-technician" class="btn btn-outline btn-sm mt-4">Book Repair</router-link>
           </div>
 
           <!-- Oven & Stove -->
           <div class="service-card">
             <div class="service-card-icon">
-              <img src="/images/icons/oven.svg" alt="Oven & Stove" class="w-8 h-8">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"></path>
+              </svg>
             </div>
             <h3 class="service-card-title">Oven & Stove</h3>
             <p class="service-card-description">Gas and electric repairs</p>
-            <a href="/services/oven" class="btn btn-outline btn-sm mt-4">Learn More</a>
+            <router-link to="/book-technician" class="btn btn-outline btn-sm mt-4">Book Repair</router-link>
           </div>
 
           <!-- Dishwasher -->
           <div class="service-card">
             <div class="service-card-icon">
-              <img src="/images/icons/dishwasher.svg" alt="Dishwasher" class="w-8 h-8">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+              </svg>
             </div>
             <h3 class="service-card-title">Dishwasher</h3>
             <p class="service-card-description">Drainage and cleaning issues</p>
-            <a href="/services/dishwasher" class="btn btn-outline btn-sm mt-4">Learn More</a>
+            <router-link to="/book-technician" class="btn btn-outline btn-sm mt-4">Book Repair</router-link>
           </div>
 
           <!-- Dryer -->
           <div class="service-card">
             <div class="service-card-icon">
-              <img src="/images/icons/dryer.svg" alt="Dryer" class="w-8 h-8">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1zm8 12a4 4 0 100-8 4 4 0 000 8z"></path>
+              </svg>
             </div>
             <h3 class="service-card-title">Dryer</h3>
             <p class="service-card-description">Heating and drum repairs</p>
-            <a href="/services/dryer" class="btn btn-outline btn-sm mt-4">Learn More</a>
+            <router-link to="/book-technician" class="btn btn-outline btn-sm mt-4">Book Repair</router-link>
           </div>
 
           <!-- Microwave -->
           <div class="service-card">
             <div class="service-card-icon">
-              <img src="/images/icons/microwave.svg" alt="Microwave" class="w-8 h-8">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+              </svg>
             </div>
             <h3 class="service-card-title">Microwave</h3>
             <p class="service-card-description">All types of microwaves</p>
-            <a href="/services/microwave" class="btn btn-outline btn-sm mt-4">Learn More</a>
+            <router-link to="/book-technician" class="btn btn-outline btn-sm mt-4">Book Repair</router-link>
           </div>
 
           <!-- Water Heater -->
           <div class="service-card">
             <div class="service-card-icon">
-              <img src="/images/icons/water-heater.svg" alt="Water Heater" class="w-8 h-8">
+              <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path>
+              </svg>
             </div>
             <h3 class="service-card-title">Water Heater</h3>
             <p class="service-card-description">Tank and tankless repairs</p>
-            <a href="/services/water-heater" class="btn btn-outline btn-sm mt-4">Learn More</a>
+            <router-link to="/book-technician" class="btn btn-outline btn-sm mt-4">Book Repair</router-link>
           </div>
         </div>
       </div>
@@ -188,9 +205,9 @@
         </div>
 
         <div class="text-center mt-10">
-          <a href="/book-technician" class="btn btn-secondary btn-lg">
+          <router-link to="/book-technician" class="btn btn-secondary btn-lg">
             Book Your First Repair
-          </a>
+          </router-link>
         </div>
       </div>
     </section>
@@ -231,12 +248,12 @@
                 Customer ratings and reviews
               </li>
             </ul>
-            <a href="/book-technician" class="btn btn-primary">
+            <router-link to="/book-technician" class="btn btn-primary">
               Book a Technician
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
               </svg>
-            </a>
+            </router-link>
           </div>
           <div class="flex-1">
             <img 
@@ -340,12 +357,12 @@
           Book a verified technician now and get your appliance fixed quickly.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/book-technician" class="btn btn-white btn-lg">
+          <router-link to="/book-technician" class="btn btn-white btn-lg">
             Book a Technician
-          </a>
-          <a href="/register" class="btn btn-lg bg-white/10 text-white border-2 border-white/30 hover:bg-white/20">
+          </router-link>
+          <router-link to="/register" class="btn btn-lg bg-white/10 text-white border-2 border-white/30 hover:bg-white/20">
             Create Free Account
-          </a>
+          </router-link>
         </div>
       </div>
     </section>

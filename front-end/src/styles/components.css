@@ -3,8 +3,6 @@
  * 
  * Reusable UI component classes.
  */
-
-@layer components {
   /* ==========================================================================
      BUTTONS
      ========================================================================== */
@@ -35,7 +33,7 @@
 
   /* Primary button */
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800
+    @apply bg-primary-600 text-white hover:text-white hover:bg-primary-700 active:bg-primary-800
            focus-visible:ring-primary-500;
   }
 
@@ -356,4 +354,3 @@
   .service-card-description {
     @apply text-sm text-neutral-500;
   }
-}

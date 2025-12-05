@@ -45,15 +45,15 @@
 
       <!-- CTA -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/" class="btn btn-primary btn-lg">
+        <router-link to="/" class="btn btn-primary btn-lg">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
           </svg>
           Back to Home
-        </a>
-        <a href="/book-technician" class="btn btn-outline btn-lg">
+        </router-link>
+        <router-link to="/book-technician" class="btn btn-outline btn-lg">
           Book a Technician
-        </a>
+        </router-link>
       </div>
     </div>
   </div>

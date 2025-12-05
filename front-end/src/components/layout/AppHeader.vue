@@ -2,22 +2,21 @@
   <header class="header">
     <div class="header-inner">
       <!-- Logo -->
-      <a href="/" class="header-logo">
+      <router-link to="/" class="header-logo">
         <img 
-          src="/images/logo/fixappliance-logo.svg" 
+          src="/images/logo/fixappliance-icon.svg" 
           alt="FixAppliance Logo" 
           class="h-8 w-auto"
         >
         <span class="hidden sm:inline">FixAppliance</span>
-      </a>
+      </router-link>
 
       <!-- Desktop Navigation -->
       <nav class="header-nav">
-        <a href="/" class="header-nav-link active">Home</a>
-        <a href="/services" class="header-nav-link">Services</a>
-        <a href="/book-technician" class="header-nav-link">Book a Technician</a>
-        <a href="/about" class="header-nav-link">About Us</a>
-        <a href="/contact" class="header-nav-link">Contact</a>
+        <router-link to="/" class="header-nav-link" exact-active-class="active">Home</router-link>
+        <router-link to="/book-technician" class="header-nav-link">Book a Technician</router-link>
+        <router-link to="/about" class="header-nav-link">About Us</router-link>
+        <router-link to="/contact" class="header-nav-link">Contact</router-link>
       </nav>
 
       <!-- Header Actions -->
@@ -34,19 +33,30 @@
           </svg>
         </button>
 
-        <!-- Login/Register buttons (shown when not logged in) -->
-        <div class="hidden md:flex items-center gap-2">
-          <a href="/login" class="btn btn-ghost btn-sm">Login</a>
-          <a href="/register" class="btn btn-primary btn-sm">Get Started</a>
+        <!-- When User is Logged In -->
+        <div v-if="isUserAuthenticated" class="hidden md:flex items-center gap-2">
+          <router-link to="/my-bookings" class="btn btn-ghost btn-sm">Dashboard</router-link>
+          <button @click="handleUserLogout" class="btn btn-primary btn-sm">Logout</button>
         </div>
 
-        <!-- User Menu (shown when logged in) - TODO: Implement with Vue reactivity based on auth state -->
+        <!-- When Technician is Logged In -->
+        <div v-else-if="isTechnicianAuthenticated" class="hidden md:flex items-center gap-2">
+          <router-link to="/technician-dashboard" class="btn btn-ghost btn-sm">Dashboard</router-link>
+          <button @click="handleTechnicianLogout" class="btn btn-primary btn-sm">Logout</button>
+        </div>
+
+        <!-- Login/Register buttons (shown when not logged in) -->
+        <div v-else class="hidden md:flex items-center gap-2">
+          <router-link to="/login" class="btn btn-ghost btn-sm">Login</router-link>
+          <router-link to="/register" class="btn btn-primary btn-sm">Get Started</router-link>
+        </div>
 
         <!-- Mobile Menu Toggle -->
         <button 
           type="button" 
           class="btn-ghost btn-icon md:hidden"
           aria-label="Toggle mobile menu"
+          @click="toggleMobileMenu"
         >
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -56,26 +66,41 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div class="mobile-menu-overlay"></div>
-    <div class="mobile-menu">
+    <div class="mobile-menu-overlay" :class="{ active: mobileMenuOpen }" @click="closeMobileMenu"></div>
+    <div class="mobile-menu" :class="{ active: mobileMenuOpen }">
       <div class="flex items-center justify-between p-4 border-b border-neutral-100">
         <span class="text-lg font-bold text-primary-600">FixAppliance</span>
-        <button type="button" class="btn-ghost btn-icon-sm" aria-label="Close menu">
+        <button type="button" class="btn-ghost btn-icon-sm" aria-label="Close menu" @click="closeMobileMenu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
       </div>
       <nav class="p-4 space-y-1">
-        <a href="/" class="block px-4 py-3 text-base font-medium text-neutral-900 rounded-lg hover:bg-neutral-50">Home</a>
-        <a href="/services" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50">Services</a>
-        <a href="/book-technician" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50">Book a Technician</a>
-        <a href="/about" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50">About Us</a>
-        <a href="/contact" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50">Contact</a>
+        <router-link to="/" class="block px-4 py-3 text-base font-medium text-neutral-900 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Home</router-link>
+        <router-link to="/coming-soon" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Services</router-link>
+        <router-link to="/book-technician" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Book a Technician</router-link>
+        <router-link to="/about" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">About Us</router-link>
+        <router-link to="/contact" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Contact</router-link>
       </nav>
       <div class="p-4 border-t border-neutral-100 space-y-3">
-        <a href="/login" class="btn btn-outline w-full">Login</a>
-        <a href="/register" class="btn btn-primary w-full">Get Started</a>
+        <!-- When User is Logged In (Mobile) -->
+        <template v-if="isUserAuthenticated">
+          <router-link to="/my-bookings" class="btn btn-outline w-full" @click="closeMobileMenu">Dashboard</router-link>
+          <button @click="handleUserLogout" class="btn btn-primary w-full">Logout</button>
+        </template>
+
+        <!-- When Technician is Logged In (Mobile) -->
+        <template v-else-if="isTechnicianAuthenticated">
+          <router-link to="/technician-dashboard" class="btn btn-outline w-full" @click="closeMobileMenu">Dashboard</router-link>
+          <button @click="handleTechnicianLogout" class="btn btn-primary w-full">Logout</button>
+        </template>
+
+        <!-- Not Logged In (Mobile) -->
+        <template v-else>
+          <router-link to="/login" class="btn btn-outline w-full" @click="closeMobileMenu">Login</router-link>
+          <router-link to="/register" class="btn btn-primary w-full" @click="closeMobileMenu">Get Started</router-link>
+        </template>
       </div>
       <div class="p-4 border-t border-neutral-100">
         <button type="button" class="flex items-center gap-2 text-sm text-neutral-600">
@@ -93,7 +118,55 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/store/auth'
+import { useTechnicianAuthStore } from '@/store/technicianAuth'
+
 export default {
-  name: 'AppHeader'
+  name: 'AppHeader',
+  data() {
+    return {
+      mobileMenuOpen: false
+    }
+  },
+  computed: {
+    authStore() {
+      return useAuthStore()
+    },
+    technicianAuthStore() {
+      return useTechnicianAuthStore()
+    },
+    isUserAuthenticated() {
+      return this.authStore.isAuthenticated
+    },
+    isTechnicianAuthenticated() {
+      return this.technicianAuthStore.isAuthenticated
+    }
+  },
+  methods: {
+    toggleMobileMenu() {
+      this.mobileMenuOpen = !this.mobileMenuOpen
+    },
+    closeMobileMenu() {
+      this.mobileMenuOpen = false
+    },
+    async handleUserLogout() {
+      try {
+        await this.authStore.logout()
+        this.closeMobileMenu()
+        this.$router.push('/')
+      } catch (err) {
+        console.error('Logout failed:', err)
+      }
+    },
+    async handleTechnicianLogout() {
+      try {
+        await this.technicianAuthStore.logout()
+        this.closeMobileMenu()
+        this.$router.push('/')
+      } catch (err) {
+        console.error('Logout failed:', err)
+      }
+    }
+  }
 }
 </script>

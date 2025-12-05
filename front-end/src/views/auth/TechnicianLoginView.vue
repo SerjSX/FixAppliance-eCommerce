@@ -4,7 +4,7 @@
     <div class="page-header bg-primary-700 text-white">
       <div class="container-wide">
         <nav class="breadcrumb mb-4 text-primary-200">
-          <a href="/" class="breadcrumb-link text-primary-200 hover:text-white">Home</a>
+          <router-link to="/" class="breadcrumb-link text-primary-200 hover:text-white">Home</router-link>
           <span class="breadcrumb-separator text-primary-400">/</span>
           <span class="breadcrumb-current text-white">Technician Login</span>
         </nav>
@@ -32,16 +32,26 @@
               </div>
 
               <!-- Login Form -->
-              <form class="space-y-5">
+              <form @submit.prevent="handleLogin" class="space-y-5">
+                <!-- Error Alert -->
+                <AlertMessage 
+                  v-if="error" 
+                  type="error" 
+                  :message="error"
+                  @dismiss="error = null"
+                />
+
                 <!-- Email -->
                 <div class="form-group">
                   <label for="tech-email" class="form-label">Email Address</label>
                   <input 
                     type="email" 
                     id="tech-email" 
+                    v-model="form.email"
                     class="form-input" 
                     placeholder="technician@example.com"
                     autocomplete="email"
+                    required
                   >
                 </div>
 
@@ -49,15 +59,17 @@
                 <div class="form-group">
                   <div class="flex items-center justify-between mb-1.5">
                     <label for="tech-password" class="form-label mb-0">Password</label>
-                    <a href="/technician-forgot-password" class="text-sm text-primary-600 hover:underline">Forgot password?</a>
+                    <router-link to="/coming-soon" class="text-sm text-primary-600 hover:underline">Forgot password?</router-link>
                   </div>
                   <div class="form-input-wrapper">
                     <input 
                       type="password" 
                       id="tech-password" 
+                      v-model="form.password"
                       class="form-input" 
                       placeholder="Enter your password"
                       autocomplete="current-password"
+                      required
                     >
                     <button type="button" class="form-input-icon form-input-icon-right-position text-neutral-400 hover:text-neutral-600" aria-label="Toggle password visibility">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,21 +87,21 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-full">
-                  Sign In to Dashboard
+                <button type="submit" class="btn btn-primary w-full" :disabled="loading">
+                  {{ loading ? 'Signing in...' : 'Sign In to Dashboard' }}
                 </button>
               </form>
 
               <!-- Register Link -->
               <p class="text-center text-sm text-neutral-600 mt-8">
                 Not a registered technician? 
-                <a href="/technician-register" class="text-primary-600 font-medium hover:underline">Apply now</a>
+                <router-link to="/technician-register" class="text-primary-600 font-medium hover:underline">Apply now</router-link>
               </p>
 
               <!-- Customer Login Link -->
               <div class="mt-6 pt-6 border-t border-neutral-200 text-center">
                 <p class="text-sm text-neutral-500 mb-2">Looking for customer login?</p>
-                <a href="/login" class="text-sm text-primary-600 font-medium hover:underline">Sign in as Customer →</a>
+                <router-link to="/login" class="text-sm text-primary-600 font-medium hover:underline">Sign in as Customer →</router-link>
               </div>
             </div>
           </div>
@@ -117,7 +129,35 @@
 </template>
 
 <script>
+import { useTechnicianAuthStore } from '@/store/technicianAuth'
+import AlertMessage from '@/components/common/AlertMessage.vue'
+
 export default {
-  name: 'TechnicianLoginView'
+  name: 'TechnicianLoginView',
+  components: {
+    AlertMessage
+  },
+  data() {
+    return {
+      form: { email: '', password: '' },
+      loading: false,
+      error: null
+    }
+  },
+  methods: {
+    // Handle login
+    async handleLogin() {
+      this.loading = true
+      this.error = null
+      try {
+        await useTechnicianAuthStore().login(this.form)
+        this.$router.push('/technician-dashboard')
+      } catch (err) {
+        this.error = err.message || 'Login failed'
+      } finally {
+        this.loading = false
+      }
+    }
+  }
 }
 </script>

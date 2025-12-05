@@ -3,8 +3,6 @@
  * 
  * Page structure, containers, grids, and layout utilities.
  */
-
-@layer components {
   /* ==========================================================================
      CONTAINERS
      ========================================================================== */
@@ -267,6 +265,12 @@
     @apply bg-neutral-100 py-8 md:py-12 mb-8;
   }
 
+  /* When page-header is NOT inside main-content, add top margin for fixed header */
+  body > .page-header,
+  #app > .page-header {
+    margin-top: var(--header-height);
+  }
+
   .page-title {
     @apply text-2xl md:text-3xl font-bold text-neutral-900 mb-2;
   }
@@ -315,4 +319,3 @@
   .empty-state-description {
     @apply text-neutral-500 mb-6;
   }
-}

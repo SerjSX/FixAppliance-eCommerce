@@ -1,24 +1,38 @@
-/**
- * Vue Router Configuration
- * 
- * This file defines all the routes for the FixAppliance frontend application.
- * Routes are organized by functionality: public, auth, user dashboard, technician portal.
- */
-
+// Vue Router Configuration
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/store/auth'
+import { useTechnicianAuthStore } from '@/store/technicianAuth'
 
-// Import Views
-import HomeView from '@/views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
-import RegisterView from '@/views/RegisterView.vue'
-import BookTechnicianView from '@/views/BookTechnicianView.vue'
-import MyBookingsView from '@/views/MyBookingsView.vue'
-import ComingSoonView from '@/views/ComingSoonView.vue'
-import TechnicianLoginView from '@/views/TechnicianLoginView.vue'
-import TechnicianRegisterView from '@/views/TechnicianRegisterView.vue'
-import TechnicianDashboardView from '@/views/TechnicianDashboardView.vue'
-import ContactView from '@/views/ContactView.vue'
-import AboutView from '@/views/AboutView.vue'
+// Flag to track if auth has been initialized
+let authInitialized = false
+
+// Public Views
+import HomeView from '@/views/public/HomeView.vue'
+import AboutView from '@/views/public/AboutView.vue'
+import ContactView from '@/views/public/ContactView.vue'
+import ComingSoonView from '@/views/public/ComingSoonView.vue'
+
+// Auth Views
+import LoginView from '@/views/auth/LoginView.vue'
+import RegisterView from '@/views/auth/RegisterView.vue'
+import TechnicianLoginView from '@/views/auth/TechnicianLoginView.vue'
+import TechnicianRegisterView from '@/views/auth/TechnicianRegisterView.vue'
+
+// User Views
+import BookTechnicianView from '@/views/user/BookTechnicianView.vue'
+import MyBookingsView from '@/views/user/MyBookingsView.vue'
+import UserProfileView from '@/views/user/UserProfileView.vue'
+import BookingDetailView from '@/views/user/BookingDetailView.vue'
+
+// Technician Views
+import TechnicianDashboardView from '@/views/technician/TechnicianDashboardView.vue'
+import TechnicianProfileView from '@/views/technician/TechnicianProfileView.vue'
+import TechnicianPendingBookingsView from '@/views/technician/TechnicianPendingBookingsView.vue'
+import TechnicianActiveBookingsView from '@/views/technician/TechnicianActiveBookingsView.vue'
+import TechnicianCompletedBookingsView from '@/views/technician/TechnicianCompletedBookingsView.vue'
+import TechnicianEarningsView from '@/views/technician/TechnicianEarningsView.vue'
+import TechnicianSpecialtyView from '@/views/technician/TechnicianSpecialtyView.vue'
+import TechnicianServiceAreasView from '@/views/technician/TechnicianServiceAreasView.vue'
 
 const routes = [
   // ========================================
@@ -105,6 +119,18 @@ const routes = [
       requiresAuth: true
     }
   },
+  {
+    path: '/booking/:id',
+    name: 'BookingDetail',
+    component: BookingDetailView,
+    meta: { title: 'Booking Details - FixAppliance', requiresAuth: true }
+  },
+  {
+    path: '/profile',
+    name: 'UserProfile',
+    component: UserProfileView,
+    meta: { title: 'My Profile - FixAppliance', requiresAuth: true }
+  },
 
   // ========================================
   // TECHNICIAN PORTAL ROUTES
@@ -137,6 +163,48 @@ const routes = [
       requiresTechnicianAuth: true
     }
   },
+  {
+    path: '/technician/profile',
+    name: 'TechnicianProfile',
+    component: TechnicianProfileView,
+    meta: { title: 'Technician Profile - FixAppliance', requiresTechnicianAuth: true }
+  },
+  {
+    path: '/technician/pending-bookings',
+    name: 'TechnicianPendingBookings',
+    component: TechnicianPendingBookingsView,
+    meta: { title: 'Pending Bookings - FixAppliance', requiresTechnicianAuth: true }
+  },
+  {
+    path: '/technician/active-bookings',
+    name: 'TechnicianActiveBookings',
+    component: TechnicianActiveBookingsView,
+    meta: { title: 'Active Bookings - FixAppliance', requiresTechnicianAuth: true }
+  },
+  {
+    path: '/technician/completed-bookings',
+    name: 'TechnicianCompletedBookings',
+    component: TechnicianCompletedBookingsView,
+    meta: { title: 'Completed Bookings - FixAppliance', requiresTechnicianAuth: true }
+  },
+  {
+    path: '/technician/earnings',
+    name: 'TechnicianEarnings',
+    component: TechnicianEarningsView,
+    meta: { title: 'My Earnings - FixAppliance', requiresTechnicianAuth: true }
+  },
+  {
+    path: '/technician/specialties',
+    name: 'TechnicianSpecialties',
+    component: TechnicianSpecialtyView,
+    meta: { title: 'My Specialties - FixAppliance', requiresTechnicianAuth: true }
+  },
+  {
+    path: '/technician/service-areas',
+    name: 'TechnicianServiceAreas',
+    component: TechnicianServiceAreasView,
+    meta: { title: 'Service Areas - FixAppliance', requiresTechnicianAuth: true }
+  },
 
   // ========================================
   // CATCH-ALL / 404
@@ -144,7 +212,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: () => import('@/views/NotFoundView.vue'),
+    component: () => import('@/views/public/NotFoundView.vue'),
     meta: {
       title: 'Page Not Found - FixAppliance'
     }
@@ -163,8 +231,59 @@ const router = createRouter({
   }
 })
 
-// Navigation guard for setting page title and meta
-router.beforeEach((to, from, next) => {
+// Navigation guard for setting page title, meta, and auth checking
+router.beforeEach(async (to, from, next) => {
+  // Get auth stores
+  const authStore = useAuthStore()
+  const technicianAuthStore = useTechnicianAuthStore()
+  
+  // Wait for auth initialization on first navigation
+  if (!authInitialized) {
+    // Import getAuthInitPromise dynamically to avoid circular dependency
+    const { getAuthInitPromise } = await import('@/main.js')
+    const authInitPromise = getAuthInitPromise()
+    if (authInitPromise) {
+      await authInitPromise
+    }
+    authInitialized = true
+  }
+  
+  // Check if route requires user authentication
+  if (to.meta.requiresAuth) {
+    if (!authStore.isAuthenticated) {
+      // Redirect to login with return URL
+      return next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    }
+  }
+  
+  // Check if route requires technician authentication
+  if (to.meta.requiresTechnicianAuth) {
+    if (!technicianAuthStore.isAuthenticated) {
+      // Redirect to technician login with return URL
+      return next({
+        path: '/technician-login',
+        query: { redirect: to.fullPath }
+      })
+    }
+  }
+  
+  // Redirect authenticated users away from login/register pages
+  if (to.path === '/login' || to.path === '/register') {
+    if (authStore.isAuthenticated) {
+      return next('/my-bookings')
+    }
+  }
+  
+  // Redirect authenticated technicians away from technician login/register pages
+  if (to.path === '/technician-login' || to.path === '/technician-register') {
+    if (technicianAuthStore.isAuthenticated) {
+      return next('/technician-dashboard')
+    }
+  }
+  
   // Set document title
   document.title = to.meta.title || 'FixAppliance'
   

@@ -14,7 +14,7 @@
 const express = require("express");
 const {registerTechnician, loginTechnician, logoutTechnician, getProfile, updateProfile, settingTechnicianSpecialty, getSpecialties, removeSpecialty, settingTechnicianServiceArea, getServiceAreas, removeServiceArea} = require("../controllers/TechnicianController");
 const {technicianValidation} = require("../middlewares/auth");
-const {getPendingBookings, acceptPendingBooking, startBooking, completeBooking, declineBooking} = require("../controllers/TechnicianBookingController");
+const {getPendingBookings, acceptPendingBooking, startBooking, completeBooking, declineBooking, getActiveBookings, getCompletedBookings} = require("../controllers/TechnicianBookingController");
 const { getTechnicianEarnings } = require("../controllers/EarningsController.js");
 
 const router = express.Router();
@@ -35,6 +35,8 @@ router.get("/service-areas", technicianValidation, getServiceAreas);
 router.delete("/service-area/:areaId", technicianValidation, removeServiceArea);
 
 router.get("/booking/get-pendings", technicianValidation, getPendingBookings);
+router.get("/booking/active", technicianValidation, getActiveBookings);
+router.get("/booking/completed", technicianValidation, getCompletedBookings);
 router.post("/booking/accept", technicianValidation, acceptPendingBooking);
 router.post("/booking/start", technicianValidation, startBooking);
 router.post("/booking/complete", technicianValidation, completeBooking);

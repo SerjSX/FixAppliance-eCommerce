@@ -8,7 +8,7 @@
           <div class="footer-brand">
             <div class="footer-logo">
               <img 
-                src="/images/logo/fixappliance-logo-white.svg" 
+                src="/images/logo/fixappliance-icon-white.svg" 
                 alt="FixAppliance Logo" 
                 class="h-8 w-auto mb-2"
               >
@@ -45,12 +45,12 @@
           <div>
             <h3 class="footer-heading">Services</h3>
             <ul class="footer-links">
-              <li><a href="/book-technician" class="footer-link">Book a Technician</a></li>
-              <li><a href="/services/washing-machine" class="footer-link">Washing Machine Repair</a></li>
-              <li><a href="/services/refrigerator" class="footer-link">Refrigerator Repair</a></li>
-              <li><a href="/services/ac" class="footer-link">AC Maintenance</a></li>
-              <li><a href="/services/oven" class="footer-link">Oven & Stove Repair</a></li>
-              <li><a href="/services/dishwasher" class="footer-link">Dishwasher Repair</a></li>
+              <li><router-link to="/book-technician" class="footer-link">Book a Technician</router-link></li>
+              <li><router-link to="/book-technician" class="footer-link">Washing Machine Repair</router-link></li>
+              <li><router-link to="/book-technician" class="footer-link">Refrigerator Repair</router-link></li>
+              <li><router-link to="/book-technician" class="footer-link">AC Maintenance</router-link></li>
+              <li><router-link to="/book-technician" class="footer-link">Oven & Stove Repair</router-link></li>
+              <li><router-link to="/book-technician" class="footer-link">Dishwasher Repair</router-link></li>
             </ul>
           </div>
 
@@ -58,8 +58,8 @@
           <div>
             <h3 class="footer-heading">Resources</h3>
             <ul class="footer-links">
-              <li><a href="/articles" class="footer-link">DIY Articles <span class="text-xs text-secondary-400">(Coming Soon)</span></a></li>
-              <li><a href="/faq" class="footer-link">FAQ</a></li>
+              <li><router-link to="/coming-soon" class="footer-link">DIY Articles <span class="text-xs text-secondary-400">(Coming Soon)</span></router-link></li>
+              <li><router-link to="/contact" class="footer-link">FAQ</router-link></li>
             </ul>
           </div>
 
@@ -67,12 +67,12 @@
           <div>
             <h3 class="footer-heading">Company</h3>
             <ul class="footer-links">
-              <li><a href="/about" class="footer-link">About Us</a></li>
-              <li><a href="/contact" class="footer-link">Contact</a></li>
-              <li><a href="/careers" class="footer-link">Careers</a></li>
-              <li><a href="/technician-register" class="footer-link">Become a Technician</a></li>
-              <li><a href="/privacy" class="footer-link">Privacy Policy</a></li>
-              <li><a href="/terms" class="footer-link">Terms of Service</a></li>
+              <li><router-link to="/about" class="footer-link">About Us</router-link></li>
+              <li><router-link to="/contact" class="footer-link">Contact</router-link></li>
+              <li><router-link to="/coming-soon" class="footer-link">Careers</router-link></li>
+              <li><router-link to="/technician-register" class="footer-link">Become a Technician</router-link></li>
+              <li><router-link to="/coming-soon" class="footer-link">Privacy Policy</router-link></li>
+              <li><router-link to="/coming-soon" class="footer-link">Terms of Service</router-link></li>
             </ul>
           </div>
         </div>
@@ -81,7 +81,7 @@
       <!-- Footer Bottom -->
       <div class="footer-bottom">
         <div class="footer-bottom-inner container-wide">
-          <p>&copy; 2024 FixAppliance Lebanon. All rights reserved.</p>
+          <p>&copy; 2025 FixAppliance Lebanon. All rights reserved.</p>
           
           <!-- Social Links -->
           <div class="footer-social">

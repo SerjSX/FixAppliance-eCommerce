@@ -141,15 +141,6 @@
       </div>
     </div>
 
-    <!-- Terms Agreement -->
-    <div class="form-check">
-      <input type="checkbox" id="terms" class="form-checkbox">
-      <label for="terms" class="form-check-label">
-        I agree to the <a href="/terms" class="text-primary-600 hover:underline">Terms of Service</a> 
-        and <a href="/privacy" class="text-primary-600 hover:underline">Privacy Policy</a>
-      </label>
-    </div>
-
     <!-- Submit Button -->
     <div class="form-actions">
       <button type="button" class="btn btn-ghost">Cancel</button>

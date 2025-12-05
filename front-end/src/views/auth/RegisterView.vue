@@ -4,7 +4,7 @@
     <div class="page-header">
       <div class="container-wide">
         <nav class="breadcrumb mb-4">
-          <a href="/" class="breadcrumb-link">Home</a>
+          <router-link to="/" class="breadcrumb-link">Home</router-link>
           <span class="breadcrumb-separator">/</span>
           <span class="breadcrumb-current">Register</span>
         </nav>
@@ -20,7 +20,15 @@
           <div class="card">
             <div class="card-body py-8 px-6 md:px-8">
               <!-- Register Form -->
-              <form class="space-y-6">
+              <form @submit.prevent="handleRegister" class="space-y-6">
+                <!-- Error Alert -->
+                <AlertMessage 
+                  v-if="error" 
+                  type="error" 
+                  :message="error"
+                  @dismiss="error = null"
+                />
+
                 <!-- Personal Information Section -->
                 <div class="form-section">
                   <h3 class="form-section-title">Personal Information</h3>
@@ -32,9 +40,11 @@
                       <input 
                         type="text" 
                         id="first-name" 
+                        v-model="form.firstName"
                         class="form-input" 
                         placeholder="John"
                         autocomplete="given-name"
+                        required
                       >
                     </div>
 
@@ -44,9 +54,11 @@
                       <input 
                         type="text" 
                         id="last-name" 
+                        v-model="form.lastName"
                         class="form-input" 
                         placeholder="Doe"
                         autocomplete="family-name"
+                        required
                       >
                     </div>
                   </div>
@@ -58,9 +70,11 @@
                       <input 
                         type="email" 
                         id="register-email" 
+                        v-model="form.email"
                         class="form-input" 
                         placeholder="name@example.com"
                         autocomplete="email"
+                        required
                       >
                     </div>
 
@@ -72,9 +86,11 @@
                         <input 
                           type="tel" 
                           id="phone" 
+                          v-model="form.phone"
                           class="form-input" 
                           placeholder="71 234 567"
                           autocomplete="tel"
+                          required
                         >
                       </div>
                     </div>
@@ -92,9 +108,11 @@
                     <input 
                       type="text" 
                       id="street-address" 
+                      v-model="form.streetAddress"
                       class="form-input" 
                       placeholder="123 Main Street"
                       autocomplete="street-address"
+                      required
                     >
                   </div>
 
@@ -105,8 +123,10 @@
                       <input 
                         type="text" 
                         id="building-name" 
+                        v-model="form.buildingName"
                         class="form-input" 
                         placeholder="Sunset Tower"
+                        required
                       >
                     </div>
 
@@ -116,8 +136,10 @@
                       <input 
                         type="text" 
                         id="floor" 
+                        v-model="form.floor"
                         class="form-input" 
                         placeholder="3rd Floor"
+                        required
                       >
                     </div>
                   </div>
@@ -126,7 +148,7 @@
                     <!-- City -->
                     <div class="form-group">
                       <label for="city" class="form-label form-label-required">City</label>
-                      <select id="city" class="form-select">
+                      <select id="city" v-model="form.city" class="form-select" required>
                         <option value="">Select city...</option>
                         <option value="beirut">Beirut</option>
                         <option value="tripoli">Tripoli</option>
@@ -147,9 +169,11 @@
                       <input 
                         type="text" 
                         id="postal-code" 
+                        v-model="form.postalCode"
                         class="form-input" 
                         placeholder="1234"
                         autocomplete="postal-code"
+                        required
                       >
                     </div>
                   </div>
@@ -167,9 +191,11 @@
                         <input 
                           type="password" 
                           id="register-password" 
+                          v-model="form.password"
                           class="form-input" 
                           placeholder="Create a strong password"
                           autocomplete="new-password"
+                          required
                         >
                         <button type="button" class="form-input-icon form-input-icon-right-position text-neutral-400 hover:text-neutral-600" aria-label="Toggle password visibility">
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,9 +213,11 @@
                       <input 
                         type="password" 
                         id="confirm-password" 
+                        v-model="form.confirmPassword"
                         class="form-input" 
                         placeholder="Confirm your password"
                         autocomplete="new-password"
+                        required
                       >
                     </div>
                   </div>
@@ -206,39 +234,22 @@
                   </div>
                 </div>
 
-                <!-- Terms Agreement -->
-                <div class="form-check">
-                  <input type="checkbox" id="terms-agree" class="form-checkbox">
-                  <label for="terms-agree" class="form-check-label">
-                    I agree to the <a href="/terms" class="text-primary-600 hover:underline">Terms of Service</a> 
-                    and <a href="/privacy" class="text-primary-600 hover:underline">Privacy Policy</a>
-                  </label>
-                </div>
-
-                <!-- Newsletter Opt-in -->
-                <div class="form-check">
-                  <input type="checkbox" id="newsletter" class="form-checkbox" checked>
-                  <label for="newsletter" class="form-check-label">
-                    Send me helpful tips and maintenance reminders via email
-                  </label>
-                </div>
-
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-full btn-lg">
-                  Create Account
+                <button type="submit" class="btn btn-primary w-full btn-lg" :disabled="loading">
+                  {{ loading ? 'Creating Account...' : 'Create Account' }}
                 </button>
               </form>
 
               <!-- Login Link -->
               <p class="text-center text-sm text-neutral-600 mt-6">
                 Already have an account? 
-                <a href="/login" class="text-primary-600 font-medium hover:underline">Sign in</a>
+                <router-link to="/login" class="text-primary-600 font-medium hover:underline">Sign in</router-link>
               </p>
 
               <!-- Technician Register Link -->
               <div class="mt-6 pt-6 border-t border-neutral-200 text-center">
                 <p class="text-sm text-neutral-500 mb-2">Are you a technician looking to join our platform?</p>
-                <a href="/technician-register" class="text-sm text-primary-600 font-medium hover:underline">Register as a Technician →</a>
+                <router-link to="/technician-register" class="text-sm text-primary-600 font-medium hover:underline">Register as a Technician →</router-link>
               </div>
             </div>
           </div>
@@ -249,7 +260,65 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/store/auth'
+import AlertMessage from '@/components/common/AlertMessage.vue'
+
 export default {
-  name: 'RegisterView'
+  name: 'RegisterView',
+  components: {
+    AlertMessage
+  },
+  data() {
+    return {
+      form: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        streetAddress: '',
+        buildingName: '',
+        floor: '',
+        city: '',
+        postalCode: '',
+        password: '',
+        confirmPassword: '',
+        newsletter: true
+      },
+      loading: false,
+      error: null
+    }
+  },
+  methods: {
+    // Handle registration form
+    async handleRegister() {
+      if (this.form.password !== this.form.confirmPassword) {
+        this.error = 'Passwords do not match'
+        return
+      }
+      this.loading = true
+      this.error = null
+      try {
+        // Send data matching backend expectations
+        const userData = {
+          firstName: this.form.firstName,
+          lastName: this.form.lastName,
+          email: this.form.email,
+          phone: this.form.phone,
+          password: this.form.password,
+          streetAddress: this.form.streetAddress,
+          buildingName: this.form.buildingName,
+          floor: this.form.floor,
+          city: this.form.city,
+          postalCode: this.form.postalCode
+        }
+        await useAuthStore().register(userData)
+        this.$router.push('/login')
+      } catch (err) {
+        this.error = err.response?.data?.message || err.message || 'Registration failed'
+      } finally {
+        this.loading = false
+      }
+    }
+  }
 }
 </script>

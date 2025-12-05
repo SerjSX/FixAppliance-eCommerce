@@ -1,15 +1,15 @@
 <template>
   <div id="app" class="min-h-screen flex flex-col">
-    <!-- Header -->
-    <AppHeader />
+    <!-- Header (hidden on technician portal pages which have their own layout) -->
+    <AppHeader v-if="!isTechnicianPortal" />
 
     <!-- Main Content -->
     <main class="flex-1">
       <router-view />
     </main>
 
-    <!-- Footer -->
-    <AppFooter />
+    <!-- Footer (hidden on technician portal pages) -->
+    <AppFooter v-if="!isTechnicianPortal" />
   </div>
 </template>
 
@@ -22,6 +22,16 @@ export default {
   components: {
     AppHeader,
     AppFooter
+  },
+  computed: {
+    isTechnicianPortal() {
+      // Hide header/footer on technician dashboard pages (they have their own layout)
+      const path = this.$route.path
+      return path.startsWith('/technician-dashboard') || 
+             (path.startsWith('/technician/') && 
+              !path.includes('/technician-login') && 
+              !path.includes('/technician-register'))
+    }
   }
 }
 </script>

@@ -83,25 +83,25 @@ const isValidPassword = (password) => {
         return { valid: false, message: "Password is required." };
     }
 
-    if (password.length < 8) {
-        return { valid: false, message: "Password must be at least 8 characters long." };
+    if (password.length < 3) {
+        return { valid: false, message: "Password must be at least 3 characters long." };
     }
 
     if (password.length > 100) {
         return { valid: false, message: "Password cannot exceed 100 characters." };
     }
 
-    if (!/[a-z]/.test(password)) {
-        return { valid: false, message: "Password must contain at least one lowercase letter." };
-    }
+    // if (!/[a-z]/.test(password)) {
+    //     return { valid: false, message: "Password must contain at least one lowercase letter." };
+    // }
 
-    if (!/[A-Z]/.test(password)) {
-        return { valid: false, message: "Password must contain at least one uppercase letter." };
-    }
+    // if (!/[A-Z]/.test(password)) {
+    //     return { valid: false, message: "Password must contain at least one uppercase letter." };
+    // }
 
-    if (!/[0-9]/.test(password)) {
-        return { valid: false, message: "Password must contain at least one number." };
-    }
+    // if (!/[0-9]/.test(password)) {
+    //     return { valid: false, message: "Password must contain at least one number." };
+    // }
 
     return { valid: true, message: "Password is valid." };
 };

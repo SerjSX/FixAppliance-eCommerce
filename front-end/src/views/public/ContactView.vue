@@ -4,7 +4,7 @@
     <div class="page-header">
       <div class="container-wide">
         <nav class="breadcrumb mb-4">
-          <a href="/" class="breadcrumb-link">Home</a>
+          <router-link to="/" class="breadcrumb-link">Home</router-link>
           <span class="breadcrumb-separator">/</span>
           <span class="breadcrumb-current">Contact Us</span>
         </nav>
@@ -24,15 +24,31 @@
                 <h3 class="font-semibold text-neutral-900">Send us a Message</h3>
               </div>
               <div class="card-body">
-                <form class="space-y-5">
+                <form @submit.prevent="handleSubmit" class="space-y-5">
+                  <!-- Success Alert -->
+                  <AlertMessage 
+                    v-if="success" 
+                    type="success" 
+                    message="Your message has been sent successfully!"
+                    @dismiss="success = false"
+                  />
+
+                  <!-- Error Alert -->
+                  <AlertMessage 
+                    v-if="error" 
+                    type="error" 
+                    :message="error"
+                    @dismiss="error = null"
+                  />
+
                   <div class="form-row">
                     <div class="form-group">
                       <label for="contact-name" class="form-label form-label-required">Full Name</label>
-                      <input type="text" id="contact-name" class="form-input" placeholder="Your name">
+                      <input type="text" id="contact-name" v-model="form.name" class="form-input" placeholder="Your name" required>
                     </div>
                     <div class="form-group">
                       <label for="contact-email" class="form-label form-label-required">Email Address</label>
-                      <input type="email" id="contact-email" class="form-input" placeholder="name@example.com">
+                      <input type="email" id="contact-email" v-model="form.email" class="form-input" placeholder="name@example.com" required>
                     </div>
                   </div>
 
@@ -40,13 +56,13 @@
                     <label for="contact-phone" class="form-label">Phone Number (Optional)</label>
                     <div class="input-group">
                       <span class="input-group-text">+961</span>
-                      <input type="tel" id="contact-phone" class="form-input" placeholder="71 234 567">
+                      <input type="tel" id="contact-phone" v-model="form.phone" class="form-input" placeholder="71 234 567">
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="contact-subject" class="form-label form-label-required">Subject</label>
-                    <select id="contact-subject" class="form-select">
+                    <select id="contact-subject" v-model="form.subject" class="form-select" required>
                       <option value="">Select a topic...</option>
                       <option value="booking">Booking Issue</option>
                       <option value="payment">Payment Problem</option>
@@ -59,14 +75,14 @@
 
                   <div class="form-group">
                     <label for="contact-message" class="form-label form-label-required">Message</label>
-                    <textarea id="contact-message" class="form-textarea" rows="6" placeholder="How can we help you?"></textarea>
+                    <textarea id="contact-message" v-model="form.message" class="form-textarea" rows="6" placeholder="How can we help you?" required></textarea>
                   </div>
 
-                  <button type="submit" class="btn btn-primary">
+                  <button type="submit" class="btn btn-primary" :disabled="loading">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
-                    Send Message
+                    {{ loading ? 'Sending...' : 'Send Message' }}
                   </button>
                 </form>
               </div>
@@ -148,9 +164,9 @@
             <!-- FAQ Link -->
             <div class="card bg-primary-50 border-primary-100">
               <div class="card-body text-center">
-                <h4 class="font-semibold text-primary-900 mb-2">Have a quick question?</h4>
-                <p class="text-sm text-primary-700 mb-4">Check our FAQ for instant answers</p>
-                <a href="/faq" class="btn btn-primary btn-sm">View FAQ</a>
+                <h4 class="font-semibold text-primary-900 mb-2">Need More Help?</h4>
+                <p class="text-sm text-primary-700 mb-4">Learn about our services and technicians</p>
+                <router-link to="/about" class="btn btn-primary btn-sm">About Us</router-link>
               </div>
             </div>
           </div>
@@ -161,7 +177,38 @@
 </template>
 
 <script>
+import { contactApi } from '@/api'
+import AlertMessage from '@/components/common/AlertMessage.vue'
+
 export default {
-  name: 'ContactView'
+  name: 'ContactView',
+  components: {
+    AlertMessage
+  },
+  data() {
+    return {
+      form: { name: '', email: '', phone: '', subject: '', message: '' },
+      loading: false,
+      error: null,
+      success: false
+    }
+  },
+  methods: {
+    // Submit contact form
+    async handleSubmit() {
+      this.loading = true
+      this.error = null
+      this.success = false
+      try {
+        await contactApi.submit(this.form)
+        this.success = true
+        this.form = { name: '', email: '', phone: '', subject: '', message: '' }
+      } catch (err) {
+        this.error = err.message || 'Failed to send message'
+      } finally {
+        this.loading = false
+      }
+    }
+  }
 }
 </script>

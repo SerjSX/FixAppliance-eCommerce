@@ -186,23 +186,6 @@
         </div>
       </div>
 
-      <!-- Terms Agreement -->
-      <div class="form-check">
-        <input type="checkbox" id="terms-agree" class="form-checkbox">
-        <label for="terms-agree" class="form-check-label">
-          I agree to the <a href="/terms" class="text-primary-600 hover:underline">Terms of Service</a> 
-          and <a href="/privacy" class="text-primary-600 hover:underline">Privacy Policy</a>
-        </label>
-      </div>
-
-      <!-- Newsletter Opt-in -->
-      <div class="form-check">
-        <input type="checkbox" id="newsletter" class="form-checkbox" checked>
-        <label for="newsletter" class="form-check-label">
-          Send me helpful tips and updates via email
-        </label>
-      </div>
-
       <!-- Submit Button -->
       <button type="submit" class="btn btn-primary w-full btn-lg">
         Create Account
@@ -211,7 +194,7 @@
       <!-- Login Link -->
       <p class="text-center text-sm text-neutral-600">
         Already have an account? 
-        <a href="/login" class="text-primary-600 font-medium hover:underline">Sign in</a>
+        <router-link to="/login" class="text-primary-600 font-medium hover:underline">Sign in</router-link>
       </p>
     </form>
   </div>

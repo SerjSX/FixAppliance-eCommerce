@@ -4,7 +4,7 @@
  * Headings, text sizes, and font utilities.
  */
 
-@layer base {
+/* Typography base styles */
   /* Headings */
   h1, .h1 {
     @apply text-4xl md:text-5xl font-bold leading-tight tracking-tight text-neutral-900;
@@ -40,13 +40,7 @@
     @apply text-sm text-neutral-500;
   }
 
-  /* Extra small text */
-  .text-xs {
-    @apply text-xs text-neutral-400;
-  }
-}
-
-@layer utilities {
+/* Typography utilities */
   /* Text emphasis */
   .text-emphasis {
     @apply text-neutral-900 font-medium;
@@ -117,4 +111,3 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-}
