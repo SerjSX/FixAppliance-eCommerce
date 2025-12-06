@@ -155,8 +155,9 @@
                     <button 
                       v-if="booking.status === 'confirmed'"
                       @click="declineJob(booking.id)"
-                      :disabled="actionLoading === booking.id"
+                      :disabled="actionLoading === booking.id || booking.paymentStatus === 'completed'"
                       class="btn btn-ghost text-error-600 hover:bg-error-50"
+                      :title="booking.paymentStatus === 'completed' ? 'Cannot decline a paid booking' : ''"
                     >
                       <span v-if="actionLoading === booking.id">Declining...</span>
                       <span v-else>Decline</span>

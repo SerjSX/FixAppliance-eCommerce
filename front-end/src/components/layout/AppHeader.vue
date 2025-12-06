@@ -21,21 +21,9 @@
 
       <!-- Header Actions -->
       <div class="header-actions">
-        <!-- Language Toggle -->
-        <button 
-          type="button" 
-          class="btn-ghost btn-icon-sm hidden md:flex items-center gap-1 text-sm"
-          aria-label="Switch language"
-        >
-          <span>EN</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-
         <!-- When User is Logged In -->
         <div v-if="isUserAuthenticated" class="hidden md:flex items-center gap-2">
-          <router-link to="/my-bookings" class="btn btn-ghost btn-sm">Dashboard</router-link>
+          <router-link to="/dashboard" class="btn btn-ghost btn-sm">Dashboard</router-link>
           <button @click="handleUserLogout" class="btn btn-primary btn-sm">Logout</button>
         </div>
 
@@ -86,7 +74,7 @@
       <div class="p-4 border-t border-neutral-100 space-y-3">
         <!-- When User is Logged In (Mobile) -->
         <template v-if="isUserAuthenticated">
-          <router-link to="/my-bookings" class="btn btn-outline w-full" @click="closeMobileMenu">Dashboard</router-link>
+          <router-link to="/dashboard" class="btn btn-outline w-full" @click="closeMobileMenu">Dashboard</router-link>
           <button @click="handleUserLogout" class="btn btn-primary w-full">Logout</button>
         </template>
 
@@ -101,17 +89,6 @@
           <router-link to="/login" class="btn btn-outline w-full" @click="closeMobileMenu">Login</router-link>
           <router-link to="/register" class="btn btn-primary w-full" @click="closeMobileMenu">Get Started</router-link>
         </template>
-      </div>
-      <div class="p-4 border-t border-neutral-100">
-        <button type="button" class="flex items-center gap-2 text-sm text-neutral-600">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
-          </svg>
-          <span>English</span>
-          <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-        </button>
       </div>
     </div>
   </header>

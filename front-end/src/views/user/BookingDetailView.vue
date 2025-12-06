@@ -160,7 +160,7 @@
                   </div>
                 </div>
                 <button 
-                  v-if="!booking.isPaid && booking.status === 'confirmed'" 
+                  v-if="!booking.isPaid && (booking.status === 'confirmed' || booking.status === 'in-progress')" 
                   @click="handlePayment"
                   :disabled="processingPayment"
                   class="btn btn-primary w-full mt-4"
@@ -262,13 +262,15 @@ export default {
         this.submittingRating = false
       }
     },
-    // Handle payment
+    // Handle payment - simplified cash payment for now
     async handlePayment() {
+      if (!confirm('Confirm payment for this booking?')) return
+      
       this.processingPayment = true
       try {
         const store = useBookingStore()
-        await store.payBooking(this.booking.id)
-        this.booking.isPaid = true
+        await store.payBooking(this.booking.id, null) // null for cash payment
+        this.loadBooking() // Reload booking to get updated payment status from store
       } catch (err) {
         this.error = err.response?.data?.message || 'Payment failed'
       } finally {

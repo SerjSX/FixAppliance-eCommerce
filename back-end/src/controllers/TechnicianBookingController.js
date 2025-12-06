@@ -240,13 +240,14 @@ const declineBooking = asyncHandler(async (req, res) => {
         const pool = getPool();
 
         // Check if the booking exists and is assigned to this technician
-        // Also get Booking_Date to determine if we should set to 'pending' or 'cancelled'
+        // Also get Booking_Date and Payment_Status to validate decline request
         const checkBooking = await pool.request()
             .input("bookingID", sql.Int, bookingID)
             .query(`
-                SELECT Booking_ID, [Status], Technician_ID, Booking_Date
-                FROM Booking
-                WHERE Booking_ID = @bookingID
+                SELECT b.Booking_ID, b.[Status], b.Technician_ID, b.Booking_Date, p.[Status] AS Payment_Status
+                FROM Booking b
+                LEFT JOIN Payment p ON b.Booking_ID = p.Booking_ID
+                WHERE b.Booking_ID = @bookingID
             `);
 
         // If no result returned, the booking doesn't exist
@@ -264,6 +265,11 @@ const declineBooking = asyncHandler(async (req, res) => {
         // Check if booking status is confirmed - only confirmed bookings can be declined by technician
         if (booking.Status !== 'confirmed') {
             return res.status(400).json({ message: `This booking is ${booking.Status} and cannot be declined. Only confirmed bookings can be declined.` });
+        }
+
+        // Check if payment is already completed - cannot decline a paid booking
+        if (booking.Payment_Status === 'completed') {
+            return res.status(400).json({ message: "Cannot decline a booking that has already been paid. Please contact the customer or support." });
         }
 
         // Determine new status based on booking date

@@ -145,7 +145,7 @@
                 <div class="flex items-center gap-2 md:flex-col">
                   <router-link :to="`/booking/${booking.id}`" class="btn btn-outline btn-sm w-full">View
                     Details</router-link>
-                  <button v-if="booking.status === 'confirmed' && !booking.isPaid" @click="payBooking(booking.id)"
+                  <button v-if="(booking.status === 'confirmed' || booking.status === 'in-progress') && !booking.isPaid" @click="payBooking(booking.id)"
                     class="btn btn-primary btn-sm w-full">Pay Now</button>
                   <button v-if="booking.status === 'completed' && !booking.isRated" @click="openRatingModal(booking)"
                     class="btn btn-secondary btn-sm w-full">Rate</button>
@@ -294,8 +294,9 @@ export default {
       }
     },
     async payBooking(bookingId) {
+      if (!confirm('Confirm payment for this booking?')) return
       try {
-        await this.bookingStore.payBooking(bookingId)
+        await this.bookingStore.payBooking(bookingId, null) // null for cash payment
       } catch (err) {
         alert(err.response?.data?.message || 'Payment failed')
       }

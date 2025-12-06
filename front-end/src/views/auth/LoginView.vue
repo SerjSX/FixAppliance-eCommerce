@@ -140,7 +140,7 @@ export default {
       this.error = null
       try {
         await useAuthStore().login(this.form)
-        this.$router.push('/my-bookings')
+        this.$router.push('/dashboard')
       } catch (err) {
         this.error = err.message || 'Login failed'
       } finally {

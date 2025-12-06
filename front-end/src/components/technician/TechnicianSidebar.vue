@@ -6,8 +6,8 @@
         <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
           <img src="/images/logo/fixappliance-icon.svg" alt="FixAppliance" class="w-6 h-6">
         </div>
-        <div>
-          <p class="font-bold">FixAppliance</p>
+        <div class="text-white">
+          <p class="font-bold text-white">FixAppliance</p>
           <p class="text-xs text-primary-300">Technician Portal</p>
         </div>
       </div>

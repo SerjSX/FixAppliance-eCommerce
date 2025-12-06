@@ -240,13 +240,9 @@ const userPayBooking = asyncHandler(async (req, res) => {
             return res.status(403).json({message: "You are not authorized to pay for this booking since it's not yours."});
         }
 
-        // Status checking: cannot pay a booking that's cancelled/completed
+        // Status checking: cannot pay a booking that's cancelled
         if (booking.Status === 'cancelled') {
             return res.status(400).json({message: "Cannot pay for a cancelled booking!"});
-        }
-
-        if (booking.Status === 'completed') {
-            return res.status(400).json({message: "Cannot pay for a booking that's already paid for."});
         }
 
         // If the booking is already paid then the user cant pay it again!

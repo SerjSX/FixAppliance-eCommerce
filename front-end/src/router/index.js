@@ -19,6 +19,7 @@ import TechnicianLoginView from '@/views/auth/TechnicianLoginView.vue'
 import TechnicianRegisterView from '@/views/auth/TechnicianRegisterView.vue'
 
 // User Views
+import UserDashboardView from '@/views/user/UserDashboardView.vue'
 import BookTechnicianView from '@/views/user/BookTechnicianView.vue'
 import MyBookingsView from '@/views/user/MyBookingsView.vue'
 import UserProfileView from '@/views/user/UserProfileView.vue'
@@ -100,6 +101,16 @@ const routes = [
   // ========================================
   // USER DASHBOARD ROUTES
   // ========================================
+  {
+    path: '/dashboard',
+    name: 'UserDashboard',
+    component: UserDashboardView,
+    meta: {
+      title: 'Dashboard - FixAppliance',
+      description: 'View your booking overview, manage payments, and access quick actions.',
+      requiresAuth: true
+    }
+  },
   {
     path: '/book-technician',
     name: 'BookTechnician',
@@ -273,7 +284,7 @@ router.beforeEach(async (to, from, next) => {
   // Redirect authenticated users away from login/register pages
   if (to.path === '/login' || to.path === '/register') {
     if (authStore.isAuthenticated) {
-      return next('/my-bookings')
+      return next('/dashboard')
     }
   }
   

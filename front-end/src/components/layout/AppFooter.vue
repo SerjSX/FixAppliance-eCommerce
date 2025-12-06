@@ -106,13 +106,6 @@
               </svg>
             </a>
           </div>
-
-          <!-- Language Selector -->
-          <div class="flex items-center gap-2 text-sm">
-            <button type="button" class="text-neutral-400 hover:text-white transition-colors">English</button>
-            <span class="text-neutral-600">|</span>
-            <button type="button" class="text-neutral-400 hover:text-white transition-colors font-arabic">العربية</button>
-          </div>
         </div>
       </div>
     </div>

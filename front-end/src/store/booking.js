@@ -63,10 +63,10 @@ export const useBookingStore = defineStore('booking', {
     },
 
     // Pay for booking
-    async payBooking(bookingId) {
+    async payBooking(bookingId, transactionId = null) {
       this.loading = true
       try {
-        await bookingApi.pay(bookingId)
+        await bookingApi.pay(bookingId, transactionId)
         await this.fetchAll() // Refresh bookings
       } catch (err) {
         this.error = err.message
