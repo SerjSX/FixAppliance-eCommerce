@@ -1,49 +1,48 @@
 <template>
-  <div class="main-content">
-    <!-- Page Header -->
-    <div class="page-header">
-      <div class="container-wide">
-        <nav class="breadcrumb mb-4">
-          <router-link to="/" class="breadcrumb-link">Home</router-link>
-          <span class="breadcrumb-separator">/</span>
-          <router-link to="/my-bookings" class="breadcrumb-link">My Bookings</router-link>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">Booking Details</span>
-        </nav>
-        <div class="flex items-center gap-4">
-          <h1 class="page-title">Booking #{{ booking.id || $route.params.id }}</h1>
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <UserSidebar />
+
+    <!-- Main Content -->
+    <main class="flex-1 lg:ml-64 bg-neutral-50 min-h-screen">
+      <!-- Top Bar -->
+      <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-4 ml-10 lg:ml-0">
+            <router-link to="/my-bookings" class="text-neutral-500 hover:text-neutral-700">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </router-link>
+            <div>
+              <h1 class="text-lg sm:text-xl font-semibold text-neutral-900">Booking #{{ booking.id || $route.params.id }}</h1>
+              <p class="text-sm text-neutral-500 hidden sm:block">View booking details</p>
+            </div>
+          </div>
           <span :class="['badge', `badge-${statusClass}`]">{{ booking.status || 'Loading...' }}</span>
         </div>
-      </div>
-    </div>
+      </header>
 
-    <!-- Loading State -->
-    <section v-if="loading" class="section-sm">
-      <div class="container-wide text-center py-12">
+      <!-- Loading State -->
+      <div v-if="loading" class="p-6 text-center py-12">
         <div class="spinner spinner-xl mx-auto"></div>
         <p class="mt-4 text-neutral-600">Loading booking details...</p>
       </div>
-    </section>
 
-    <!-- Error State -->
-    <section v-else-if="error" class="section-sm">
-      <div class="container-wide text-center py-12">
+      <!-- Error State -->
+      <div v-else-if="error" class="p-6 text-center py-12">
         <p class="text-error-600 mb-4">{{ error }}</p>
         <router-link to="/my-bookings" class="btn btn-primary">Back to My Bookings</router-link>
       </div>
-    </section>
 
-    <!-- Not Found State -->
-    <section v-else-if="!booking.id" class="section-sm">
-      <div class="container-wide text-center py-12">
+      <!-- Not Found State -->
+      <div v-else-if="!booking.id" class="p-6 text-center py-12">
         <p class="text-neutral-600 mb-4">Booking not found</p>
         <router-link to="/my-bookings" class="btn btn-primary">Back to My Bookings</router-link>
       </div>
-    </section>
 
-    <!-- Booking Content -->
-    <section v-else class="section-sm">
-      <div class="container-wide">
+      <!-- Booking Content -->
+      <div v-else class="p-6">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <!-- Main Info -->
           <div class="lg:col-span-2 space-y-6">
@@ -190,16 +189,20 @@
           </div>
         </div>
       </div>
-    </section>
+    </main>
   </div>
 </template>
 
 <script>
 import { useBookingStore } from '@/store/booking'
 import { formatDate } from '@/utils/dateUtils'
+import UserSidebar from '@/components/user/UserSidebar.vue'
 
 export default {
   name: 'BookingDetailView',
+  components: {
+    UserSidebar
+  },
   data() {
     return {
       booking: {},

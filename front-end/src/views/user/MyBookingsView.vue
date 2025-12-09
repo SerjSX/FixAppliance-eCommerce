@@ -1,52 +1,75 @@
 <template>
-  <div class="main-content">
-    <!-- Page Header -->
-    <div class="page-header">
-      <div class="container-wide">
-        <nav class="breadcrumb mb-4">
-          <router-link to="/" class="breadcrumb-link">Home</router-link>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">My Bookings</span>
-        </nav>
-        <h1 class="page-title">My Bookings</h1>
-        <p class="page-description">Track and manage your appliance repair bookings</p>
-      </div>
-    </div>
+  <div class="min-h-screen flex overflow-x-hidden">
+    <!-- Sidebar -->
+    <UserSidebar />
 
-    <!-- Bookings Content -->
-    <section class="section-sm">
-      <div class="container-wide">
-        <!-- Tabs -->
-        <div class="tabs mb-6 overflow-x-auto">
-          <button type="button" class="tab" :class="{ active: activeTab === 'all' }" @click="activeTab = 'all'">All
-            Bookings</button>
-          <button type="button" class="tab" :class="{ active: activeTab === 'pending' }"
-            @click="activeTab = 'pending'">Pending</button>
-          <button type="button" class="tab" :class="{ active: activeTab === 'confirmed' }"
-            @click="activeTab = 'confirmed'">Confirmed</button>
-          <button type="button" class="tab" :class="{ active: activeTab === 'inProgress' }"
-            @click="activeTab = 'inProgress'">In Progress</button>
-          <button type="button" class="tab" :class="{ active: activeTab === 'completed' }"
-            @click="activeTab = 'completed'">Completed</button>
-          <button type="button" class="tab" :class="{ active: activeTab === 'cancelled' }"
-            @click="activeTab = 'cancelled'">Cancelled</button>
+    <!-- Main Content -->
+    <main class="flex-1 lg:ml-64 bg-neutral-50 min-h-screen w-full overflow-x-hidden">
+      <!-- Top Bar -->
+      <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div class="ml-14 lg:ml-0">
+            <h1 class="text-xl font-semibold text-neutral-900">My Bookings</h1>
+            <p class="text-sm text-neutral-500">Track and manage your appliance repair bookings</p>
+          </div>
+          <router-link to="/book-technician" class="btn btn-primary btn-sm">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            New Booking
+          </router-link>
+        </div>
+      </header>
+
+      <!-- Bookings Content -->
+      <div class="p-4 sm:p-6 max-w-full">
+        <!-- Tabs - Horizontally scrollable on mobile -->
+        <div class="mb-6 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-hidden">
+          <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" style="-webkit-overflow-scrolling: touch;">
+            <button type="button" 
+              class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
+              :class="activeTab === 'all' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'" 
+              @click="activeTab = 'all'">All</button>
+            <button type="button" 
+              class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
+              :class="activeTab === 'pending' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'"
+              @click="activeTab = 'pending'">Pending</button>
+            <button type="button" 
+              class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
+              :class="activeTab === 'confirmed' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'"
+              @click="activeTab = 'confirmed'">Confirmed</button>
+            <button type="button" 
+              class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
+              :class="activeTab === 'inProgress' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'"
+              @click="activeTab = 'inProgress'">In Progress</button>
+            <button type="button" 
+              class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
+              :class="activeTab === 'completed' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'"
+              @click="activeTab = 'completed'">Completed</button>
+            <button type="button" 
+              class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
+              :class="activeTab === 'cancelled' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'"
+              @click="activeTab = 'cancelled'">Cancelled</button>
+          </div>
         </div>
 
         <!-- Filters and Search -->
-        <div class="flex flex-col md:flex-row gap-4 mb-6">
-          <div class="w-48">
-            <select v-model="sortOrder" class="form-select">
+        <div class="flex flex-col sm:flex-row gap-3 mb-6">
+          <div class="w-full sm:w-40 flex-shrink-0">
+            <select v-model="sortOrder" class="form-select w-full">
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
             </select>
           </div>
 
-          <div class="flex-1 form-search-wrapper">
-            <svg class="form-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-            <input type="text" v-model="searchQuery" class="form-search" placeholder="Search bookings...">
+          <div class="flex-1 min-w-0">
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              <input type="text" v-model="searchQuery" class="form-input pl-10 w-full" placeholder="Search bookings...">
+            </div>
           </div>
         </div>
 
@@ -74,83 +97,105 @@
 
         <!-- Bookings List -->
         <div v-else class="space-y-4">
-          <div v-for="booking in filteredBookings" :key="booking.id" class="card">
+          <div v-for="booking in filteredBookings" :key="booking.id" class="card overflow-hidden">
             <div class="card-body">
-              <div class="flex flex-col md:flex-row md:items-center gap-4">
-                <!-- Appliance Icon -->
-                <div class="w-16 h-16 flex-shrink-0 flex items-center justify-center bg-primary-50 rounded-xl">
-                  <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z">
-                    </path>
-                  </svg>
-                </div>
-
-                <!-- Booking Info -->
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-start justify-between mb-2">
-                    <div>
-                      <h3 class="text-lg font-semibold text-neutral-900">{{ booking.applianceType || 'Appliance Repair'
-                        }}</h3>
-                      <p class="text-sm text-neutral-500">Booking #{{ booking.id }}</p>
-                    </div>
-                    <span :class="getBadgeClass(booking.status)">
-                      <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 8 8">
-                        <circle cx="4" cy="4" r="3"></circle>
-                      </svg>
-                      {{ formatStatus(booking.status) }}
-                    </span>
+              <!-- Mobile-first layout -->
+              <div class="flex flex-col gap-4">
+                <!-- Header: Icon + Title + Badge -->
+                <div class="flex items-start gap-3">
+                  <!-- Appliance Icon -->
+                  <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-primary-50 rounded-xl">
+                    <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z">
+                      </path>
+                    </svg>
                   </div>
 
-                  <p class="text-sm text-neutral-600 mb-3 line-clamp-2">
-                    {{ booking.description || 'No description provided' }}
-                  </p>
-
-                  <div class="flex flex-wrap gap-4 text-sm text-neutral-500">
-                    <div class="flex items-center gap-1">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                        </path>
-                      </svg>
-                      <span>{{ formatDate(booking.scheduledDate) }}</span>
-                    </div>
-                    <div v-if="booking.price" class="flex items-center gap-1">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                        </path>
-                      </svg>
-                      <span>${{ booking.price }}{{ booking.isPaid ? ' (Paid)' : '' }}</span>
-                    </div>
-                    <div class="flex items-center gap-1">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                      </svg>
-                      <span>{{ booking.technicianName || 'Awaiting technician' }}</span>
-                    </div>
-                    <div v-if="booking.isRated" class="flex items-center gap-1 text-warning-500">
-                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                        </path>
-                      </svg>
-                      <span>{{ booking.rating }}/5</span>
+                  <!-- Title & Badge -->
+                  <div class="flex-1 min-w-0 overflow-hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                      <div class="min-w-0 overflow-hidden">
+                        <h3 class="text-base font-semibold text-neutral-900 truncate">
+                          {{ booking.applianceType || 'Appliance Repair' }}
+                        </h3>
+                        <p class="text-sm text-neutral-500">Booking #{{ booking.id }}</p>
+                      </div>
+                      <span :class="getBadgeClass(booking.status)" class="flex-shrink-0 self-start">
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 8 8">
+                          <circle cx="4" cy="4" r="3"></circle>
+                        </svg>
+                        {{ formatStatus(booking.status) }}
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <!-- Actions -->
-                <div class="flex items-center gap-2 md:flex-col">
-                  <router-link :to="`/booking/${booking.id}`" class="btn btn-outline btn-sm w-full">View
-                    Details</router-link>
-                  <button v-if="(booking.status === 'confirmed' || booking.status === 'in-progress') && !booking.isPaid" @click="payBooking(booking.id)"
-                    class="btn btn-primary btn-sm w-full">Pay Now</button>
-                  <button v-if="booking.status === 'completed' && !booking.isRated" @click="openRatingModal(booking)"
-                    class="btn btn-secondary btn-sm w-full">Rate</button>
-                  <span v-else-if="booking.status === 'completed' && booking.isRated"
-                    class="btn btn-ghost btn-sm w-full text-success-600 cursor-default">
+                <!-- Description -->
+                <p class="text-sm text-neutral-600 line-clamp-2">
+                  {{ booking.description || 'No description provided' }}
+                </p>
+
+                <!-- Meta Info - Wrap properly -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-neutral-500">
+                  <div class="flex items-center gap-1 min-w-0">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                      </path>
+                    </svg>
+                    <span class="truncate">{{ formatDate(booking.scheduledDate) }}</span>
+                  </div>
+                  <div v-if="booking.price" class="flex items-center gap-1 min-w-0">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                      </path>
+                    </svg>
+                    <span>${{ booking.price }}<span v-if="booking.isPaid" class="text-success-600 ml-1">(Paid)</span></span>
+                  </div>
+                  <div class="flex items-center gap-1 min-w-0">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <span class="truncate">{{ booking.technicianName || 'Awaiting technician' }}</span>
+                  </div>
+                  <div v-if="booking.isRated" class="flex items-center gap-1 text-warning-500">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                      </path>
+                    </svg>
+                    <span>{{ booking.rating }}/5</span>
+                  </div>
+                </div>
+
+                <!-- Action Buttons - Stack on mobile, row on larger -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-3 border-t border-neutral-100">
+                  <router-link 
+                    :to="`/booking/${booking.id}`" 
+                    class="btn btn-outline btn-sm justify-center">
+                    View Details
+                  </router-link>
+                  
+                  <button 
+                    v-if="(booking.status === 'confirmed' || booking.status === 'in-progress') && !booking.isPaid" 
+                    @click="payBooking(booking.id)"
+                    class="btn btn-primary btn-sm justify-center">
+                    Pay Now
+                  </button>
+                  
+                  <button 
+                    v-if="booking.status === 'completed' && !booking.isRated" 
+                    @click="openRatingModal(booking)"
+                    class="btn btn-secondary btn-sm justify-center">
+                    Rate Service
+                  </button>
+                  
+                  <span 
+                    v-else-if="booking.status === 'completed' && booking.isRated"
+                    class="btn btn-ghost btn-sm text-success-600 cursor-default justify-center">
                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -158,8 +203,13 @@
                     </svg>
                     Rated
                   </span>
-                  <button v-if="booking.status === 'pending'" @click="cancelBooking(booking.id)"
-                    class="btn btn-ghost btn-sm w-full text-error-600 hover:bg-error-50">Cancel</button>
+                  
+                  <button 
+                    v-if="booking.status === 'pending'" 
+                    @click="cancelBooking(booking.id)"
+                    class="btn btn-ghost btn-sm text-error-600 hover:bg-error-50 justify-center">
+                    Cancel
+                  </button>
                 </div>
               </div>
             </div>
@@ -171,7 +221,6 @@
           <p class="text-sm text-neutral-500">Showing {{ filteredBookings.length }} booking(s)</p>
         </div>
       </div>
-    </section>
 
     <!-- Rating Modal -->
     <div v-if="ratingModal.show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -193,15 +242,20 @@
         </div>
       </div>
     </div>
+    </main>
   </div>
 </template>
 
 <script>
 import { useBookingStore } from '@/store/booking'
 import { formatDate } from '@/utils/dateUtils'
+import UserSidebar from '@/components/user/UserSidebar.vue'
 
 export default {
   name: 'MyBookingsView',
+  components: {
+    UserSidebar
+  },
   data() {
     return {
       activeTab: 'all',

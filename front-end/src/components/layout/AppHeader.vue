@@ -66,7 +66,6 @@
       </div>
       <nav class="p-4 space-y-1">
         <router-link to="/" class="block px-4 py-3 text-base font-medium text-neutral-900 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Home</router-link>
-        <router-link to="/coming-soon" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Services</router-link>
         <router-link to="/book-technician" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Book a Technician</router-link>
         <router-link to="/about" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">About Us</router-link>
         <router-link to="/contact" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Contact</router-link>

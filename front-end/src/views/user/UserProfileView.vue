@@ -1,21 +1,22 @@
 <template>
-  <div class="main-content">
-    <!-- Page Header -->
-    <div class="page-header">
-      <div class="container-wide">
-        <nav class="breadcrumb mb-4">
-          <router-link to="/" class="breadcrumb-link">Home</router-link>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">My Profile</span>
-        </nav>
-        <h1 class="page-title">My Profile</h1>
-        <p class="page-description">Manage your account information</p>
-      </div>
-    </div>
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <UserSidebar />
 
-    <!-- Profile Content -->
-    <section class="section-sm">
-      <div class="container-wide">
+    <!-- Main Content -->
+    <main class="flex-1 lg:ml-64 bg-neutral-50 min-h-screen">
+      <!-- Top Bar -->
+      <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="ml-14 lg:ml-0">
+            <h1 class="text-xl font-semibold text-neutral-900">My Profile</h1>
+            <p class="text-sm text-neutral-500">Manage your account information</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Profile Content -->
+      <div class="p-4 sm:p-6">
         <!-- Loading State -->
         <div v-if="loading" class="loading-container">
           <div class="spinner spinner-lg"></div>
@@ -231,7 +232,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </main>
   </div>
 </template>
 
@@ -240,11 +241,13 @@ import { useAuthStore } from '@/store/auth'
 import { useBookingStore } from '@/store/booking'
 import { formatDate } from '@/utils/dateUtils'
 import AlertMessage from '@/components/common/AlertMessage.vue'
+import UserSidebar from '@/components/user/UserSidebar.vue'
 
 export default {
   name: 'UserProfileView',
   components: {
-    AlertMessage
+    AlertMessage,
+    UserSidebar
   },
   data() {
     return {

@@ -30,7 +30,8 @@ export const useApplianceStore = defineStore('appliance', {
           id: cat.Category_ID,
           name: cat.NameEN,
           nameAR: cat.NameAR,
-          isActive: cat.isActive
+          isActive: cat.isActive,
+          fileName: cat.logoFileName
         }))
       } catch (err) {
         this.error = err.message
@@ -39,8 +40,8 @@ export const useApplianceStore = defineStore('appliance', {
       }
     },
 
-    // Fetch types by category
-    async fetchTypes(categoryId) {
+    // Fetch types by category (pass null/undefined to get all types)
+    async fetchTypes(categoryId = null) {
       this.loading = true
       this.selectedCategoryId = categoryId
       try {
@@ -55,7 +56,8 @@ export const useApplianceStore = defineStore('appliance', {
           avgRepairTime: type.Average_Repair_Time_Min,
           description: type.DescriptionEN,
           descriptionAR: type.DescriptionAR,
-          isActive: type.isActive
+          isActive: type.isActive,
+          logoFileName: type.logoFileName
         }))
       } catch (err) {
         this.error = err.message

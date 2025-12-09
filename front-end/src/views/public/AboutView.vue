@@ -148,42 +148,30 @@
               We're currently focused on providing the best service to homeowners 
               in Mount Lebanon. Our network of technicians covers:
             </p>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="flex items-center gap-2 text-neutral-700">
+            
+            <!-- Loading State -->
+            <div v-if="loadingServiceAreas" class="py-4">
+              <div class="spinner spinner-md"></div>
+              <p class="text-neutral-500 mt-2">Loading service areas...</p>
+            </div>
+            
+            <!-- Dynamic Service Areas -->
+            <div v-else-if="serviceAreas.length > 0" class="grid grid-cols-2 gap-3">
+              <div v-for="area in serviceAreas" :key="area.id" class="flex items-center gap-2 text-neutral-700">
                 <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                <span>Beirut</span>
+                <span>{{ area.name }}</span>
               </div>
+            </div>
+            
+            <!-- Fallback -->
+            <div v-else class="grid grid-cols-2 gap-3">
               <div class="flex items-center gap-2 text-neutral-700">
                 <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                <span>Jounieh</span>
-              </div>
-              <div class="flex items-center gap-2 text-neutral-700">
-                <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Baabda</span>
-              </div>
-              <div class="flex items-center gap-2 text-neutral-700">
-                <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Metn</span>
-              </div>
-              <div class="flex items-center gap-2 text-neutral-700">
-                <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Aley</span>
-              </div>
-              <div class="flex items-center gap-2 text-neutral-700">
-                <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Keserwan</span>
+                <span>Mount Lebanon</span>
               </div>
             </div>
             <p class="text-sm text-neutral-500 mt-6">
@@ -216,7 +204,31 @@
 </template>
 
 <script>
+import { useServiceAreaStore } from '@/store/serviceArea'
+
 export default {
-  name: 'AboutView'
+  name: 'AboutView',
+  data() {
+    return {
+      serviceAreaStore: null
+    }
+  },
+  computed: {
+    serviceAreas() {
+      return this.serviceAreaStore?.areas?.filter(area => area.isActive !== false) || []
+    },
+    loadingServiceAreas() {
+      return this.serviceAreaStore?.loading ?? true
+    }
+  },
+  mounted() {
+    this.serviceAreaStore = useServiceAreaStore()
+    this.fetchServiceAreas()
+  },
+  methods: {
+    async fetchServiceAreas() {
+      await this.serviceAreaStore.fetchAll()
+    }
+  }
 }
 </script>

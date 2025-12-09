@@ -4,11 +4,11 @@
     <TechnicianSidebar />
 
     <!-- Main Content -->
-    <main class="flex-1 ml-64 bg-neutral-50 min-h-screen">
+    <main class="flex-1 lg:ml-64 bg-neutral-50 min-h-screen">
       <!-- Top Bar -->
-      <header class="bg-white border-b border-neutral-100 px-6 py-4">
-        <div class="flex items-center justify-between">
-          <div>
+      <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div class="ml-14 lg:ml-0">
             <h1 class="text-xl font-semibold text-neutral-900">Dashboard</h1>
             <p class="text-sm text-neutral-500">Welcome back, {{ technician.firstName || 'Technician' }}!</p>
           </div>

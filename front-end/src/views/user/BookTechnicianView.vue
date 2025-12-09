@@ -1,21 +1,36 @@
 <template>
-  <div class="main-content">
-    <!-- Page Header -->
-    <div class="page-header">
-      <div class="container-wide">
-        <nav class="breadcrumb mb-4">
-          <router-link to="/" class="breadcrumb-link">Home</router-link>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">Book a Technician</span>
-        </nav>
-        <h1 class="page-title">Book a Technician</h1>
-        <p class="page-description">Get your appliance fixed by a verified professional</p>
-      </div>
-    </div>
+  <div :class="isAuthenticated ? 'min-h-screen flex' : 'main-content'">
+    <!-- Sidebar (only when logged in) -->
+    <UserSidebar v-if="isAuthenticated" />
 
-    <!-- Booking Form Section -->
-    <section class="section-sm">
-      <div class="container-wide">
+    <!-- Main Content -->
+    <main :class="isAuthenticated ? 'flex-1 lg:ml-64 bg-neutral-50 min-h-screen' : ''">
+      <!-- Top Bar (only when logged in) -->
+      <header v-if="isAuthenticated" class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="ml-14 lg:ml-0">
+            <h1 class="text-xl font-semibold text-neutral-900">Book a Technician</h1>
+            <p class="text-sm text-neutral-500">Get your appliance fixed by a verified professional</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Header (only when NOT logged in) -->
+      <div v-if="!isAuthenticated" class="page-header">
+        <div class="container-wide">
+          <nav class="breadcrumb mb-4">
+            <router-link to="/" class="breadcrumb-link">Home</router-link>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Book a Technician</span>
+          </nav>
+          <h1 class="page-title">Book a Technician</h1>
+          <p class="page-description">Get your appliance fixed by a verified professional</p>
+        </div>
+      </div>
+
+      <!-- Booking Form Section -->
+      <div :class="isAuthenticated ? 'p-6' : 'section-sm'" ref="formTop">
+        <div :class="isAuthenticated ? '' : 'container-wide'">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <!-- Main Form -->
           <div class="lg:col-span-2">
@@ -38,43 +53,94 @@
                     :dismissible="false"
                   />
 
-                  <!-- Step Indicator -->
-                  <div class="flex items-center justify-center gap-4 mb-8">
-                    <div class="flex items-center gap-2">
-                      <span class="w-8 h-8 flex items-center justify-center rounded-full bg-primary-600 text-white text-sm font-medium">1</span>
-                      <span class="text-sm font-medium text-neutral-900">Details</span>
-                    </div>
-                    <div class="w-12 h-0.5 bg-neutral-200"></div>
-                    <div class="flex items-center gap-2">
-                      <span class="w-8 h-8 flex items-center justify-center rounded-full bg-neutral-200 text-neutral-600 text-sm font-medium">2</span>
-                      <span class="text-sm text-neutral-500">Payment</span>
-                    </div>
-                    <div class="w-12 h-0.5 bg-neutral-200"></div>
-                    <div class="flex items-center gap-2">
-                      <span class="w-8 h-8 flex items-center justify-center rounded-full bg-neutral-200 text-neutral-600 text-sm font-medium">3</span>
-                      <span class="text-sm text-neutral-500">Confirm</span>
-                    </div>
-                  </div>
-
                   <!-- Appliance Selection -->
                   <div class="form-section">
                     <h3 class="form-section-title">Select Your Appliance</h3>
                     
                     <!-- Loading -->
-                    <div v-if="loadingAppliances" class="loading-container-sm">
+                    <div v-if="loadingAppliances" class="flex items-center justify-center py-8">
                       <div class="spinner spinner-lg"></div>
                     </div>
 
-                    <div v-else class="grid grid-cols-2 md:grid-cols-4 gap-3" role="radiogroup" aria-label="Select appliance type">
-                      <label v-for="appliance in appliances" :key="appliance.id" class="relative cursor-pointer">
-                        <input type="radio" name="appliance-type" :value="appliance.id" v-model="form.applianceTypeId" class="peer sr-only" :aria-label="appliance.name">
-                        <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <svg class="w-10 h-10 mx-auto mb-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
-                          </svg>
-                          <span class="text-sm font-medium block">{{ appliance.name }}</span>
+                    <!-- Category Tabs + Accordion Style -->
+                    <div v-else>
+                      <!-- Category Tabs -->
+                      <div class="flex flex-wrap gap-2 mb-4">
+                        <button
+                          v-for="category in groupedAppliances"
+                          :key="category.id"
+                          type="button"
+                          @click="selectCategory(category.id)"
+                          :class="[
+                            'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all',
+                            selectedCategoryId === category.id
+                              ? 'bg-primary-600 text-white'
+                              : 'bg-white border border-neutral-200 text-neutral-700 hover:border-primary-300 hover:bg-primary-50'
+                          ]"
+                        >
+                          <img 
+                            v-if="category.fileName" 
+                            class="w-5 h-5" 
+                            :src="'/images/appliance-categories/' + category.fileName"
+                            :alt="category.name"
+                          />
+                          <span>{{ category.name }}</span>
+                          <span class="text-xs opacity-75">({{ category.types.length }})</span>
+                        </button>
+                      </div>
+
+                      <!-- Selected Category Types -->
+                      <div v-if="selectedCategory" class="border border-neutral-200 rounded-lg p-4 bg-white">
+                        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-neutral-100">
+                          <img 
+                            v-if="selectedCategory.fileName" 
+                            class="w-6 h-6" 
+                            :src="'/images/appliance-categories/' + selectedCategory.fileName"
+                            :alt="selectedCategory.name"
+                          />
+                          <h4 class="font-semibold text-neutral-900">{{ selectedCategory.name }}</h4>
                         </div>
-                      </label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3" role="radiogroup" aria-label="Select appliance type">
+                          <label v-for="type in selectedCategory.types" :key="type.id" class="relative cursor-pointer">
+                            <input 
+                              type="radio" 
+                              name="appliance-type" 
+                              :value="type.id" 
+                              v-model="form.applianceTypeId" 
+                              class="peer sr-only" 
+                              :aria-label="type.name"
+                            >
+                            <div class="p-3 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300 hover:shadow-sm">
+                              <span class="text-sm font-medium block mb-1">{{ type.name }}</span>
+                              <span class="text-xs text-neutral-500">${{ type.basePrice?.toFixed(2) || '0.00' }}</span>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+
+                      <!-- Prompt to select category -->
+                      <div v-else class="border border-dashed border-neutral-300 rounded-lg p-6 text-center bg-neutral-50">
+                        <svg class="w-10 h-10 mx-auto text-neutral-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
+                        </svg>
+                        <p class="text-neutral-500 text-sm">Select a category above to view available appliances</p>
+                      </div>
+
+                      <!-- Selected Appliance Display -->
+                      <div v-if="selectedAppliance" class="mt-4 p-3 bg-success-50 border border-success-200 rounded-lg flex items-center gap-3">
+                        <svg class="w-5 h-5 text-success-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <div class="flex-1">
+                          <span class="text-sm font-medium text-success-800">Selected: {{ selectedAppliance.name }}</span>
+                          <span class="text-xs text-success-600 ml-2">${{ selectedAppliance.basePrice?.toFixed(2) }}</span>
+                        </div>
+                        <button type="button" @click="form.applianceTypeId = null" class="text-success-600 hover:text-success-800">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -90,11 +156,10 @@
                         id="issue-description" 
                         v-model="form.description"
                         class="form-textarea" 
-                        rows="4"
-                        placeholder="Please describe the problem with your appliance in detail. For example: 'My washing machine makes a loud banging noise during the spin cycle and has started leaking water from the bottom.'"
+                        rows="3"
+                        placeholder="Describe the problem with your appliance..."
                         required
                       ></textarea>
-                      <p class="form-hint">The more details you provide, the better prepared the technician will be</p>
                     </div>
 
                     <!-- Quick Issue Tags -->
@@ -147,74 +212,66 @@
                   <div class="form-section">
                     <h3 class="form-section-title">Payment Method</h3>
                     
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                      <!-- Cash -->
+                    <div class="grid grid-cols-3 md:grid-cols-5 gap-2">
                       <label class="relative cursor-pointer">
                         <input type="radio" name="payment-method" value="cash" v-model="form.paymentMethod" class="peer sr-only" checked>
-                        <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <svg class="w-6 h-6 mx-auto mb-2 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
+                          <svg class="w-5 h-5 mx-auto mb-1 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                           </svg>
-                          <span class="text-sm font-medium">Cash</span>
+                          <span class="text-xs font-medium">Cash</span>
                         </div>
                       </label>
 
-                      <!-- Credit Card -->
                       <label class="relative cursor-pointer">
                         <input type="radio" name="payment-method" value="credit_card" v-model="form.paymentMethod" class="peer sr-only">
-                        <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <svg class="w-6 h-6 mx-auto mb-2 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
+                          <svg class="w-5 h-5 mx-auto mb-1 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                           </svg>
-                          <span class="text-sm font-medium">Credit</span>
+                          <span class="text-xs font-medium">Credit</span>
                         </div>
                       </label>
 
-                      <!-- Debit Card -->
                       <label class="relative cursor-pointer">
                         <input type="radio" name="payment-method" value="debit_card" v-model="form.paymentMethod" class="peer sr-only">
-                        <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <svg class="w-6 h-6 mx-auto mb-2 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
+                          <svg class="w-5 h-5 mx-auto mb-1 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                           </svg>
-                          <span class="text-sm font-medium">Debit</span>
+                          <span class="text-xs font-medium">Debit</span>
                         </div>
                       </label>
 
-                      <!-- Whish -->
                       <label class="relative cursor-pointer">
                         <input type="radio" name="payment-method" value="whish" v-model="form.paymentMethod" class="peer sr-only">
-                        <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <svg class="w-6 h-6 mx-auto mb-2 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
+                          <svg class="w-5 h-5 mx-auto mb-1 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V7m0 1v8m0 0v1"></path>
                           </svg>
-                          <span class="text-sm font-medium">Whish</span>
+                          <span class="text-xs font-medium">Whish</span>
                         </div>
                       </label>
 
-                      <!-- OMT -->
                       <label class="relative cursor-pointer">
                         <input type="radio" name="payment-method" value="omt" v-model="form.paymentMethod" class="peer sr-only">
-                        <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
-                          <svg class="w-6 h-6 mx-auto mb-2 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300">
+                          <svg class="w-5 h-5 mx-auto mb-1 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V7m0 1v8m0 0v1"></path>
                           </svg>
-                          <span class="text-sm font-medium">OMT</span>
+                          <span class="text-xs font-medium">OMT</span>
                         </div>
                       </label>
                     </div>
                   </div>
 
                   <!-- Submit Button -->
-                  <div class="flex justify-end gap-3 pt-4">
-                    <router-link to="/" class="btn btn-ghost">Cancel</router-link>
-                    <button type="submit" class="btn btn-secondary btn-lg" :disabled="loading || !isFormValid">
-                      <svg v-if="loading" class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                  <div class="flex justify-end gap-3 pt-4 border-t border-neutral-100">
+                    <router-link to="/dashboard" class="btn btn-ghost">Cancel</router-link>
+                    <button type="submit" class="btn btn-secondary" :disabled="loading || !isFormValid">
+                      <svg v-if="loading" class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                       </svg>
                       {{ loading ? 'Submitting...' : 'Book Now' }}
                     </button>
@@ -227,7 +284,7 @@
           <!-- Sidebar -->
           <div class="lg:col-span-1">
             <!-- Price Summary Card -->
-            <div class="card sticky top-24">
+            <div class="card sticky top-6">
               <div class="card-header">
                 <h3 class="font-semibold text-neutral-900">Booking Summary</h3>
               </div>
@@ -259,7 +316,7 @@
                     </div>
                   </div>
 
-                  <div class="divider"></div>
+                  <div class="border-t border-neutral-100 pt-4 mt-4"></div>
 
                   <!-- Price Breakdown -->
                   <div class="space-y-2 text-sm">
@@ -273,11 +330,11 @@
                     </div>
                   </div>
 
-                  <div class="divider"></div>
+                  <div class="border-t border-neutral-100 pt-4 mt-4"></div>
 
                   <div class="flex justify-between text-base">
                     <span class="font-semibold text-neutral-900">Total</span>
-                    <span class="font-bold text-primary-600">{{ totalPrice > 0 ? '$' + totalPrice.toFixed(2) : 'Select appliance' }}</span>
+                    <span class="font-bold text-primary-600">{{ totalPrice > 0 ? '$' + totalPrice.toFixed(2) : '--' }}</span>
                   </div>
                 </div>
               </div>
@@ -290,42 +347,31 @@
                 </div>
               </div>
             </div>
-
-            <!-- Help Card -->
-            <div class="card mt-6">
-              <div class="card-body">
-                <h4 class="font-semibold text-neutral-900 mb-3">Need Help?</h4>
-                <p class="text-sm text-neutral-600 mb-4">
-                  Can't find your appliance or have questions about our service?
-                </p>
-                <router-link to="/contact" class="btn btn-outline btn-sm w-full">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                  </svg>
-                  Contact Support
-                </router-link>
-              </div>
-            </div>
           </div>
         </div>
+        </div>
       </div>
-    </section>
+    </main>
   </div>
 </template>
 
 <script>
 import { useApplianceStore } from '@/store/appliance'
 import { useBookingStore } from '@/store/booking'
+import { useAuthStore } from '@/store/auth'
 import { formatDate } from '@/utils/dateUtils'
 import AlertMessage from '@/components/common/AlertMessage.vue'
+import UserSidebar from '@/components/user/UserSidebar.vue'
 
 export default {
   name: 'BookTechnicianView',
   components: {
-    AlertMessage
+    AlertMessage,
+    UserSidebar
   },
   data() {
     return {
+      authStore: null,
       form: {
         applianceTypeId: null,
         description: '',
@@ -333,15 +379,47 @@ export default {
         scheduledTime: '',
         paymentMethod: 'cash',
       },
+      selectedCategoryId: null,
       loading: false,
       loadingAppliances: false,
       error: null,
       success: null
     }
   },
+  created() {
+    this.authStore = useAuthStore()
+  },
   computed: {
+    isAuthenticated() {
+      return this.authStore?.isAuthenticated || false
+    },
     appliances() {
       return useApplianceStore().types
+    },
+    categories() {
+      return useApplianceStore().categories
+    },
+    groupedAppliances() {
+      const grouped = []
+      
+      this.categories.forEach(category => {
+        const types = this.appliances.filter(type => type.categoryId === category.id)
+        
+        if (types.length > 0) {
+          grouped.push({
+            id: category.id,
+            name: category.name,
+            fileName: category.fileName,
+            types: types
+          })
+        }
+      })
+      
+      return grouped
+    },
+    selectedCategory() {
+      if (!this.selectedCategoryId) return null
+      return this.groupedAppliances.find(c => c.id === this.selectedCategoryId) || null
     },
     selectedAppliance() {
       if (!this.form.applianceTypeId) return null
@@ -350,12 +428,11 @@ export default {
     selectedApplianceName() {
       return this.selectedAppliance ? this.selectedAppliance.name : null
     },
-    // Dynamic pricing based on selected appliance
     serviceFee() {
       return this.selectedAppliance?.basePrice || 0
     },
     platformFeeRate() {
-      return 15 // 15% platform fee as per backend
+      return 15
     },
     platformFee() {
       return (this.serviceFee * this.platformFeeRate) / 100
@@ -390,6 +467,11 @@ export default {
   },
   methods: {
     formatDate,
+    selectCategory(categoryId) {
+      this.selectedCategoryId = categoryId
+      // Clear appliance selection when changing category
+      this.form.applianceTypeId = null
+    },
     appendToDescription(text) {
       if (this.form.description) {
         this.form.description += '. ' + text
@@ -397,12 +479,14 @@ export default {
         this.form.description = text
       }
     },
+    scrollToTop() {
+      this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    },
     async loadAppliances() {
       this.loadingAppliances = true
       try {
         await useApplianceStore().fetchCategories()
-        // Load all types (assuming no category filter needed)
-        await useApplianceStore().fetchTypes()
+        await useApplianceStore().fetchTypes(null)
       } catch (err) {
         console.error('Failed to load appliances:', err)
       } finally {
@@ -417,7 +501,6 @@ export default {
       this.success = null
       
       try {
-        // Backend expects: applianceTypeID, issueDescription, bookingDate, bookingTime, paymentMethod
         const bookingData = {
           applianceTypeID: this.form.applianceTypeId,
           issueDescription: this.form.description,
@@ -429,12 +512,15 @@ export default {
         await useBookingStore().requestBooking(bookingData)
         this.success = 'Booking submitted successfully! Redirecting to your bookings...'
         
-        // Redirect after a short delay
         setTimeout(() => {
           this.$router.push('/my-bookings')
         }, 2000)
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to submit booking'
+        // Scroll to top to show error message
+        this.$nextTick(() => {
+          this.scrollToTop()
+        })
       } finally {
         this.loading = false
       }
@@ -442,6 +528,10 @@ export default {
   },
   async mounted() {
     await this.loadAppliances()
+    // Auto-select first category if available
+    if (this.groupedAppliances.length > 0) {
+      this.selectedCategoryId = this.groupedAppliances[0].id
+    }
   }
 }
 </script>

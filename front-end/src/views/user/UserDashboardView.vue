@@ -1,31 +1,41 @@
 <template>
-  <div class="main-content">
-    <!-- Page Header -->
-    <div class="page-header">
-      <div class="container-wide">
-        <nav class="breadcrumb mb-4">
-          <router-link to="/" class="breadcrumb-link">Home</router-link>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">Dashboard</span>
-        </nav>
-        <div class="flex items-center justify-between">
-          <div>
-            <h1 class="page-title">Dashboard</h1>
-            <p class="page-description">Welcome back, {{ userName }}!</p>
-          </div>
-          <router-link to="/book-technician" class="btn btn-primary">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            Book a Technician
-          </router-link>
-        </div>
-      </div>
-    </div>
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <UserSidebar />
 
-    <!-- Dashboard Content -->
-    <section class="section-sm">
-      <div class="container-wide">
+    <!-- Main Content -->
+    <main class="flex-1 lg:ml-64 bg-neutral-50 min-h-screen">
+      <!-- Top Bar -->
+      <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4">
+        <div class="flex items-center justify-between gap-3">
+          <!-- Title - with left margin for mobile hamburger -->
+          <div class="ml-14 sm:ml-12 lg:ml-0 min-w-0 flex-shrink">
+            <h1 class="text-lg sm:text-xl font-semibold text-neutral-900 truncate">Dashboard</h1>
+            <p class="text-xs sm:text-sm text-neutral-500 truncate">Welcome back, {{ userName }}!</p>
+          </div>
+          
+          <!-- Actions - always in row, shrink on mobile -->
+          <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+            <router-link to="/book-technician" class="btn btn-primary whitespace-nowrap sm:px-4 sm:py-2">
+              <svg class="w-6 h-6 sm:w-4 sm:h-4 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              <span class="hidden sm:inline">Book a Technician</span>
+            </router-link>
+            <!-- Profile Avatar -->
+            <div class="flex items-center gap-2 sm:gap-3">
+              <span class="avatar avatar-sm sm:avatar-md bg-primary-100 text-primary-600 flex-shrink-0">{{ userInitials }}</span>
+              <div class="hidden md:block">
+                <p class="text-sm font-medium text-neutral-900">{{ userName }}</p>
+                <p class="text-xs text-neutral-500">Customer</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <div class="p-6">
         <!-- Loading State -->
         <div v-if="loading" class="loading-container">
           <div class="spinner spinner-lg"></div>
@@ -158,7 +168,7 @@
                       </div>
                       <div class="text-sm">
                         <span class="text-neutral-500">Time:</span>
-                        <span class="text-neutral-900 ml-1">{{ booking.scheduledTime }}</span>
+                        <span class="text-neutral-900 ml-1">{{ formatTime(booking.scheduledTime) }}</span>
                       </div>
                     </div>
 
@@ -296,7 +306,6 @@
           </div>
         </template>
       </div>
-    </section>
 
     <!-- Payment Modal -->
     <BaseModal 
@@ -317,7 +326,7 @@
         <div class="mb-4">
           <p class="text-sm text-neutral-600 mb-2">Booking Details:</p>
           <p class="font-medium text-neutral-900">{{ selectedBooking?.applianceType }}</p>
-          <p class="text-sm text-neutral-500">{{ formatDate(selectedBooking?.scheduledDate) }} at {{ selectedBooking?.scheduledTime }}</p>
+          <p class="text-sm text-neutral-500">{{ formatDate(selectedBooking?.scheduledDate) }} at {{ formatTime(selectedBooking?.scheduledTime) }}</p>
         </div>
         
         <div class="mb-4 p-4 bg-neutral-50 rounded-lg">
@@ -420,21 +429,24 @@
         </div>
       </div>
     </BaseModal>
+    </main>
   </div>
 </template>
 
 <script>
 import { useAuthStore } from '@/store/auth'
 import { useBookingStore } from '@/store/booking'
-import { formatDate } from '@/utils/dateUtils'
+import { formatDate, formatTime } from '@/utils/dateUtils'
 import AlertMessage from '@/components/common/AlertMessage.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
+import UserSidebar from '@/components/user/UserSidebar.vue'
 
 export default {
   name: 'UserDashboardView',
   components: {
     AlertMessage,
-    BaseModal
+    BaseModal,
+    UserSidebar
   },
   data() {
     return {
@@ -466,6 +478,12 @@ export default {
         return `${this.user.firstName} ${this.user.lastName}`
       }
       return this.user.name || 'User'
+    },
+    userInitials() {
+      if (this.user.firstName && this.user.lastName) {
+        return `${this.user.firstName[0]}${this.user.lastName[0]}`.toUpperCase()
+      }
+      return this.userName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'U'
     },
     allBookings() {
       return this.bookingStore.allBookings || []
@@ -533,6 +551,7 @@ export default {
   },
   methods: {
     formatDate,
+    formatTime,
     async loadDashboardData() {
       this.loading = true
       this.error = null

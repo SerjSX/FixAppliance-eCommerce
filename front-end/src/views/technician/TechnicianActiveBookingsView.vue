@@ -4,11 +4,11 @@
     <TechnicianSidebar />
 
     <!-- Main Content -->
-    <main class="flex-1 ml-64 bg-neutral-50 min-h-screen">
+    <main class="flex-1 lg:ml-64 bg-neutral-50 min-h-screen">
       <!-- Top Bar -->
-      <header class="bg-white border-b border-neutral-100 px-6 py-4">
+      <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4">
         <div class="flex items-center justify-between">
-          <div>
+          <div class="ml-14 lg:ml-0">
             <h1 class="text-xl font-semibold text-neutral-900">Active Bookings</h1>
             <p class="text-sm text-neutral-500">Manage your confirmed and in-progress jobs</p>
           </div>
@@ -16,7 +16,7 @@
       </header>
 
       <!-- Content -->
-      <div class="p-6">
+      <div class="p-4 sm:p-6">
         <!-- Loading State -->
         <div v-if="loading" class="loading-container">
           <div class="spinner spinner-lg"></div>
@@ -186,7 +186,7 @@
 <script>
 import { useTechnicianAuthStore } from '@/store/technicianAuth'
 import { useTechnicianStore } from '@/store/technician'
-import { formatDate } from '@/utils/dateUtils'
+import { formatDate, formatTime } from '@/utils/dateUtils'
 import AlertMessage from '@/components/common/AlertMessage.vue'
 import TechnicianSidebar from '@/components/technician/TechnicianSidebar.vue'
 
@@ -228,19 +228,7 @@ export default {
   },
   methods: {
     formatDate,
-    formatTime(time) {
-      if (!time) return 'TBD'
-      // If time is a string like "14:00:00", format it nicely
-      const parts = time.split(':')
-      if (parts.length >= 2) {
-        const hour = parseInt(parts[0])
-        const minute = parts[1]
-        const ampm = hour >= 12 ? 'PM' : 'AM'
-        const hour12 = hour % 12 || 12
-        return `${hour12}:${minute} ${ampm}`
-      }
-      return time
-    },
+    formatTime,
     async handleLogout() {
       await this.technicianAuthStore.logout()
       this.$router.push('/technician-login')

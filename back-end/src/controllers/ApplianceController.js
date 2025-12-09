@@ -14,7 +14,7 @@ const getActiveCategories = asyncHandler(async (req, res) => {
 
         const result = await pool.request()
             .query(`
-                SELECT Category_ID, NameEN, NameAR, isActive
+                SELECT Category_ID, NameEN, NameAR, isActive, logoFileName
                 FROM Appliance_Category
                 WHERE isActive = 1;
                 `)
@@ -43,14 +43,18 @@ const getActiveTypes = asyncHandler(async (req, res) => {
         if (categoryId) {
             result = await pool.request()
                 .input("categoryId", sql.Int, categoryId)
-                .query(`SELECT Appliance_Type_ID, Category_ID, nameEN, nameAR, Average_Repair_Time_Min, Base_Price, DescriptionEN, DescriptionAR, isActive
-                        FROM Appliance_Type
-                        WHERE isActive = 1 AND Category_ID = @categoryId`);
+                .query(`SELECT Appliance_Type_ID, type.Category_ID, type.nameEN, type.nameAR, Average_Repair_Time_Min, Base_Price, DescriptionEN, DescriptionAR, type.isActive, logoFileName
+                        FROM Appliance_Type AS type
+                        JOIN Appliance_Category AS cat
+                        ON type.Category_ID = cat.Category_ID
+                        WHERE type.isActive = 1 AND type.Category_ID = @categoryId`);
         } else {
             result = await pool.request()
-                .query(`SELECT Appliance_Type_ID, Category_ID, nameEN, nameAR, Average_Repair_Time_Min, Base_Price, DescriptionEN, DescriptionAR, isActive
-                        FROM Appliance_Type
-                        WHERE isActive = 1`);
+                .query(`SELECT Appliance_Type_ID, type.Category_ID, type.nameEN, type.nameAR, Average_Repair_Time_Min, Base_Price, DescriptionEN, DescriptionAR, type.isActive, logoFileName
+                        FROM Appliance_Type AS type
+                        JOIN Appliance_Category AS cat
+                        ON type.Category_ID = cat.Category_ID
+                        WHERE type.isActive = 1`);
         }
 
         res.status(200).json({

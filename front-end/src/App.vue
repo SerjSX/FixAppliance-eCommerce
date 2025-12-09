@@ -1,21 +1,23 @@
 <template>
   <div id="app" class="min-h-screen flex flex-col">
-    <!-- Header (hidden on technician portal pages which have their own layout) -->
-    <AppHeader v-if="!isTechnicianPortal" />
+    <!-- Header (hidden on portal pages which have their own layout) -->
+    <AppHeader v-if="!isPortalPage" />
 
     <!-- Main Content -->
     <main class="flex-1">
       <router-view />
     </main>
 
-    <!-- Footer (hidden on technician portal pages) -->
-    <AppFooter v-if="!isTechnicianPortal" />
+    <!-- Footer (hidden on portal pages) -->
+    <AppFooter v-if="!isPortalPage" />
   </div>
 </template>
 
 <script>
 import AppHeader from './components/layout/AppHeader.vue'
 import AppFooter from './components/layout/AppFooter.vue'
+import { useAuthStore } from '@/store/auth'
+import { useTechnicianAuthStore } from '@/store/technicianAuth'
 
 export default {
   name: 'App',
@@ -24,13 +26,30 @@ export default {
     AppFooter
   },
   computed: {
-    isTechnicianPortal() {
-      // Hide header/footer on technician dashboard pages (they have their own layout)
+    isPortalPage() {
       const path = this.$route.path
-      return path.startsWith('/technician-dashboard') || 
-             (path.startsWith('/technician/') && 
-              !path.includes('/technician-login') && 
-              !path.includes('/technician-register'))
+      const authStore = useAuthStore()
+      const techAuthStore = useTechnicianAuthStore()
+      
+      // Technician portal pages (only if logged in as technician)
+      const isTechnicianPortal = techAuthStore.isAuthenticated && (
+        path.startsWith('/technician-dashboard') || 
+        (path.startsWith('/technician/') && 
+         !path.includes('/technician-login') && 
+         !path.includes('/technician-register'))
+      )
+      
+      // User portal pages (only if logged in as user)
+      // book-technician is accessible without login, so only hide header if authenticated
+      const isUserPortal = authStore.isAuthenticated && (
+        path === '/dashboard' ||
+        path.startsWith('/my-bookings') ||
+        path.startsWith('/booking/') ||
+        path === '/profile' ||
+        path === '/book-technician'
+      )
+      
+      return isTechnicianPortal || isUserPortal
     }
   }
 }

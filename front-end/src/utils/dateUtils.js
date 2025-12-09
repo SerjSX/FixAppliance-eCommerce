@@ -19,11 +19,27 @@ export const formatDateTime = (date) => {
   })
 }
 
-export const formatTime = (date) => {
-  if (!date) return ''
-  return new Date(date).toLocaleTimeString('en-US', {
+export const formatTime = (time) => {
+  if (!time) return ''
+  
+  // Handle time-only strings like "10:00:00" or "10:00"
+  if (typeof time === 'string' && /^\d{1,2}:\d{2}(:\d{2})?$/.test(time)) {
+    const [hours, minutes] = time.split(':')
+    const hour = parseInt(hours, 10)
+    const ampm = hour >= 12 ? 'PM' : 'AM'
+    const hour12 = hour % 12 || 12
+    return `${hour12}:${minutes} ${ampm}`
+  }
+  
+  // Handle ISO timestamps with dummy date (e.g., "1970-01-01T10:00:00.000Z")
+  // or full datetime strings
+  const date = new Date(time)
+  if (isNaN(date.getTime())) return time // Return as-is if invalid
+  
+  return date.toLocaleTimeString('en-US', {
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
+    hour12: true
   })
 }
 
