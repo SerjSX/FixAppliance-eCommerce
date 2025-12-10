@@ -12,7 +12,7 @@
 This list is subject to update.
 
 # Languages and Libraries Used
-- **Backend:** Vue JS framework, vue store, HTML, TailwindCSS, Axios (for backend API calls)
+- **Backend:** Vue JS framework, pinia, HTML, TailwindCSS, Axios (for backend API calls)
 - **Frontend:** Nodejs, expressjs, mssql, jwt and bcrypt
 
 # Screenshots
