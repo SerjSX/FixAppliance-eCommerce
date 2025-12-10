@@ -9,6 +9,7 @@
 - User has a dashboard allowing him to view his/her past bookings, and total spending
 - User can request bookings of the available appliance types
 - User can pay and review a booking
+
 This list is subject to update.
 
 # Languages and Libraries Used
