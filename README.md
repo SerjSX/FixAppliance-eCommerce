@@ -4,14 +4,16 @@
 # Features
 - User and Technician dashboards, login and register forms
 - Technician's register is form-like, so verified technicians are allowed only
-- User can request bookings of the available appliance types
-- Technician can accept bookings that are pending
-- User can pay and review a booking
-- Technician can go through the process of starting a booking job, and then completing it after the user pays
+- Technician can go through the process of accepting a pending booking, starting it, and then completing it after the user pays
 - Technician has a dashboard allowing him/her to see their earnings both before and after cutting platform costs, and seeing a list of all bookings he/she has and had taken
 - User has a dashboard allowing him to view his/her past bookings, and total spending
+- User can request bookings of the available appliance types
+- User can pay and review a booking
 This list is subject to update.
 
 # Languages and Libraries Used
 - **Backend:** Vue JS framework, vue store, HTML, TailwindCSS, Axios (for backend API calls)
 - **Frontend:** Nodejs, expressjs, mssql, jwt and bcrypt
+
+# Screenshots
+_To add after presentation_
