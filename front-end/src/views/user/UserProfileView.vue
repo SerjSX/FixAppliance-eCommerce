@@ -60,7 +60,7 @@
           </div>
 
           <!-- Main Content -->
-          <div class="lg:col-span-2">
+          <div class="lg:col-span-2" ref="formTop">
             <div class="card">
               <div class="card-body">
                 <h3 class="text-lg font-semibold text-neutral-900 mb-6">Edit Profile</h3>
@@ -303,8 +303,10 @@ export default {
       try {
         await this.authStore.updateProfile(this.form)
         this.successMessage = 'Profile updated successfully!'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to update profile'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       } finally {
         this.saving = false
       }
@@ -353,6 +355,7 @@ export default {
         this.calculateStats()
       } catch (err) {
         this.error = err.response?.data?.message || 'Failed to load profile'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       } finally {
         this.loading = false
       }

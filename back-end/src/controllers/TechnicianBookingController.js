@@ -387,7 +387,9 @@ const getActiveBookings = asyncHandler(async (req, res) => {
                     [User].Building_Name AS "Building Name", 
                     [User].Floor AS "Building Floor", 
                     [User].Postal_Code AS "Postal Code",
-                    Payment.[Status] AS "Payment Status"
+                    Payment.[Status] AS "Payment Status",
+                    Payment.Payment_Method AS "Payment Method",
+                    Payment.Transaction_ID AS "Transaction ID"
                 FROM Booking
                 JOIN [User] ON Booking.UserID = [User].User_ID
                 JOIN Appliance_Type ON Booking.Appliance_Type_ID = Appliance_Type.Appliance_Type_ID
@@ -432,11 +434,15 @@ const getCompletedBookings = asyncHandler(async (req, res) => {
                     [User].Last_Name AS "Last Name", 
                     [User].City AS "City",
                     Rating.Rating_Score AS "Rating",
-                    Rating.Review_Text AS "Review"
+                    Rating.Review_Text AS "Review",
+                    Payment.[Status] AS "Payment Status",
+                    Payment.Payment_Method AS "Payment Method",
+                    Payment.Transaction_ID AS "Transaction ID"
                 FROM Booking
                 JOIN [User] ON Booking.UserID = [User].User_ID
                 JOIN Appliance_Type ON Booking.Appliance_Type_ID = Appliance_Type.Appliance_Type_ID
                 LEFT JOIN Rating ON Booking.Booking_ID = Rating.Booking_ID
+                LEFT JOIN Payment ON Booking.Booking_ID = Payment.Booking_ID
                 WHERE Booking.Technician_ID = @technicianID 
                     AND Booking.[Status] = 'completed'
                 ORDER BY Booking.completedAt DESC

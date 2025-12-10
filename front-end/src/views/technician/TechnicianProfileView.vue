@@ -66,7 +66,7 @@
             <!-- Form -->
             <div class="lg:col-span-2">
               <div class="card">
-                <div class="card-body">
+                <div class="card-body" ref="formTop">
                   <h3 class="text-lg font-semibold text-neutral-900 mb-6">Edit Profile</h3>
                   
                   <!-- Error Message -->
@@ -246,10 +246,12 @@ export default {
           phone: this.form.phone
         })
         this.success = 'Profile updated successfully!'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
         // Refresh profile data
         await this.loadProfile()
       } catch (err) {
         this.error = err.response?.data?.message || 'Failed to update profile'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       } finally {
         this.saving = false
       }
@@ -271,6 +273,7 @@ export default {
         this.resetForm()
       } catch (err) {
         this.error = 'Failed to load profile'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       } finally {
         this.loading = false
       }

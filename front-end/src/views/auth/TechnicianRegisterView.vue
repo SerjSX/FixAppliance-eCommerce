@@ -75,7 +75,7 @@
               <h3 class="font-semibold text-neutral-900">Technician Registration</h3>
             </div>
             <div class="card-body">
-              <form @submit.prevent="handleRegister" class="space-y-6">
+              <form @submit.prevent="handleRegister" class="space-y-6" ref="formTop">
                 <!-- Error Alert -->
                 <AlertMessage 
                   v-if="error" 
@@ -290,6 +290,7 @@ export default {
       // Validate passwords match
       if (this.form.password !== this.form.confirmPassword) {
         this.error = 'Passwords do not match'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
         return
       }
       
@@ -308,6 +309,7 @@ export default {
         
         await useTechnicianAuthStore().register(registerData)
         this.success = 'Registration successful! Redirecting to login...'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
         
         // Redirect to login page after a short delay
         setTimeout(() => {
@@ -315,6 +317,7 @@ export default {
         }, 2000)
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Registration failed'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       } finally {
         this.loading = false
       }

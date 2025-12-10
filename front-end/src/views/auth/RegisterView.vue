@@ -20,7 +20,7 @@
           <div class="card">
             <div class="card-body py-8 px-6 md:px-8">
               <!-- Register Form -->
-              <form @submit.prevent="handleRegister" class="space-y-6">
+              <form @submit.prevent="handleRegister" class="space-y-6" ref="formTop">
                 <!-- Error Alert -->
                 <AlertMessage 
                   v-if="error" 
@@ -293,6 +293,7 @@ export default {
     async handleRegister() {
       if (this.form.password !== this.form.confirmPassword) {
         this.error = 'Passwords do not match'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
         return
       }
       this.loading = true
@@ -315,6 +316,7 @@ export default {
         this.$router.push('/login')
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Registration failed'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       } finally {
         this.loading = false
       }

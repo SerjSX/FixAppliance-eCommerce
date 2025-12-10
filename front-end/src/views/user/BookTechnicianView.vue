@@ -510,10 +510,15 @@ export default {
         }
         
         await useBookingStore().requestBooking(bookingData)
-        this.success = 'Booking submitted successfully! Redirecting to your bookings...'
+        this.success = 'Booking submitted successfully! Redirecting to your pending bookings...'
+        
+        // Scroll to top to show success message
+        this.$nextTick(() => {
+          this.scrollToTop()
+        })
         
         setTimeout(() => {
-          this.$router.push('/my-bookings')
+          this.$router.push('/my-bookings?tab=pending')
         }, 2000)
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to submit booking'

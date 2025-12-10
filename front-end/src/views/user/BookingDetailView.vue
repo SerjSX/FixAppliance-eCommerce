@@ -261,6 +261,7 @@ export default {
         this.booking.review = this.ratingForm.review
       } catch (err) {
         this.error = err.response?.data?.message || 'Failed to submit rating'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } finally {
         this.submittingRating = false
       }
@@ -276,6 +277,7 @@ export default {
         this.loadBooking() // Reload booking to get updated payment status from store
       } catch (err) {
         this.error = err.response?.data?.message || 'Payment failed'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } finally {
         this.processingPayment = false
       }
@@ -291,6 +293,7 @@ export default {
         this.$router.push('/my-bookings')
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to cancel booking'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } finally {
         this.cancelling = false
       }
@@ -315,6 +318,7 @@ export default {
       this.loadBooking()
     } catch (err) {
       this.error = err.response?.data?.message || 'Failed to load booking details'
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     } finally {
       this.loading = false
     }

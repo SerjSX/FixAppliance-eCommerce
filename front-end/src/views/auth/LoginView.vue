@@ -30,7 +30,7 @@
               </div>
 
               <!-- Login Form -->
-              <form @submit.prevent="handleLogin" class="space-y-5">
+              <form @submit.prevent="handleLogin" class="space-y-5" ref="formTop">
                 <!-- Error Alert -->
                 <AlertMessage 
                   v-if="error" 
@@ -143,6 +143,7 @@ export default {
         this.$router.push('/dashboard')
       } catch (err) {
         this.error = err.message || 'Login failed'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       } finally {
         this.loading = false
       }

@@ -63,7 +63,7 @@ export const useBookingStore = defineStore('booking', {
     },
 
     // Pay for booking
-    async payBooking(bookingId, transactionId = null) {
+    async payBooking(bookingId, transactionId = 0) {
       this.loading = true
       try {
         await bookingApi.pay(bookingId, transactionId)

@@ -334,6 +334,7 @@ export default {
         this.error = null
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to accept booking'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     },
     async loadDashboardData() {

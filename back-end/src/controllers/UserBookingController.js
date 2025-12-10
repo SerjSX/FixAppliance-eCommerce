@@ -44,6 +44,7 @@ const getBookingsByStatus = async (userID, status, statusDisplayName) => {
                     Technician.Phone AS "Technician's Phone Number",
                     Payment.[Status] AS "Payment Status",
                     Payment.Payment_Method AS "Payment Method",
+                    Payment.Transaction_ID AS "Transaction ID",
                     Rating.Rating_Score AS "Rating Score",
                     Rating.Review_Text AS "Review Text"
                 FROM Booking

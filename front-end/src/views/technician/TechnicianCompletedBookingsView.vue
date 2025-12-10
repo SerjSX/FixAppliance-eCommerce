@@ -110,6 +110,10 @@
                     <p class="text-sm text-neutral-500">Job Earnings (after platform fee)</p>
                     <p class="text-xl font-bold text-success-600">${{ calculateEarnings(booking.totalPrice).toFixed(2) }}</p>
                     <p class="text-xs text-neutral-500">Total: ${{ booking.totalPrice?.toFixed(2) || '0.00' }} (15% platform fee)</p>
+                    <div v-if="booking.paymentMethod || booking.transactionId" class="flex flex-wrap gap-2 mt-1">
+                      <span v-if="booking.paymentMethod" class="text-xs text-neutral-400">{{ formatPaymentMethod(booking.paymentMethod) }}</span>
+                      <span v-if="booking.transactionId" class="text-xs text-neutral-400 font-mono">TXN: {{ booking.transactionId }}</span>
+                    </div>
                   </div>
                   <div>
                     <p class="text-sm text-neutral-500">Service Date</p>
@@ -159,6 +163,16 @@ export default {
   },
   methods: {
     formatDate,
+    formatPaymentMethod(method) {
+      const methodMap = {
+        cash: 'Cash',
+        credit_card: 'Credit Card',
+        debit_card: 'Debit Card',
+        whish: 'Whish',
+        omt: 'OMT'
+      }
+      return methodMap[method] || method
+    },
     formatDateTime(dateTime) {
       if (!dateTime) return 'N/A'
       const date = new Date(dateTime)

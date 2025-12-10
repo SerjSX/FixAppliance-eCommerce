@@ -24,7 +24,7 @@
                 <h3 class="font-semibold text-neutral-900">Send us a Message</h3>
               </div>
               <div class="card-body">
-                <form @submit.prevent="handleSubmit" class="space-y-5">
+                <form @submit.prevent="handleSubmit" class="space-y-5" ref="formTop">
                   <!-- Success Alert -->
                   <AlertMessage 
                     v-if="success" 
@@ -203,8 +203,10 @@ export default {
         await contactApi.submit(this.form)
         this.success = true
         this.form = { name: '', email: '', phone: '', subject: '', message: '' }
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       } catch (err) {
         this.error = err.message || 'Failed to send message'
+        this.$nextTick(() => this.$refs.formTop?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       } finally {
         this.loading = false
       }

@@ -61,6 +61,7 @@ export const bookingApi = {
       technicianPhone: booking["Technician's Phone Number"],
       paymentStatus: booking['Payment Status'],
       paymentMethod: booking['Payment Method'],
+      transactionId: booking['Transaction ID'] || null,
       isPaid: booking['Payment Status'] === 'completed',
       rating: booking['Rating Score'] || null,
       reviewText: booking['Review Text'] || null,

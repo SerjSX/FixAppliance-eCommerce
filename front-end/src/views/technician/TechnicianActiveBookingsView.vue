@@ -132,6 +132,9 @@
                     <p v-if="booking.paymentStatus" class="text-xs text-neutral-500">
                       Payment: <span :class="booking.paymentStatus === 'completed' ? 'text-success-600' : 'text-warning-600'">{{ booking.paymentStatus }}</span>
                     </p>
+                    <p v-if="booking.paymentStatus === 'completed' && booking.transactionId" class="text-xs text-neutral-400 font-mono">
+                      TXN: {{ booking.transactionId }}
+                    </p>
                   </div>
                   <div class="flex gap-2">
                     <button 
@@ -241,6 +244,7 @@ export default {
         this.error = null
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to start job'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } finally {
         this.actionLoading = null
       }
@@ -254,6 +258,7 @@ export default {
         this.error = null
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to complete job'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } finally {
         this.actionLoading = null
       }
@@ -267,6 +272,7 @@ export default {
         this.error = null
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to decline booking'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } finally {
         this.actionLoading = null
       }

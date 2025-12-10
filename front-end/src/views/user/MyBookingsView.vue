@@ -29,27 +29,27 @@
             <button type="button" 
               class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
               :class="activeTab === 'all' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'" 
-              @click="activeTab = 'all'">All</button>
+              @click="activeTab = 'all'">All <span class="ml-1 text-xs opacity-75">({{ allBookings.length }})</span></button>
             <button type="button" 
               class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
               :class="activeTab === 'pending' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'"
-              @click="activeTab = 'pending'">Pending</button>
+              @click="activeTab = 'pending'">Pending <span class="ml-1 text-xs opacity-75">({{ bookingStore.pending.length }})</span></button>
             <button type="button" 
               class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
               :class="activeTab === 'confirmed' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'"
-              @click="activeTab = 'confirmed'">Confirmed</button>
+              @click="activeTab = 'confirmed'">Confirmed <span class="ml-1 text-xs opacity-75">({{ bookingStore.confirmed.length }})</span></button>
             <button type="button" 
               class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
               :class="activeTab === 'inProgress' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'"
-              @click="activeTab = 'inProgress'">In Progress</button>
+              @click="activeTab = 'inProgress'">In Progress <span class="ml-1 text-xs opacity-75">({{ bookingStore.inProgress.length }})</span></button>
             <button type="button" 
               class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
               :class="activeTab === 'completed' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'"
-              @click="activeTab = 'completed'">Completed</button>
+              @click="activeTab = 'completed'">Completed <span class="ml-1 text-xs opacity-75">({{ bookingStore.completed.length }})</span></button>
             <button type="button" 
               class="flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
               :class="activeTab === 'cancelled' ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'"
-              @click="activeTab = 'cancelled'">Cancelled</button>
+              @click="activeTab = 'cancelled'">Cancelled <span class="ml-1 text-xs opacity-75">({{ bookingStore.cancelled.length }})</span></button>
           </div>
         </div>
 
@@ -171,6 +171,22 @@
                   </div>
                 </div>
 
+                <!-- Payment Info (shown if paid) -->
+                <div v-if="booking.isPaid" class="flex flex-wrap gap-2">
+                  <div v-if="booking.paymentMethod" class="text-xs text-neutral-500 bg-neutral-50 px-2 py-1 rounded inline-flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                    </svg>
+                    <span>{{ formatPaymentMethod(booking.paymentMethod) }}</span>
+                  </div>
+                  <div v-if="booking.transactionId" class="text-xs text-neutral-500 bg-neutral-50 px-2 py-1 rounded inline-flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="font-mono">TXN: {{ booking.transactionId }}</span>
+                  </div>
+                </div>
+
                 <!-- Action Buttons - Stack on mobile, row on larger -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-3 border-t border-neutral-100">
                   <router-link 
@@ -181,7 +197,7 @@
                   
                   <button 
                     v-if="(booking.status === 'confirmed' || booking.status === 'in-progress') && !booking.isPaid" 
-                    @click="payBooking(booking.id)"
+                    @click="openPaymentModal(booking)"
                     class="btn btn-primary btn-sm justify-center">
                     Pay Now
                   </button>
@@ -242,6 +258,51 @@
         </div>
       </div>
     </div>
+
+    <!-- Payment Modal -->
+    <div v-if="paymentModal.show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <h3 class="text-lg font-semibold mb-4">Payment Confirmation</h3>
+        
+        <!-- Booking Details -->
+        <div class="mb-4">
+          <p class="text-sm text-neutral-600 mb-2">Booking Details:</p>
+          <p class="font-medium text-neutral-900">{{ paymentModal.booking?.applianceType }}</p>
+          <p class="text-sm text-neutral-500">Booking #{{ paymentModal.booking?.id }}</p>
+        </div>
+        
+        <!-- Amount -->
+        <div class="mb-4 p-4 bg-neutral-50 rounded-lg">
+          <div class="flex items-center justify-between">
+            <span class="text-neutral-600">Total Amount:</span>
+            <span class="text-2xl font-bold text-neutral-900">${{ paymentModal.booking?.price }}</span>
+          </div>
+        </div>
+
+        <!-- Payment Method (read-only, set during booking) -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Payment Method</label>
+          <div class="form-input bg-neutral-50 text-neutral-700 cursor-not-allowed">
+            {{ formatPaymentMethod(paymentModal.method) }}
+          </div>
+          <p class="text-xs text-neutral-500 mt-1">Payment method was set when booking was created</p>
+        </div>
+
+        <!-- Generated Transaction ID -->
+        <div class="mb-4 p-3 bg-primary-50 rounded-lg border border-primary-100">
+          <p class="text-xs text-primary-600 mb-1">Transaction ID (auto-generated)</p>
+          <p class="font-mono text-sm text-primary-800">{{ paymentModal.transactionId }}</p>
+        </div>
+
+        <div class="flex gap-3">
+          <button @click="confirmPayment" class="btn btn-primary flex-1" :disabled="paymentModal.processing">
+            <span v-if="paymentModal.processing" class="spinner spinner-sm mr-2"></span>
+            {{ paymentModal.processing ? 'Processing...' : 'Confirm Payment' }}
+          </button>
+          <button @click="paymentModal.show = false" class="btn btn-outline flex-1">Cancel</button>
+        </div>
+      </div>
+    </div>
     </main>
   </div>
 </template>
@@ -258,7 +319,7 @@ export default {
   },
   data() {
     return {
-      activeTab: 'all',
+      activeTab: this.$route.query.tab || 'all',
       searchQuery: '',
       sortOrder: 'newest',
       loading: false,
@@ -268,6 +329,13 @@ export default {
         bookingId: null,
         rating: 0,
         review: ''
+      },
+      paymentModal: {
+        show: false,
+        booking: null,
+        method: 'cash',
+        transactionId: '',
+        processing: false
       }
     }
   },
@@ -314,8 +382,20 @@ export default {
       })
     }
   },
+  watch: {
+  },
   methods: {
     formatDate,
+    formatPaymentMethod(method) {
+      const methodMap = {
+        cash: 'Cash',
+        credit_card: 'Credit Card',
+        debit_card: 'Debit Card',
+        whish: 'Whish',
+        omt: 'OMT'
+      }
+      return methodMap[method] || method
+    },
     formatStatus(status) {
       const statusMap = {
         pending: 'Pending',
@@ -343,16 +423,46 @@ export default {
         await this.bookingStore.fetchAll()
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to load bookings'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } finally {
         this.loading = false
       }
     },
-    async payBooking(bookingId) {
-      if (!confirm('Confirm payment for this booking?')) return
+    generateTransactionId(method) {
+      const timestamp = Date.now().toString(36).toUpperCase()
+      const random = Math.random().toString(36).substring(2, 8).toUpperCase()
+      const methodPrefix = {
+        cash: 'CSH',
+        credit_card: 'CC',
+        debit_card: 'DC',
+        whish: 'WSH',
+        omt: 'OMT'
+      }
+      return `${methodPrefix[method] || 'TXN'}-${timestamp}-${random}`
+    },
+    openPaymentModal(booking) {
+      const method = booking.paymentMethod || 'cash'
+      this.paymentModal = {
+        show: true,
+        booking: booking,
+        method: method,
+        transactionId: this.generateTransactionId(method),
+        processing: false
+      }
+    },
+    async confirmPayment() {
+      this.paymentModal.processing = true
       try {
-        await this.bookingStore.payBooking(bookingId, null) // null for cash payment
+        await this.bookingStore.payBooking(
+          this.paymentModal.booking.id,
+          this.paymentModal.transactionId
+        )
+        this.paymentModal.show = false
+        await this.fetchBookings()
       } catch (err) {
         alert(err.response?.data?.message || 'Payment failed')
+      } finally {
+        this.paymentModal.processing = false
       }
     },
     async cancelBooking(id) {

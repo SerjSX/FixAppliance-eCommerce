@@ -190,7 +190,9 @@ export const useTechnicianStore = defineStore('technician', {
           buildingName: booking['Building Name'] || booking.buildingName,
           floor: booking['Building Floor'] || booking.floor,
           postalCode: booking['Postal Code'] || booking.postalCode,
-          paymentStatus: booking['Payment Status'] || booking.paymentStatus
+          paymentStatus: booking['Payment Status'] || booking.paymentStatus,
+          paymentMethod: booking['Payment Method'] || booking.paymentMethod || null,
+          transactionId: booking['Transaction ID'] || booking.transactionId || null
         }))
       } catch (err) {
         this.error = err.message
@@ -220,7 +222,10 @@ export const useTechnicianStore = defineStore('technician', {
           customerName: `${booking['First Name'] || ''} ${booking['Last Name'] || ''}`.trim() || booking.customerName,
           city: booking.City || booking.city,
           rating: booking.Rating || booking.rating,
-          review: booking.Review || booking.review
+          review: booking.Review || booking.review,
+          paymentStatus: booking['Payment Status'] || booking.paymentStatus,
+          paymentMethod: booking['Payment Method'] || booking.paymentMethod || null,
+          transactionId: booking['Transaction ID'] || booking['Transaction_ID'] || booking.transactionId || null
         }))
       } catch (err) {
         this.error = err.message

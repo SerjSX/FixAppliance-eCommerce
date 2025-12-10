@@ -338,23 +338,16 @@
 
         <div class="mb-4">
           <label class="block text-sm font-medium text-neutral-700 mb-2">Payment Method</label>
-          <select v-model="paymentMethod" class="form-select">
-            <option value="cash">Cash</option>
-            <option value="credit_card">Credit Card</option>
-            <option value="debit_card">Debit Card</option>
-            <option value="whish">Whish</option>
-            <option value="omt">OMT</option>
-          </select>
+          <div class="form-input bg-neutral-50 text-neutral-700 cursor-not-allowed">
+            {{ formatPaymentMethod(paymentMethod) }}
+          </div>
+          <p class="text-xs text-neutral-500 mt-1">Payment method was set when booking was created</p>
         </div>
 
-        <div v-if="paymentMethod !== 'cash'" class="mb-4">
-          <label class="block text-sm font-medium text-neutral-700 mb-2">Transaction ID</label>
-          <input 
-            v-model="transactionId" 
-            type="text" 
-            class="form-input" 
-            placeholder="Enter transaction ID"
-          >
+        <!-- Generated Transaction ID Preview -->
+        <div class="mb-4 p-3 bg-primary-50 rounded-lg border border-primary-100">
+          <p class="text-xs text-primary-600 mb-1">Transaction ID (auto-generated)</p>
+          <p class="font-mono text-sm text-primary-800">{{ generatedTransactionId }}</p>
         </div>
 
         <div class="flex gap-3">
@@ -456,7 +449,7 @@ export default {
       showRatingModal: false,
       selectedBooking: null,
       paymentMethod: 'cash',
-      transactionId: '',
+      generatedTransactionId: '',
       processingPayment: false,
       ratingScore: 0,
       reviewText: '',
@@ -546,6 +539,8 @@ export default {
         .slice(0, 5)
     }
   },
+  watch: {
+  },
   async mounted() {
     await this.loadDashboardData()
   },
@@ -559,6 +554,7 @@ export default {
         await this.bookingStore.fetchAll()
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to load dashboard data'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } finally {
         this.loading = false
       }
@@ -583,25 +579,42 @@ export default {
       }
       return labels[status] || status
     },
+    formatPaymentMethod(method) {
+      const methodMap = {
+        cash: 'Cash',
+        credit_card: 'Credit Card',
+        debit_card: 'Debit Card',
+        whish: 'Whish',
+        omt: 'OMT'
+      }
+      return methodMap[method] || method
+    },
+    generateTransactionId() {
+      const timestamp = Date.now().toString(36).toUpperCase()
+      const random = Math.random().toString(36).substring(2, 8).toUpperCase()
+      const methodPrefix = {
+        cash: 'CSH',
+        credit_card: 'CC',
+        debit_card: 'DC',
+        whish: 'WSH',
+        omt: 'OMT'
+      }
+      return `${methodPrefix[this.paymentMethod] || 'TXN'}-${timestamp}-${random}`
+    },
     handlePayment(booking) {
       this.selectedBooking = booking
-      this.paymentMethod = 'cash'
-      this.transactionId = ''
+      this.paymentMethod = booking.paymentMethod || 'cash'
+      this.generatedTransactionId = this.generateTransactionId()
       this.showPaymentModal = true
     },
     async confirmPayment() {
-      if (this.paymentMethod !== 'cash' && !this.transactionId.trim()) {
-        this.error = 'Transaction ID is required for this payment method'
-        return
-      }
-
       this.processingPayment = true
       this.error = null
 
       try {
         await this.bookingStore.payBooking(
           this.selectedBooking.id,
-          this.paymentMethod !== 'cash' ? this.transactionId : null
+          this.generatedTransactionId
         )
         this.showPaymentModal = false
         await this.loadDashboardData()
@@ -656,6 +669,7 @@ export default {
         await this.loadDashboardData()
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to cancel booking'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     }
   }
