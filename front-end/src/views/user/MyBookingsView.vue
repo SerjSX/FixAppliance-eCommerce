@@ -311,6 +311,7 @@
 import { useBookingStore } from '@/store/booking'
 import { formatDate } from '@/utils/dateUtils'
 import UserSidebar from '@/components/user/UserSidebar.vue'
+import { useAutoRefresh } from '@/composables/useAutoRefresh';
 
 export default {
   name: 'MyBookingsView',
@@ -318,6 +319,7 @@ export default {
     UserSidebar
   },
   data() {
+    const { isRefreshing, lastUpdated, startAutoRefresh, stopAutoRefresh } = useAutoRefresh();
     return {
       activeTab: this.$route.query.tab || 'all',
       searchQuery: '',
@@ -336,7 +338,11 @@ export default {
         method: 'cash',
         transactionId: '',
         processing: false
-      }
+      },
+      isRefreshing,
+      lastUpdated,
+      startAutoRefresh,
+      stopAutoRefresh
     }
   },
   computed: {
@@ -496,6 +502,13 @@ export default {
   },
   async mounted() {
     await this.fetchBookings()
+
+    this.startAutoRefresh(async () => {
+      await this.fetchBookings()
+    }, 15000)
+  },
+  unmounted() {
+    this.stopAutoRefresh()
   }
 }
 </script>

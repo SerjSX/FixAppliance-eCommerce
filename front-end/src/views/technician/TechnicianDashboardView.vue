@@ -217,6 +217,7 @@ import { useTechnicianStore } from '@/store/technician'
 import { formatDate } from '@/utils/dateUtils'
 import AlertMessage from '@/components/common/AlertMessage.vue'
 import TechnicianSidebar from '@/components/technician/TechnicianSidebar.vue'
+import { useAutoRefresh } from '@/composables/useAutoRefresh'
 
 export default {
   name: 'TechnicianDashboardView',
@@ -225,9 +226,14 @@ export default {
     TechnicianSidebar
   },
   data() {
+    const { isRefreshing, lastUpdated, startAutoRefresh, stopAutoRefresh } = useAutoRefresh();
     return {
       loading: false,
-      error: null
+      error: null,
+      isRefreshing,
+      lastUpdated,
+      startAutoRefresh,
+      stopAutoRefresh
     }
   },
   computed: {
@@ -335,6 +341,12 @@ export default {
       } catch (err) {
         this.error = err.response?.data?.message || err.message || 'Failed to accept booking'
         window.scrollTo({ top: 0, behavior: 'smooth' })
+        // Refresh dashboard data to remove stale/cancelled bookings
+        try {
+          await this.loadDashboardData()
+        } catch (refreshErr) {
+          console.error('Failed to refresh dashboard data:', refreshErr)
+        }
       }
     },
     async loadDashboardData() {
@@ -356,6 +368,13 @@ export default {
   },
   async mounted() {
     await this.loadDashboardData()
+
+    this.startAutoRefresh(async () => {
+      await this.loadDashboardData()
+    }, 15000)
+  },
+  unmounted() {
+    this.stopAutoRefresh()
   }
 }
 </script>

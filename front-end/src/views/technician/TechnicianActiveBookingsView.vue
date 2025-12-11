@@ -192,6 +192,7 @@ import { useTechnicianStore } from '@/store/technician'
 import { formatDate, formatTime } from '@/utils/dateUtils'
 import AlertMessage from '@/components/common/AlertMessage.vue'
 import TechnicianSidebar from '@/components/technician/TechnicianSidebar.vue'
+import { useAutoRefresh } from '@/composables/useAutoRefresh'
 
 export default {
   name: 'TechnicianActiveBookingsView',
@@ -200,11 +201,16 @@ export default {
     TechnicianSidebar
   },
   data() {
+    const { isRefreshing, lastUpdated, startAutoRefresh, stopAutoRefresh} = useAutoRefresh();
     return {
       loading: false,
       actionLoading: null,
       filter: 'all',
-      error: null
+      error: null,
+      isRefreshing, 
+      lastUpdated,
+      startAutoRefresh,
+      stopAutoRefresh
     }
   },
   computed: {
@@ -290,6 +296,13 @@ export default {
   },
   async mounted() {
     await this.loadData()
+
+    this.startAutoRefresh(async () => {
+      await this.loadData()
+    }, 15000)
+  },
+  unmounted() {
+    this.stopAutoRefresh()
   }
 }
 </script>

@@ -22,6 +22,15 @@
           <div class="spinner spinner-lg"></div>
         </div>
 
+        <!-- Error Alert -->
+        <div v-if="error" class="alert alert-error mb-4">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          <span>{{ error }}</span>
+          <button @click="error = null" class="text-sm font-medium hover:opacity-75">Dismiss</button>
+        </div>
+
         <!-- Empty State -->
         <div v-else-if="pendingBookings.length === 0" class="card p-12 text-center">
           <svg class="w-16 h-16 mx-auto text-neutral-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,6 +92,7 @@ import TechnicianSidebar from '@/components/technician/TechnicianSidebar.vue';
 import { useTechnicianStore } from '@/store/technician'
 import { useTechnicianAuthStore } from '@/store/technicianAuth'
 import { formatDate } from '@/utils/dateUtils'
+import { useAutoRefresh } from '@/composables/useAutoRefresh';
 
 export default {
   name: 'TechnicianPendingBookingsView',
@@ -90,7 +100,15 @@ export default {
     TechnicianSidebar,
   },
   data() {
-    return { loading: false }
+    const { isRefreshing, lastUpdated, startAutoRefresh, stopAutoRefresh} = useAutoRefresh();
+    return { 
+      loading: false,
+      error: null,
+      isRefreshing,
+      lastUpdated,
+      startAutoRefresh,
+      stopAutoRefresh
+    }
   },
   computed: {
     pendingBookings() {
@@ -105,11 +123,20 @@ export default {
     },
     // Accept a booking
     async acceptBooking(bookingId) {
+      this.error = null
       try {
         await useTechnicianStore().acceptBooking(bookingId)
         await this.loadData()
       } catch (err) {
-        console.error('Failed to accept booking:', err)
+        this.error = err.response?.data?.message || err.message || 'Failed to accept booking'
+        // Scroll to error message
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        // Refresh pending bookings to remove stale/cancelled bookings
+        try {
+          await this.loadData()
+        } catch (refreshErr) {
+          console.error('Failed to refresh pending bookings:', refreshErr)
+        }
       }
     },
     async loadData() {
@@ -120,6 +147,13 @@ export default {
   },
   async mounted() {
     await this.loadData()
+
+    this.startAutoRefresh(async () => {
+      await this.loadData()
+    }, 15000)
+  },
+  unmounted() {
+    this.stopAutoRefresh()
   }
 }
 </script>
