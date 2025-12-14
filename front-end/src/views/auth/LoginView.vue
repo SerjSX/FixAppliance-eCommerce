@@ -86,12 +86,6 @@
                   </div>
                 </div>
 
-                <!-- Remember Me -->
-                <div class="form-check">
-                  <input type="checkbox" id="remember-me" class="form-checkbox">
-                  <label for="remember-me" class="form-check-label">Remember me for 30 days</label>
-                </div>
-
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary w-full" :disabled="loading">
                   {{ loading ? 'Signing in...' : 'Sign In' }}

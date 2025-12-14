@@ -10,7 +10,7 @@
         <div class="flex items-center justify-between">
           <div class="ml-14 lg:ml-0">
             <h1 class="text-xl font-semibold text-neutral-900">My Specialties</h1>
-            <p class="text-sm text-neutral-500">Select the appliance categories you specialize in</p>
+            <p class="text-sm text-neutral-500">Select the appliance types you specialize in</p>
           </div>
         </div>
       </header>
@@ -20,26 +20,35 @@
         <div class="card">
           <div class="card-body">
             <!-- Loading -->
-            <div v-if="loading" class="loading-container-sm">
+            <div v-if="loading" class="loading-container">
               <div class="spinner spinner-lg"></div>
             </div>
 
-            <!-- Categories Grid -->
-            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              <label 
-                v-for="category in categories" 
-                :key="category.id" 
-                class="flex items-center gap-3 p-4 border border-neutral-200 rounded-lg cursor-pointer hover:border-primary-300 transition-colors"
-                :class="{ 'border-primary-500 bg-primary-50': isSelected(category.id) }"
-              >
-                <input 
-                  type="checkbox" 
-                  :checked="isSelected(category.id)"
-                  @change="toggleSpecialty(category.id)"
-                  class="form-checkbox"
+            <!-- Category Selection Grid -->
+            <div v-else>
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                <label 
+                  v-for="category in categories" 
+                  :key="category.id" 
+                  class="relative cursor-pointer"
                 >
-                <span class="text-sm font-medium">{{ category.name }}</span>
-              </label>
+                  <input 
+                    type="checkbox" 
+                    :checked="isCategorySelected(category.id)"
+                    @change="toggleSpecialty(category.id)"
+                    class="peer sr-only"
+                  >
+                  <div class="p-4 border-2 border-neutral-200 rounded-lg text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all hover:border-primary-300 hover:shadow-sm">
+                    <img 
+                      v-if="category.fileName" 
+                      class="w-12 h-12 mx-auto mb-3" 
+                      :src="'/images/appliance-categories/' + category.fileName"
+                      :alt="category.name"
+                    />
+                    <span class="text-sm font-medium block">{{ category.name }}</span>
+                  </div>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -51,10 +60,9 @@
             <div v-if="selectedSpecialties.length" class="flex flex-wrap gap-2">
               <span v-for="spec in selectedSpecialties" :key="spec.id" class="tag tag-primary">
                 {{ spec.name }}
-                <span v-if="spec.yearsOfExperience" class="ml-1 text-xs opacity-75">({{ spec.yearsOfExperience }} yrs)</span>
               </span>
             </div>
-            <p v-else class="text-neutral-500 text-sm">No specialties selected</p>
+            <p v-else class="text-neutral-500 text-sm">No specialties selected yet. Choose categories from above.</p>
           </div>
         </div>
       </div>
@@ -71,7 +79,9 @@ import TechnicianSidebar from '@/components/technician/TechnicianSidebar.vue';
 export default {
   name: 'TechnicianSpecialtyView',
   data() {
-    return { loading: false }
+    return { 
+      loading: false
+    }
   },
   components: {
     TechnicianSidebar
@@ -89,14 +99,14 @@ export default {
       await useTechnicianAuthStore().logout()
       this.$router.push('/technician-login')
     },
-    // Check if category is selected as specialty
-    isSelected(categoryId) {
+    // Check if a category is selected as specialty
+    isCategorySelected(categoryId) {
       return this.selectedSpecialties.some(s => s.id === categoryId || s.categoryId === categoryId)
     },
     // Toggle specialty (add or remove category)
     async toggleSpecialty(categoryId) {
       const store = useTechnicianStore()
-      if (this.isSelected(categoryId)) {
+      if (this.isCategorySelected(categoryId)) {
         await store.removeSpecialty(categoryId)
       } else {
         // Add specialty with default 0 years experience

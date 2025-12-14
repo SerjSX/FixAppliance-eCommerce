@@ -68,7 +68,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
               </svg>
-              <input type="text" v-model="searchQuery" class="form-input pl-10 w-full" placeholder="Search bookings...">
+      
+              <input type="text" v-model="searchQuery" class="form-input !px-10 w-full" placeholder="Search bookings...">
             </div>
           </div>
         </div>
@@ -389,6 +390,26 @@ export default {
     }
   },
   watch: {
+    // Pause auto-refresh when payment modal is open
+    'paymentModal.show'(newVal) {
+      if (newVal) {
+        this.stopAutoRefresh()
+      } else {
+        this.startAutoRefresh(async () => {
+          await this.fetchBookings()
+        }, 15000)
+      }
+    },
+    // Pause auto-refresh when rating modal is open
+    'ratingModal.show'(newVal) {
+      if (newVal) {
+        this.stopAutoRefresh()
+      } else {
+        this.startAutoRefresh(async () => {
+          await this.fetchBookings()
+        }, 15000)
+      }
+    }
   },
   methods: {
     formatDate,
@@ -464,6 +485,8 @@ export default {
           this.paymentModal.transactionId
         )
         this.paymentModal.show = false
+        // Show success message
+        alert('Payment completed successfully!')
         await this.fetchBookings()
       } catch (err) {
         alert(err.response?.data?.message || 'Payment failed')
@@ -495,6 +518,9 @@ export default {
           this.ratingModal.review
         )
         this.ratingModal.show = false
+        // Show success message
+        alert('Thank you for rating! Your review has been submitted successfully.')
+        await this.fetchBookings()
       } catch (err) {
         alert(err.response?.data?.message || 'Rating failed')
       }

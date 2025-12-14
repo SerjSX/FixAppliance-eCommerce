@@ -30,13 +30,12 @@ export const useTechnicianStore = defineStore('technician', {
         // Normalize backend field names to frontend format
         const rawSpecialties = data?.specialties || data?.data || data || []
         this.specialties = rawSpecialties.map(spec => ({
-          id: spec.categoryId || spec.Category_ID || spec.id,
-          categoryId: spec.categoryId || spec.Category_ID || spec.id,
-          name: spec.nameEN || spec.NameEN || spec.name,
-          nameAr: spec.nameAR || spec.NameAR || spec.nameAr,
-          description: spec.description || spec.Description,
-          yearsOfExperience: spec.yearsOfExperience || spec.Years_Of_Experience,
-          certificationDate: spec.certificationDate || spec.Certification_Date
+          id: spec.categoryId,
+          name: spec.nameEN,
+          nameAr: spec.nameAR,
+          description: spec.description,
+          yearsOfExperience: spec.yearsOfExperience,
+          certificationDate: spec.certificateDate
         }))
       } catch (err) {
         this.error = err.message
@@ -71,14 +70,13 @@ export const useTechnicianStore = defineStore('technician', {
       try {
         const { data } = await technicianApi.getServiceAreas()
         // Normalize backend field names to frontend format
-        const rawAreas = data?.serviceAreas || data?.data || data || []
+        const rawAreas = data?.serviceAreas || []
         this.serviceAreas = rawAreas.map(area => ({
-          id: area.areaId || area.Area_ID || area.id,
-          serviceAreaId: area.areaId || area.Area_ID || area.id,
-          name: area.nameEN || area.NameEN || area.name,
-          nameAr: area.nameAR || area.NameAR || area.nameAr,
-          region: area.region || area.Region,
-          priority: area.priority || area.Priority_Order
+          id: area.areaId,
+          name: area.nameEN,
+          nameAr: area.nameAR,
+          region: area.region,
+          priority: area.priority
         }))
       } catch (err) {
         this.error = err.message
@@ -112,26 +110,25 @@ export const useTechnicianStore = defineStore('technician', {
       this.loading = true
       try {
         const { data } = await technicianApi.getPendingBookings()
-        // Normalize backend field names to frontend format
-        const rawBookings = data?.bookings || data?.data || data || []
+        const rawBookings = data?.bookings || []
         this.pendingBookings = rawBookings.map(booking => ({
-          id: booking.Booking_ID || booking.id,
-          scheduledDate: booking['Scheduled Date'] || booking.scheduledDate,
-          scheduledTime: booking['Scheduled Time'] || booking.scheduledTime,
-          totalPrice: booking['Total Price'] || booking.totalPrice,
-          applianceName: booking["Appliance's Name (EN)"] || booking.applianceName,
-          applianceNameAr: booking["Appliance's Name (AR)"] || booking.applianceNameAr,
-          issueDescription: booking['Issue Description'] || booking.issueDescription,
-          customerFirstName: booking['First Name'] || booking.customerFirstName,
-          customerLastName: booking['Last Name'] || booking.customerLastName,
-          customerName: `${booking['First Name'] || ''} ${booking['Last Name'] || ''}`.trim() || booking.customerName,
-          customerPhone: booking['Phone Number'] || booking.customerPhone,
-          city: booking.City || booking.city,
-          streetAddress: booking['Street Address'] || booking.streetAddress,
-          buildingName: booking['Building Name'] || booking.buildingName,
-          floor: booking['Building Floor'] || booking.floor,
-          postalCode: booking['Postal Code'] || booking.postalCode,
-          serviceArea: booking.City || booking['City'] || booking.serviceArea
+          id: booking.Booking_ID,
+          scheduledDate: booking['Scheduled Date'],
+          scheduledTime: booking['Scheduled Time'],
+          totalPrice: booking['Total Price'],
+          applianceName: booking["Appliance's Name (EN)"],
+          applianceNameAr: booking["Appliance's Name (AR)"],
+          issueDescription: booking['Issue Description'],
+          customerFirstName: booking['First Name'],
+          customerLastName: booking['Last Name'],
+          customerName: `${booking['First Name']} ${booking['Last Name']}`.trim(),
+          customerPhone: booking['Phone Number'],
+          city: booking.City,
+          streetAddress: booking['Street Address'],
+          buildingName: booking['Building Name'],
+          floor: booking['Building Floor'],
+          postalCode: booking['Postal Code'],
+          serviceArea: booking.City
         }))
       } catch (err) {
         this.error = err.message
@@ -171,28 +168,28 @@ export const useTechnicianStore = defineStore('technician', {
       this.loading = true
       try {
         const { data } = await technicianApi.getActiveBookings()
-        const rawBookings = data?.bookings || data?.data || data || []
+        const rawBookings = data?.bookings || []
         this.activeBookings = rawBookings.map(booking => ({
-          id: booking.Booking_ID || booking.id,
-          status: booking.Status || booking.status,
-          scheduledDate: booking['Scheduled Date'] || booking.scheduledDate,
-          scheduledTime: booking['Scheduled Time'] || booking.scheduledTime,
-          totalPrice: booking['Total Price'] || booking.totalPrice,
-          applianceName: booking["Appliance's Name (EN)"] || booking.applianceName,
-          applianceNameAr: booking["Appliance's Name (AR)"] || booking.applianceNameAr,
-          issueDescription: booking['Issue Description'] || booking.issueDescription,
-          customerFirstName: booking['First Name'] || booking.customerFirstName,
-          customerLastName: booking['Last Name'] || booking.customerLastName,
-          customerName: `${booking['First Name'] || ''} ${booking['Last Name'] || ''}`.trim() || booking.customerName,
-          customerPhone: booking['Phone Number'] || booking.customerPhone,
-          city: booking.City || booking.city,
-          streetAddress: booking['Street Address'] || booking.streetAddress,
-          buildingName: booking['Building Name'] || booking.buildingName,
-          floor: booking['Building Floor'] || booking.floor,
-          postalCode: booking['Postal Code'] || booking.postalCode,
-          paymentStatus: booking['Payment Status'] || booking.paymentStatus,
-          paymentMethod: booking['Payment Method'] || booking.paymentMethod || null,
-          transactionId: booking['Transaction ID'] || booking.transactionId || null
+          id: booking.Booking_ID,
+          status: booking.Status,
+          scheduledDate: booking['Scheduled Date'],
+          scheduledTime: booking['Scheduled Time'],
+          totalPrice: booking['Total Price'],
+          applianceName: booking["Appliance's Name (EN)"],
+          applianceNameAr: booking["Appliance's Name (AR)"],
+          issueDescription: booking['Issue Description'],
+          customerFirstName: booking['First Name'],
+          customerLastName: booking['Last Name'],
+          customerName: `${booking['First Name']} ${booking['Last Name']}`.trim(),
+          customerPhone: booking['Phone Number'],
+          city: booking.City,
+          streetAddress: booking['Street Address'],
+          buildingName: booking['Building Name'],
+          floor: booking['Building Floor'],
+          postalCode: booking['Postal Code'],
+          paymentStatus: booking['Payment Status'],
+          paymentMethod: booking['Payment Method'],
+          transactionId: booking['Transaction ID']
         }))
       } catch (err) {
         this.error = err.message
@@ -206,26 +203,26 @@ export const useTechnicianStore = defineStore('technician', {
       this.loading = true
       try {
         const { data } = await technicianApi.getCompletedBookings()
-        const rawBookings = data?.bookings || data?.data || data || []
+        const rawBookings = data?.bookings || []
         this.completedBookings = rawBookings.map(booking => ({
-          id: booking.Booking_ID || booking.id,
-          status: booking.Status || booking.status || 'completed',
-          scheduledDate: booking['Scheduled Date'] || booking.scheduledDate,
-          scheduledTime: booking['Scheduled Time'] || booking.scheduledTime,
-          completedAt: booking['Completed At'] || booking.completedAt,
-          totalPrice: booking['Total Price'] || booking.totalPrice,
-          applianceName: booking["Appliance's Name (EN)"] || booking.applianceName,
-          applianceNameAr: booking["Appliance's Name (AR)"] || booking.applianceNameAr,
-          issueDescription: booking['Issue Description'] || booking.issueDescription,
-          customerFirstName: booking['First Name'] || booking.customerFirstName,
-          customerLastName: booking['Last Name'] || booking.customerLastName,
-          customerName: `${booking['First Name'] || ''} ${booking['Last Name'] || ''}`.trim() || booking.customerName,
-          city: booking.City || booking.city,
-          rating: booking.Rating || booking.rating,
-          review: booking.Review || booking.review,
-          paymentStatus: booking['Payment Status'] || booking.paymentStatus,
-          paymentMethod: booking['Payment Method'] || booking.paymentMethod || null,
-          transactionId: booking['Transaction ID'] || booking['Transaction_ID'] || booking.transactionId || null
+          id: booking.Booking_ID,
+          status: booking.Status,
+          scheduledDate: booking['Scheduled Date'],
+          scheduledTime: booking['Scheduled Time'],
+          completedAt: booking['Completed At'],
+          totalPrice: booking['Total Price'],
+          applianceName: booking["Appliance's Name (EN)"],
+          applianceNameAr: booking["Appliance's Name (AR)"],
+          issueDescription: booking['Issue Description'],
+          customerFirstName: booking['First Name'],
+          customerLastName: booking['Last Name'],
+          customerName: `${booking['First Name']} ${booking['Last Name']}`.trim(),
+          city: booking.City,
+          rating: booking.Rating,
+          review: booking.Review,
+          paymentStatus: booking['Payment Status'],
+          paymentMethod: booking['Payment Method'],
+          transactionId: booking['Transaction ID']
         }))
       } catch (err) {
         this.error = err.message

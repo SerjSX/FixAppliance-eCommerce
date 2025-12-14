@@ -274,6 +274,8 @@ export default {
       try {
         const store = useBookingStore()
         await store.payBooking(this.booking.id, null) // null for cash payment
+        // Show success message
+        alert('Payment completed successfully!')
         this.loadBooking() // Reload booking to get updated payment status from store
       } catch (err) {
         this.error = err.response?.data?.message || 'Payment failed'

@@ -49,6 +49,12 @@ export function useAutoRefresh() {
     // By default, refreshes once per 15 seconds
     // callback is the async function to call on each refresh
     const startAutoRefresh = (callback, interval = 15000) => {
+        // Clear any existing interval to prevent duplicates
+        if (refreshInterval) {
+            clearInterval(refreshInterval)
+            refreshInterval = null
+        }
+
         // Used to restart the refresh once the tab becomes visible
         refreshCallback = { fn: callback, interval }
 

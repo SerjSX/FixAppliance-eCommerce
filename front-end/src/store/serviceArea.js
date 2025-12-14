@@ -15,13 +15,12 @@ export const useServiceAreaStore = defineStore('serviceArea', {
       this.loading = true
       try {
         const { data } = await serviceAreaApi.getAll()
-        // Normalize backend field names (Area_ID, NameEN) to frontend (id, name)
-        const rawAreas = data?.data || data || []
+        const rawAreas = data?.data || []
         this.areas = rawAreas.map(area => ({
-          id: area.Area_ID || area.areaId || area.id,
-          name: area.NameEN || area.nameEN || area.name,
-          nameAr: area.NameAR || area.nameAR || area.nameAr,
-          region: area.Region || area.region,
+          id: area.Area_ID,
+          name: area.NameEN,
+          nameAr: area.NameAR,
+          region: area.Region,
           isActive: area.isActive
         }))
       } catch (err) {
