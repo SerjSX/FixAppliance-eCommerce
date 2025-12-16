@@ -5,7 +5,7 @@ const dotenv = require("dotenv").config();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { connectDB } = require("./config/database");
-import path from 'path';
+const path = require('path');
 
 
 // Setting up the express app and its port to use
