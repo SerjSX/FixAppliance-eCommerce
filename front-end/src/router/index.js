@@ -2,6 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
 import { useTechnicianAuthStore } from '@/store/technicianAuth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 
 // Flag to track if auth has been initialized
 let authInitialized = false
@@ -17,6 +18,7 @@ import LoginView from '@/views/auth/LoginView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
 import TechnicianLoginView from '@/views/auth/TechnicianLoginView.vue'
 import TechnicianRegisterView from '@/views/auth/TechnicianRegisterView.vue'
+import AdminLoginView from '@/views/auth/AdminLoginView.vue'
 
 // User Views
 import UserDashboardView from '@/views/user/UserDashboardView.vue'
@@ -34,6 +36,17 @@ import TechnicianCompletedBookingsView from '@/views/technician/TechnicianComple
 import TechnicianEarningsView from '@/views/technician/TechnicianEarningsView.vue'
 import TechnicianSpecialtyView from '@/views/technician/TechnicianSpecialtyView.vue'
 import TechnicianServiceAreasView from '@/views/technician/TechnicianServiceAreasView.vue'
+
+// Admin Views
+import AdminDashboardView from '@/views/admin/AdminDashboardView.vue'
+import AdminAppliancesView from '@/views/admin/AdminAppliancesView.vue'
+import AdminUnpaidBookingsView from '@/views/admin/AdminUnpaidBookingsView.vue'
+import AdminIncompleteBookingsView from '@/views/admin/AdminIncompleteBookingsView.vue'
+import AdminOverdueBookingsView from '@/views/admin/AdminOverdueBookingsView.vue'
+import AdminVerificationView from '@/views/admin/AdminVerificationView.vue'
+import AdminPerformanceView from '@/views/admin/AdminPerformanceView.vue'
+import AdminTechniciansView from '@/views/admin/AdminTechniciansView.vue'
+import AdminTechnicianDetailsView from '@/views/admin/AdminTechnicianDetailsView.vue'
 
 const routes = [
   // ========================================
@@ -218,6 +231,101 @@ const routes = [
   },
 
   // ========================================
+  // ADMIN PORTAL ROUTES
+  // ========================================
+  {
+    path: '/admin-login',
+    name: 'AdminLogin',
+    component: AdminLoginView,
+    meta: {
+      title: 'Admin Login - FixAppliance',
+      description: 'Sign in to the FixAppliance admin portal to manage the platform.'
+    }
+  },
+  {
+    path: '/admin/dashboard',
+    name: 'AdminDashboard',
+    component: AdminDashboardView,
+    meta: {
+      title: 'Admin Dashboard - FixAppliance',
+      description: 'Admin platform overview and key metrics.',
+      requiresAdminAuth: true
+    }
+  },
+  {
+    path: '/admin/appliances',
+    name: 'AdminAppliances',
+    component: AdminAppliancesView,
+    meta: {
+      title: 'Appliance Management - FixAppliance',
+      requiresAdminAuth: true
+    }
+  },
+  {
+    path: '/admin/bookings/unpaid',
+    name: 'AdminUnpaidBookings',
+    component: AdminUnpaidBookingsView,
+    meta: {
+      title: 'Unpaid Bookings - FixAppliance',
+      requiresAdminAuth: true
+    }
+  },
+  {
+    path: '/admin/bookings/incomplete',
+    name: 'AdminIncompleteBookings',
+    component: AdminIncompleteBookingsView,
+    meta: {
+      title: 'Incomplete Bookings - FixAppliance',
+      requiresAdminAuth: true
+    }
+  },
+  {
+    path: '/admin/bookings/overdue',
+    name: 'AdminOverdueBookings',
+    component: AdminOverdueBookingsView,
+    meta: {
+      title: 'Overdue Bookings - FixAppliance',
+      requiresAdminAuth: true
+    }
+  },
+  {
+    path: '/admin/technicians/verification',
+    name: 'AdminVerification',
+    component: AdminVerificationView,
+    meta: {
+      title: 'Technician Verification - FixAppliance',
+      requiresAdminAuth: true
+    }
+  },
+  {
+    path: '/admin/technicians/performance',
+    name: 'AdminPerformance',
+    component: AdminPerformanceView,
+    meta: {
+      title: 'Technician Performance - FixAppliance',
+      requiresAdminAuth: true
+    }
+  },
+  {
+    path: '/admin/technicians',
+    name: 'AdminTechnicians',
+    component: AdminTechniciansView,
+    meta: {
+      title: 'Manage Technicians - FixAppliance',
+      requiresAdminAuth: true
+    }
+  },
+  {
+    path: '/admin/technicians/:id',
+    name: 'AdminTechnicianDetails',
+    component: AdminTechnicianDetailsView,
+    meta: {
+      title: 'Technician Details - FixAppliance',
+      requiresAdminAuth: true
+    }
+  },
+
+  // ========================================
   // CATCH-ALL / 404
   // ========================================
   {
@@ -247,6 +355,7 @@ router.beforeEach(async (to, from, next) => {
   // Get auth stores
   const authStore = useAuthStore()
   const technicianAuthStore = useTechnicianAuthStore()
+  const adminAuthStore = useAdminAuthStore()
   
   // Wait for auth initialization on first navigation
   if (!authInitialized) {
@@ -281,6 +390,17 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   
+  // Check if route requires admin authentication
+  if (to.meta.requiresAdminAuth) {
+    if (!adminAuthStore.isAuthenticated) {
+      // Redirect to admin login with return URL
+      return next({
+        path: '/admin-login',
+        query: { redirect: to.fullPath }
+      })
+    }
+  }
+  
   // Redirect authenticated users away from login/register pages
   if (to.path === '/login' || to.path === '/register') {
     if (authStore.isAuthenticated) {
@@ -292,6 +412,13 @@ router.beforeEach(async (to, from, next) => {
   if (to.path === '/technician-login' || to.path === '/technician-register') {
     if (technicianAuthStore.isAuthenticated) {
       return next('/technician-dashboard')
+    }
+  }
+  
+  // Redirect authenticated admins away from admin login page
+  if (to.path === '/admin-login') {
+    if (adminAuthStore.isAuthenticated) {
+      return next('/admin/dashboard')
     }
   }
   

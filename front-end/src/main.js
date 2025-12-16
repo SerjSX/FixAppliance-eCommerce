@@ -38,6 +38,8 @@ const initAuth = async () => {
     technicianAuthStore.fetchProfile().catch(() => {
       // Technician not authenticated, that's fine
     })
+    // Note: Admin auth is not checked on init for security purposes
+    // Admin must explicitly login each session
   ])
   
   await authInitPromise

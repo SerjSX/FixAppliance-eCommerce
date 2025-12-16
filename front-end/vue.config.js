@@ -8,6 +8,11 @@ const { defineConfig } = require('@vue/cli-service')
 					target: 'http://localhost:3000',
 					changeOrigin: true,
 					secure: false
+				},
+				'/images': {
+					target: 'http://localhost:3000',
+					changeOrigin: true,
+					secure: false
 				}
 			},
 			client: {

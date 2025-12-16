@@ -18,6 +18,7 @@ import AppHeader from './components/layout/AppHeader.vue'
 import AppFooter from './components/layout/AppFooter.vue'
 import { useAuthStore } from '@/store/auth'
 import { useTechnicianAuthStore } from '@/store/technicianAuth'
+import { useAdminAuthStore } from '@/store/adminAuth'
 
 export default {
   name: 'App',
@@ -30,6 +31,10 @@ export default {
       const path = this.$route.path
       const authStore = useAuthStore()
       const techAuthStore = useTechnicianAuthStore()
+      const adminAuthStore = useAdminAuthStore()
+      
+      // Admin portal pages (hide header entirely)
+      const isAdminPortal = adminAuthStore.isAuthenticated && path.startsWith('/admin/')
       
       // Technician portal pages (only if logged in as technician)
       const isTechnicianPortal = techAuthStore.isAuthenticated && (
@@ -49,7 +54,7 @@ export default {
         path === '/book-technician'
       )
       
-      return isTechnicianPortal || isUserPortal
+      return isAdminPortal || isTechnicianPortal || isUserPortal
     }
   }
 }

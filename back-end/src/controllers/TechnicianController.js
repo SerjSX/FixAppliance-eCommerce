@@ -196,9 +196,12 @@ const getProfile = asyncHandler(async (req, res) => {
         const technicianResult = await pool.request()
             .input("technicianId", sql.Int, technicianID)
             .query(`
-            SELECT tec.Technician_ID, tec.First_Name, tec.Last_Name, tec.Email, tec.Phone, tec.isActive, tec.Verified, tec.Average_Rating, tec.Total_Jobs
+            SELECT tec.Technician_ID, tec.First_Name, tec.Last_Name, tec.Email, tec.Phone, tec.isActive, tec.Verified, tec.Total_Jobs,
+                   ISNULL(AVG(CAST(r.Rating_Score AS DECIMAL(3,2))), 0) AS Average_Rating
             FROM [Technician] AS tec
+            LEFT JOIN Rating r ON tec.Technician_ID = r.Technician_ID
             WHERE tec.Technician_ID = @technicianId
+            GROUP BY tec.Technician_ID, tec.First_Name, tec.Last_Name, tec.Email, tec.Phone, tec.isActive, tec.Verified, tec.Total_Jobs
             `);
 
 

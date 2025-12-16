@@ -83,4 +83,24 @@ const freelancerValidation = asyncHandler(async(req, res, next) => {
     }
 })
 
-module.exports = {userValidation, technicianValidation, freelancerValidation};
+// Validation for admin
+const adminValidation = asyncHandler(async(req, res, next) => {
+    const token = req.cookies.admin_access_token;
+
+    if (!token) {
+        return res.status(401).json({message: "Admin authentication required."});
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.ADMIN_ACCESS_TOKEN);
+        req.adminID = decoded.id;
+        req.adminEmail = decoded.email;
+        req.adminRole = decoded.role;
+        next();
+    } catch (err) {
+        res.clearCookie('admin_access_token');
+        return res.status(401).json({message: "Admin authentication required."});
+    }
+})
+
+module.exports = {userValidation, technicianValidation, freelancerValidation, adminValidation};

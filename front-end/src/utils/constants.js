@@ -1,4 +1,13 @@
 // Application constants
+
+// Helper function to get image URL (works in both dev and production)
+// In dev: proxy forwards to backend
+// In production: served from same domain
+export const getImageUrl = (filename) => {
+  if (!filename) return null
+  return `/images/appliance-categories/${filename}`
+}
+
 export const BOOKING_STATUS = {
   PENDING: 'pending',
   CONFIRMED: 'confirmed',

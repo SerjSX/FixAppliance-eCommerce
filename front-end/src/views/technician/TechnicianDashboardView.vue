@@ -25,7 +25,7 @@
               <span class="avatar avatar-md bg-primary-100 text-primary-600">{{ technicianInitials }}</span>
               <div class="hidden md:block">
                 <p class="text-sm font-medium text-neutral-900">{{ technicianName }}</p>
-                <p class="text-xs text-neutral-500">{{ technician.isVerified ? 'Verified Technician' : 'Pending Verification' }}</p>
+                <p class="text-xs text-neutral-500">{{ technician.verified ? 'Verified Technician' : 'Pending Verification' }}</p>
               </div>
             </div>
           </div>
