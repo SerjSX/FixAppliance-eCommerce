@@ -47,6 +47,11 @@ app.use('/api/contact', require('./routes/contactRoutes'));
 // Admin routes
 app.use('/api/admin', require('./routes/adminRoutes'));
 
+// Serve index.html for all non-API, non-static routes (SPA fallback)
+app.get(/^\/(?!api|public).*/, (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../dist/index.html'));
+});
+
 // 404 handling
 app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });
@@ -63,10 +68,6 @@ app.use((err, req, res, next) => {
 connectDB()
     .then(() => {
         console.log("Connected to the database.");
-
-        app.get('/{*splat}', (req, res) => {
-            res.sendFile(path.join(__dirname, '../dist/index.html'));
-        })
 
         app.listen(port, () => {
             console.log(`Server is running on port ${port}`);
