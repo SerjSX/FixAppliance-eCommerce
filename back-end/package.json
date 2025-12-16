@@ -30,14 +30,14 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
     "mssql": "^12.1.0",
-    "multer": "^2.0.2"
-  },
-  "devDependencies": {
+    "multer": "^2.0.2",
     "@babel/cli": "^7.28.3",
     "@babel/core": "^7.28.5",
     "@babel/node": "^7.28.0",
     "@babel/plugin-transform-runtime": "^7.28.5",
-    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-env": "^7.28.5"
+  },
+  "devDependencies": {
     "nodemon": "^3.1.11"
   }
 }
