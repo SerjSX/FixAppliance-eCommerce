@@ -5,8 +5,10 @@
     <main class="flex-1 lg:ml-64 bg-neutral-50 min-h-screen w-full overflow-x-hidden">
       <!-- Top Bar -->
       <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4 sticky top-0 z-10">
-        <h1 class="text-xl font-semibold text-neutral-900">Overdue Bookings</h1>
-        <p class="text-sm text-neutral-500">Paid but not completed past scheduled date</p>
+        <div class="ml-14 lg:ml-0">
+          <h1 class="text-xl font-semibold text-neutral-900">Overdue Bookings</h1>
+          <p class="text-sm text-neutral-500">Paid but not completed past scheduled date</p>
+        </div>
       </header>
 
       <div class="p-4 sm:p-6">
@@ -23,7 +25,9 @@
             <div v-if="loading" class="p-8 text-center">
               <div class="inline-block animate-spin">
                 <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                  </path>
                 </svg>
               </div>
             </div>

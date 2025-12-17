@@ -5,23 +5,22 @@
     <main class="flex-1 lg:ml-64 bg-neutral-50 min-h-screen w-full overflow-x-hidden">
       <!-- Top Bar -->
       <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4 sticky top-0 z-10">
-        <h1 class="text-xl font-semibold text-neutral-900">Technician Performance</h1>
-        <p class="text-sm text-neutral-500">Low-rated and high-performing technicians</p>
+        <div class="ml-14 lg:ml-0">
+          <h1 class="text-xl font-semibold text-neutral-900">Technician Performance</h1>
+          <p class="text-sm text-neutral-500">Low-rated and high-performing technicians</p>
+        </div>
+
       </header>
 
       <div class="p-4 sm:p-6">
         <!-- Tabs -->
         <div class="flex gap-4 mb-6 border-b border-neutral-200">
-          <button
-            @click="activeTab = 'low'"
-            :class="['px-4 py-2 font-medium border-b-2 transition-colors', activeTab === 'low' ? 'border-error-500 text-error-600' : 'border-transparent text-neutral-600 hover:text-neutral-900']"
-          >
+          <button @click="activeTab = 'low'"
+            :class="['px-4 py-2 font-medium border-b-2 transition-colors', activeTab === 'low' ? 'border-error-500 text-error-600' : 'border-transparent text-neutral-600 hover:text-neutral-900']">
             Low Rated
           </button>
-          <button
-            @click="activeTab = 'high'"
-            :class="['px-4 py-2 font-medium border-b-2 transition-colors', activeTab === 'high' ? 'border-success-500 text-success-600' : 'border-transparent text-neutral-600 hover:text-neutral-900']"
-          >
+          <button @click="activeTab = 'high'"
+            :class="['px-4 py-2 font-medium border-b-2 transition-colors', activeTab === 'high' ? 'border-success-500 text-success-600' : 'border-transparent text-neutral-600 hover:text-neutral-900']">
             High Performers
           </button>
         </div>
@@ -32,7 +31,9 @@
             <div v-if="loadingLow" class="p-8 text-center">
               <div class="inline-block animate-spin">
                 <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                  </path>
                 </svg>
               </div>
             </div>
@@ -66,15 +67,15 @@
                     <td class="px-4 py-3 text-sm text-neutral-600">{{ tech.Total_Jobs }}</td>
                     <td class="px-4 py-3 text-sm text-neutral-600">{{ tech.Total_Reviews }}</td>
                     <td class="px-4 py-3 text-sm">
-                      <span :class="['px-2 py-1 rounded text-xs font-medium', tech.Verified ? 'bg-success-100 text-success-700' : 'bg-warning-100 text-warning-700']">
+                      <span
+                        :class="['px-2 py-1 rounded text-xs font-medium', tech.Verified ? 'bg-success-100 text-success-700' : 'bg-warning-100 text-warning-700']">
                         {{ tech.Verified ? 'Verified' : 'Unverified' }}
                       </span>
                     </td>
                     <td class="px-4 py-3 text-sm">
                       <button
                         @click="$router.push({ name: 'AdminTechnicianDetails', params: { id: tech.Technician_ID } })"
-                        class="text-primary-600 hover:text-primary-800 font-medium"
-                      >
+                        class="text-primary-600 hover:text-primary-800 font-medium">
                         View Details
                       </button>
                     </td>
@@ -91,7 +92,9 @@
             <div v-if="loadingHigh" class="p-8 text-center">
               <div class="inline-block animate-spin">
                 <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                  </path>
                 </svg>
               </div>
             </div>
@@ -126,8 +129,7 @@
                     <td class="px-4 py-3 text-sm">
                       <button
                         @click="$router.push({ name: 'AdminTechnicianDetails', params: { id: tech.Technician_ID } })"
-                        class="text-primary-600 hover:text-primary-800 font-medium"
-                      >
+                        class="text-primary-600 hover:text-primary-800 font-medium">
                         View Details
                       </button>
                     </td>

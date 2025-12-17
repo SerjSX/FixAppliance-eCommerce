@@ -11,7 +11,6 @@ let authInitialized = false
 import HomeView from '@/views/public/HomeView.vue'
 import AboutView from '@/views/public/AboutView.vue'
 import ContactView from '@/views/public/ContactView.vue'
-import ComingSoonView from '@/views/public/ComingSoonView.vue'
 
 // Auth Views
 import LoginView from '@/views/auth/LoginView.vue'
@@ -58,7 +57,7 @@ const routes = [
     component: HomeView,
     meta: {
       title: 'FixAppliance - Trusted Appliance Repair in Lebanon',
-      description: 'Book verified technicians or learn to DIY with Arabic and English troubleshooting guides. Serving homeowners across Mount Lebanon.'
+      description: 'Book verified technicians. Serving homeowners across Mount Lebanon.'
     }
   },
   {
@@ -77,15 +76,6 @@ const routes = [
     meta: {
       title: 'Contact Us - FixAppliance',
       description: 'Get in touch with FixAppliance for questions about bookings, technician inquiries, or partnerships.'
-    }
-  },
-  {
-    path: '/articles',
-    name: 'Articles',
-    component: ComingSoonView,
-    meta: {
-      title: 'Coming Soon - FixAppliance',
-      description: 'This feature is coming soon. Stay tuned for updates!'
     }
   },
 
@@ -107,7 +97,7 @@ const routes = [
     component: RegisterView,
     meta: {
       title: 'Create Account - FixAppliance',
-      description: 'Join FixAppliance to book verified technicians and access DIY troubleshooting guides.'
+      description: 'Join FixAppliance to book verified technicians.'
     }
   },
 
@@ -341,12 +331,9 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL || '/'),
   routes,
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { top: 0 }
-    }
+  // ALl routes when clicked on scroll back up to the page
+  scrollBehavior() {
+    document.getElementById('app').scrollIntoView({ behavior: 'smooth' });
   }
 })
 
@@ -356,7 +343,7 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   const technicianAuthStore = useTechnicianAuthStore()
   const adminAuthStore = useAdminAuthStore()
-  
+
   // Wait for auth initialization on first navigation
   if (!authInitialized) {
     // Import getAuthInitPromise dynamically to avoid circular dependency
@@ -367,7 +354,7 @@ router.beforeEach(async (to, from, next) => {
     }
     authInitialized = true
   }
-  
+
   // Check if route requires user authentication
   if (to.meta.requiresAuth) {
     if (!authStore.isAuthenticated) {
@@ -378,7 +365,7 @@ router.beforeEach(async (to, from, next) => {
       })
     }
   }
-  
+
   // Check if route requires technician authentication
   if (to.meta.requiresTechnicianAuth) {
     if (!technicianAuthStore.isAuthenticated) {
@@ -389,7 +376,7 @@ router.beforeEach(async (to, from, next) => {
       })
     }
   }
-  
+
   // Check if route requires admin authentication
   if (to.meta.requiresAdminAuth) {
     if (!adminAuthStore.isAuthenticated) {
@@ -400,31 +387,31 @@ router.beforeEach(async (to, from, next) => {
       })
     }
   }
-  
+
   // Redirect authenticated users away from login/register pages
   if (to.path === '/login' || to.path === '/register') {
     if (authStore.isAuthenticated) {
       return next('/dashboard')
     }
   }
-  
+
   // Redirect authenticated technicians away from technician login/register pages
   if (to.path === '/technician-login' || to.path === '/technician-register') {
     if (technicianAuthStore.isAuthenticated) {
       return next('/technician-dashboard')
     }
   }
-  
+
   // Redirect authenticated admins away from admin login page
   if (to.path === '/admin-login') {
     if (adminAuthStore.isAuthenticated) {
       return next('/admin/dashboard')
     }
   }
-  
+
   // Set document title
   document.title = to.meta.title || 'FixAppliance'
-  
+
   // Set meta description
   const description = to.meta.description || 'FixAppliance - Trusted Appliance Repair in Lebanon'
   let metaDescription = document.querySelector('meta[name="description"]')

@@ -181,7 +181,7 @@
           </div>
           <div class="flex-1">
             <img 
-              src="/images/home/technician-at-work.svg" 
+              src="/images/home/technician-at-work.jpg" 
               alt="Professional Technician at Work" 
               class="w-full max-w-md mx-auto"
             >

@@ -209,7 +209,7 @@
   }
 
   .hero-title {
-    @apply text-3xl md:text-5xl lg:text-6xl font-bold mb-6;
+    @apply text-neutral-300 text-3xl md:text-5xl lg:text-6xl font-bold mb-6;
   }
 
   .hero-subtitle {

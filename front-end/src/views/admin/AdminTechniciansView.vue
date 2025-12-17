@@ -5,8 +5,11 @@
         <main class="flex-1 lg:ml-64 bg-neutral-50 min-h-screen w-full overflow-x-hidden">
             <!-- Top Bar -->
             <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4 sticky top-0 z-10">
-                <h1 class="text-xl font-semibold text-neutral-900">Manage Technicians</h1>
-                <p class="text-sm text-neutral-500">View, search, and manage all technician accounts</p>
+                <div class="ml-14 lg:ml-0">
+                    <h1 class="text-xl font-semibold text-neutral-900">Manage Technicians</h1>
+                    <p class="text-sm text-neutral-500">View, search, and manage all technician accounts</p>
+                </div>
+
             </header>
 
             <div class="p-4 sm:p-6">
@@ -31,7 +34,8 @@
                             <!-- Status Filter -->
                             <div>
                                 <label class="block text-sm font-medium text-neutral-700 mb-2">Status</label>
-                                <select v-model="statusFilter" @change="applyFilters" class="select bg-white rounded-md hover:bg-gray-100 hover:cursor-pointer hover:transition hover:ease-in-out hover:duration-300 p-5 w-full">
+                                <select v-model="statusFilter" @change="applyFilters"
+                                    class="select bg-white rounded-md hover:bg-gray-100 hover:cursor-pointer hover:transition hover:ease-in-out hover:duration-300 p-5 w-full">
                                     <option value="all">All Status</option>
                                     <option value="active">Active</option>
                                     <option value="inactive">Inactive</option>
@@ -41,7 +45,8 @@
                             <!-- Verification Filter -->
                             <div>
                                 <label class="block text-sm font-medium text-neutral-700 mb-2">Verification</label>
-                                <select v-model="verifiedFilter" @change="applyFilters" class="select bg-white rounded-md hover:bg-gray-100 hover:cursor-pointer hover:transition hover:ease-in-out hover:duration-300 p-5 w-full">
+                                <select v-model="verifiedFilter" @change="applyFilters"
+                                    class="select bg-white rounded-md hover:bg-gray-100 hover:cursor-pointer hover:transition hover:ease-in-out hover:duration-300 p-5 w-full">
                                     <option value="all">All</option>
                                     <option value="verified">Verified</option>
                                     <option value="unverified">Unverified</option>
@@ -445,7 +450,6 @@ export default {
             this.$router.push({ name: 'AdminTechnicianDetails', params: { id: technicianId } })
         },
         handleDeactivate(technicianId) {
-            console.log('[DEBUG] handleDeactivate', technicianId)
             this.selectedTechnicianId = technicianId
             this.showDeactivateModal = true
         },
@@ -466,7 +470,6 @@ export default {
             }
         },
         handleActivate(technicianId) {
-            console.log('[DEBUG] handleActivate', technicianId)
             this.selectedTechnicianId = technicianId
             this.showActivateModal = true
         },
@@ -487,7 +490,6 @@ export default {
             }
         },
         handleVerify(technicianId) {
-            console.log('[DEBUG] handleVerify', technicianId)
             this.selectedTechnicianId = technicianId
             this.showVerifyModal = true
         },
@@ -508,7 +510,6 @@ export default {
             }
         },
         handleRevokeVerification(technicianId) {
-            console.log('[DEBUG] handleRevokeVerification', technicianId)
             this.selectedTechnicianId = technicianId
             this.showRevokeModal = true
         },

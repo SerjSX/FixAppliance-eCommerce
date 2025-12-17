@@ -59,9 +59,9 @@
           </p>
         </div>
 
-        <div class="grid-features">
+        <div class="flex justify-center items-center flex-col lg:flex-row">
           <!-- Trust -->
-          <div class="text-center">
+          <div class="text-center w-80 mb-10 lg:mr-40">
             <div class="icon-box icon-box-lg icon-box-primary mx-auto mb-6">
               <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
@@ -75,7 +75,7 @@
           </div>
 
           <!-- Transparency -->
-          <div class="text-center">
+          <div class="text-center w-80">
             <div class="icon-box icon-box-lg icon-box-secondary mx-auto mb-6">
               <svg class="w-8 h-8 text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -88,20 +88,6 @@
               You always know what to expect.
             </p>
           </div>
-
-          <!-- Empowerment -->
-          <div class="text-center">
-            <div class="icon-box icon-box-lg icon-box-success mx-auto mb-6">
-              <svg class="w-8 h-8 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-neutral-900 mb-3">Empowerment</h3>
-            <p class="text-neutral-600">
-              Free DIY guides in Arabic and English help you solve 
-              simple problems on your own.
-            </p>
-          </div>
         </div>
       </div>
     </section>
@@ -111,19 +97,19 @@
       <div class="container-wide">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <p class="text-4xl md:text-5xl font-bold mb-2">500+</p>
+            <p class="!text-neutral-300 text-4xl md:text-5xl font-bold mb-2">500+</p>
             <p class="text-primary-200">Verified Technicians</p>
           </div>
           <div>
-            <p class="text-4xl md:text-5xl font-bold mb-2">10,000+</p>
+            <p class="!text-neutral-300 text-4xl md:text-5xl font-bold mb-2">10,000+</p>
             <p class="text-primary-200">Repairs Completed</p>
           </div>
           <div>
-            <p class="text-4xl md:text-5xl font-bold mb-2">4.8★</p>
+            <p class="!text-neutral-300 text-4xl md:text-5xl font-bold mb-2">4.8★</p>
             <p class="text-primary-200">Average Rating</p>
           </div>
           <div>
-            <p class="text-4xl md:text-5xl font-bold mb-2">100+</p>
+            <p class="!text-neutral-300 text-4xl md:text-5xl font-bold mb-2">100+</p>
             <p class="text-primary-200">DIY Guides</p>
           </div>
         </div>
@@ -133,14 +119,7 @@
     <!-- Service Area Section -->
     <section class="section bg-white">
       <div class="container-wide">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <img 
-              src="/images/about/lebanon-map.svg" 
-              alt="Service Areas in Lebanon" 
-              class="w-full max-w-md mx-auto"
-            >
-          </div>
+        <div class="grid gap-12 items-center">
           <div>
             <span class="badge badge-secondary mb-4">Service Area</span>
             <h2 class="h2 mb-6">Currently Serving Mount Lebanon</h2>
@@ -156,7 +135,7 @@
             </div>
             
             <!-- Dynamic Service Areas -->
-            <div v-else-if="serviceAreas.length > 0" class="grid grid-cols-2 gap-3">
+            <div v-else-if="serviceAreas.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               <div v-for="area in serviceAreas" :key="area.id" class="flex items-center gap-2 text-neutral-700">
                 <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>

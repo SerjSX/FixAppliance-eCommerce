@@ -58,7 +58,6 @@
           <div>
             <h3 class="footer-heading">Resources</h3>
             <ul class="footer-links">
-              <li><router-link to="/coming-soon" class="footer-link">DIY Articles <span class="text-xs text-secondary-400">(Coming Soon)</span></router-link></li>
               <li><router-link to="/contact" class="footer-link">FAQ</router-link></li>
             </ul>
           </div>
@@ -69,10 +68,7 @@
             <ul class="footer-links">
               <li><router-link to="/about" class="footer-link">About Us</router-link></li>
               <li><router-link to="/contact" class="footer-link">Contact</router-link></li>
-              <li><router-link to="/coming-soon" class="footer-link">Careers</router-link></li>
               <li><router-link to="/technician-register" class="footer-link">Become a Technician</router-link></li>
-              <li><router-link to="/coming-soon" class="footer-link">Privacy Policy</router-link></li>
-              <li><router-link to="/coming-soon" class="footer-link">Terms of Service</router-link></li>
             </ul>
           </div>
         </div>

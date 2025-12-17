@@ -197,14 +197,7 @@
                           autocomplete="new-password"
                           required
                         >
-                        <button type="button" class="form-input-icon form-input-icon-right-position text-neutral-400 hover:text-neutral-600" aria-label="Toggle password visibility">
-                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                          </svg>
-                        </button>
                       </div>
-                      <p class="form-hint">Minimum 8 characters with uppercase, lowercase, number, and special character</p>
                     </div>
 
                     <!-- Confirm Password -->
@@ -220,17 +213,6 @@
                         required
                       >
                     </div>
-                  </div>
-
-                  <!-- Password Strength Indicator -->
-                  <div class="mt-2">
-                    <div class="flex gap-1">
-                      <div class="h-1 flex-1 rounded bg-neutral-200"></div>
-                      <div class="h-1 flex-1 rounded bg-neutral-200"></div>
-                      <div class="h-1 flex-1 rounded bg-neutral-200"></div>
-                      <div class="h-1 flex-1 rounded bg-neutral-200"></div>
-                    </div>
-                    <p class="text-xs text-neutral-500 mt-1">Enter a password to see its strength</p>
                   </div>
                 </div>
 

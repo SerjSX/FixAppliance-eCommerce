@@ -5,8 +5,10 @@
     <main class="flex-1 lg:ml-64 bg-neutral-50 min-h-screen w-full overflow-x-hidden">
       <!-- Top Bar -->
       <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4 sticky top-0 z-10">
-        <h1 class="text-xl font-semibold text-neutral-900">Appliance Management</h1>
-        <p class="text-sm text-neutral-500">Add and manage appliance categories and types</p>
+        <div class="ml-14 lg:ml-0">
+          <h1 class="text-xl font-semibold text-neutral-900">Appliance Management</h1>
+          <p class="text-sm text-neutral-500">Add and manage appliance categories and types</p>
+        </div>
       </header>
 
       <div class="p-4 sm:p-6">
@@ -20,42 +22,22 @@
               <form @submit.prevent="addCategory" class="space-y-4">
                 <div>
                   <label class="form-label">Category Name (English)</label>
-                  <input
-                    v-model="categoryForm.nameEN"
-                    type="text"
-                    class="form-input"
-                    placeholder="e.g., Washing Machine"
-                    required
-                  />
+                  <input v-model="categoryForm.nameEN" type="text" class="form-input"
+                    placeholder="e.g., Washing Machine" required />
                 </div>
 
                 <div>
                   <label class="form-label">Category Name (Arabic)</label>
-                  <input
-                    v-model="categoryForm.nameAR"
-                    type="text"
-                    class="form-input"
-                    placeholder="مثل: غسالة"
-                  />
+                  <input v-model="categoryForm.nameAR" type="text" class="form-input" placeholder="مثل: غسالة" />
                 </div>
 
                 <div>
                   <label class="form-label">Category Icon</label>
-                  <input
-                    @change="handleIconUpload"
-                    type="file"
-                    accept="image/*"
-                    class="form-input"
-                    required
-                  />
+                  <input @change="handleIconUpload" type="file" accept="image/*" class="form-input" required />
                   <p class="text-xs text-neutral-500 mt-1">Max 2MB, PNG/JPG/SVG</p>
                 </div>
 
-                <button
-                  type="submit"
-                  :disabled="categoryLoading"
-                  class="btn btn-primary w-full"
-                >
+                <button type="submit" :disabled="categoryLoading" class="btn btn-primary w-full">
                   {{ categoryLoading ? 'Adding...' : 'Add Category' }}
                 </button>
 
@@ -88,53 +70,28 @@
 
                 <div>
                   <label class="form-label">Type Name (English)</label>
-                  <input
-                    v-model="typeForm.nameEN"
-                    type="text"
-                    class="form-input"
-                    placeholder="e.g., Front Load"
-                    required
-                  />
+                  <input v-model="typeForm.nameEN" type="text" class="form-input" placeholder="e.g., Front Load"
+                    required />
                 </div>
 
                 <div>
                   <label class="form-label">Type Name (Arabic)</label>
-                  <input
-                    v-model="typeForm.nameAR"
-                    type="text"
-                    class="form-input"
-                    placeholder="مثل: أمامي"
-                  />
+                  <input v-model="typeForm.nameAR" type="text" class="form-input" placeholder="مثل: أمامي" />
                 </div>
 
                 <div>
                   <label class="form-label">Base Price ($)</label>
-                  <input
-                    v-model.number="typeForm.basePrice"
-                    type="number"
-                    step="0.01"
-                    class="form-input"
-                    placeholder="50.00"
-                    required
-                  />
+                  <input v-model.number="typeForm.basePrice" type="number" step="0.01" class="form-input"
+                    placeholder="50.00" required />
                 </div>
 
                 <div>
                   <label class="form-label">Avg Repair Time (minutes)</label>
-                  <input
-                    v-model.number="typeForm.averageRepairTimeMin"
-                    type="number"
-                    class="form-input"
-                    placeholder="60"
-                    required
-                  />
+                  <input v-model.number="typeForm.averageRepairTimeMin" type="number" class="form-input"
+                    placeholder="60" required />
                 </div>
 
-                <button
-                  type="submit"
-                  :disabled="typeLoading"
-                  class="btn btn-primary w-full"
-                >
+                <button type="submit" :disabled="typeLoading" class="btn btn-primary w-full">
                   {{ typeLoading ? 'Adding...' : 'Add Type' }}
                 </button>
 

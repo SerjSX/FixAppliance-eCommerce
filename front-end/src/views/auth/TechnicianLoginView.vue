@@ -57,10 +57,6 @@
 
                 <!-- Password -->
                 <div class="form-group">
-                  <div class="flex items-center justify-between mb-1.5">
-                    <label for="tech-password" class="form-label mb-0">Password</label>
-                    <router-link to="/coming-soon" class="text-sm text-primary-600 hover:underline">Forgot password?</router-link>
-                  </div>
                   <div class="form-input-wrapper">
                     <input 
                       type="password" 
@@ -71,12 +67,6 @@
                       autocomplete="current-password"
                       required
                     >
-                    <button type="button" class="form-input-icon form-input-icon-right-position text-neutral-400 hover:text-neutral-600" aria-label="Toggle password visibility">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                      </svg>
-                    </button>
                   </div>
                 </div>
 

@@ -33,7 +33,7 @@
           />
 
           <!-- Filter Tabs -->
-          <div class="flex gap-4 mb-6">
+          <div class="flex gap-4 mb-6 overflow-auto">
             <button 
               @click="filter = 'all'"
               :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors', filter === 'all' ? 'bg-primary-600 text-white hover:bg-primary-700 hover:text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100']"
@@ -125,8 +125,8 @@
                 </div>
 
                 <!-- Price & Payment -->
-                <div class="flex items-center justify-between border-t border-neutral-100 pt-4">
-                  <div>
+                <div class="flex lg:items-center flex-col lg:flex-row justify-between border-t border-neutral-100 pt-4">
+                  <div class="mb-5">
                     <p class="text-sm text-neutral-500">Total Amount</p>
                     <p class="text-xl font-bold text-primary-600">${{ booking.totalPrice?.toFixed(2) || '0.00' }}</p>
                     <p v-if="booking.paymentStatus" class="text-xs text-neutral-500">
@@ -136,6 +136,7 @@
                       TXN: {{ booking.transactionId }}
                     </p>
                   </div>
+
                   <div class="flex gap-2">
                     <button 
                       v-if="booking.status === 'confirmed'"

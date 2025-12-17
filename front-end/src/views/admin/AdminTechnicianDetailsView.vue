@@ -6,7 +6,7 @@
             <!-- Top Bar -->
             <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4 sticky top-0 z-10">
                 <div class="flex items-center justify-between">
-                    <div>
+                    <div class="ml-14 lg:ml-0">
                         <h1 class="text-xl font-semibold text-neutral-900">Technician Details</h1>
                         <p class="text-sm text-neutral-500">View and manage technician information</p>
                     </div>

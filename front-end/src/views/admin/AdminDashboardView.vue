@@ -8,7 +8,7 @@
             <!-- Top Bar -->
             <header class="bg-white border-b border-neutral-100 px-4 sm:px-6 py-4 sticky top-0 z-10">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
+                    <div class="ml-14 lg:ml-0">
                         <h1 class="text-xl font-semibold text-neutral-900">Admin Dashboard</h1>
                         <p class="text-sm text-neutral-500">Platform overview and key metrics</p>
                     </div>
@@ -356,17 +356,13 @@ export default {
 
             try {
                 // Load all data in parallel for efficiency
-                const [unverified, unpaid, incomplete, overdue, financials, analytics] = await Promise.all([
+                const [unverified, unpaid, incomplete, overdue, financials] = await Promise.all([
                     adminStore.fetchUnverifiedTechnicians(),
                     adminStore.fetchCompletedUnpaid(7),
                     adminStore.fetchAcceptedIncomplete(3),
                     adminStore.fetchPaidOverdue(),
                     adminStore.fetchFinancials(),
                 ])
-
-                console.log('Financial data:', financials)
-                console.log('Financial summary:', financials?.summary)
-                console.log('Analytics data:', analytics)
 
                 this.unverifiedCount = unverified.count || 0
                 this.unpaidCount = unpaid.count || 0
@@ -382,7 +378,6 @@ export default {
                         totalTechnicianEarnings: financials.summary.totalTechnicianEarnings || '0.00',
                         totalCompletedBookings: financials.summary.totalCompletedBookings || 0
                     }
-                    console.log('Assigned financial summary:', this.financialSummary)
                 }
             } catch (error) {
                 console.error('Error loading dashboard data:', error)
