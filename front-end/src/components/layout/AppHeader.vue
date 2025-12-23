@@ -3,11 +3,7 @@
     <div class="header-inner">
       <!-- Logo -->
       <router-link to="/" class="header-logo">
-        <img 
-          src="/images/logo/fixappliance-icon.svg" 
-          alt="FixAppliance Logo" 
-          class="h-8 w-auto"
-        >
+        <img src="/images/logo/fixappliance-icon.svg" alt="FixAppliance Logo" class="h-8 w-auto">
         <span class="hidden sm:inline">FixAppliance</span>
       </router-link>
 
@@ -40,12 +36,8 @@
         </div>
 
         <!-- Mobile Menu Toggle -->
-        <button 
-          type="button" 
-          class="btn-ghost btn-icon md:hidden"
-          aria-label="Toggle mobile menu"
-          @click="toggleMobileMenu"
-        >
+        <button type="button" class="btn-ghost btn-icon md:hidden" aria-label="Toggle mobile menu"
+          @click="toggleMobileMenu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
@@ -65,10 +57,18 @@
         </button>
       </div>
       <nav class="p-4 space-y-1">
-        <router-link to="/" class="block px-4 py-3 text-base font-medium text-neutral-900 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Home</router-link>
-        <router-link to="/book-technician" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Book a Technician</router-link>
-        <router-link to="/about" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">About Us</router-link>
-        <router-link to="/contact" class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50" @click="closeMobileMenu">Contact</router-link>
+        <router-link to="/"
+          class="block px-4 py-3 text-base font-medium text-neutral-900 rounded-lg hover:bg-neutral-50"
+          @click="closeMobileMenu">Home</router-link>
+        <router-link to="/book-technician"
+          class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50"
+          @click="closeMobileMenu">Book a Technician</router-link>
+        <router-link to="/about"
+          class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50"
+          @click="closeMobileMenu">About Us</router-link>
+        <router-link to="/contact"
+          class="block px-4 py-3 text-base font-medium text-neutral-600 rounded-lg hover:bg-neutral-50"
+          @click="closeMobileMenu">Contact</router-link>
       </nav>
       <div class="p-4 border-t border-neutral-100 space-y-3">
         <!-- When User is Logged In (Mobile) -->
@@ -79,7 +79,8 @@
 
         <!-- When Technician is Logged In (Mobile) -->
         <template v-else-if="isTechnicianAuthenticated">
-          <router-link to="/technician-dashboard" class="btn btn-outline w-full" @click="closeMobileMenu">Dashboard</router-link>
+          <router-link to="/technician-dashboard" class="btn btn-outline w-full"
+            @click="closeMobileMenu">Dashboard</router-link>
           <button @click="handleTechnicianLogout" class="btn btn-primary w-full">Logout</button>
         </template>
 

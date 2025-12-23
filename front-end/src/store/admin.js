@@ -83,6 +83,7 @@ export const useAdminStore = defineStore('admin', {
       }
     },
 
+    // Not implemented in the final stage
     async updateTypePrice(typeId, basePrice) {
       this.loading = true
       this.error = null

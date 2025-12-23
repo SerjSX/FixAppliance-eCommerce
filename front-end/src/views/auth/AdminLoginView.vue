@@ -21,11 +21,7 @@
             <div class="card-body py-8 px-6 md:px-8">
               <!-- Logo -->
               <div class="text-center mb-8">
-                <img 
-                  src="/images/logo/fixappliance-icon.svg" 
-                  alt="FixAppliance Admin" 
-                  class="h-10 w-auto mx-auto mb-4"
-                >
+                <img src="/images/logo/fixappliance-icon.svg" alt="FixAppliance Admin" class="h-10 w-auto mx-auto mb-4">
                 <h2 class="text-xl font-semibold text-neutral-900">Admin Sign In</h2>
                 <p class="text-sm text-neutral-500 mt-2">Secure access to platform administration</p>
               </div>
@@ -33,29 +29,20 @@
               <!-- Login Form -->
               <form @submit.prevent="handleLogin" class="space-y-5">
                 <!-- Error Alert -->
-                <AlertMessage 
-                  v-if="error" 
-                  type="error" 
-                  :message="error"
-                  @dismiss="error = null"
-                />
+                <AlertMessage v-if="error" type="error" :message="error" @dismiss="error = null" />
 
                 <!-- Email -->
                 <div class="form-group">
                   <label for="admin-email" class="form-label">Email Address</label>
                   <div class="form-input-wrapper">
-                    <svg class="form-input-icon form-input-icon-left-position w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    <svg class="form-input-icon form-input-icon-left-position w-5 h-5" fill="none" stroke="currentColor"
+                      viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                      </path>
                     </svg>
-                    <input 
-                      type="email" 
-                      id="admin-email"
-                      v-model="formData.email" 
-                      class="form-input !pl-10" 
-                      placeholder="admin@fixappliance.com"
-                      required
-                      autocomplete="email"
-                    >
+                    <input type="email" id="admin-email" v-model="formData.email" class="form-input !pl-10"
+                      placeholder="admin@fixappliance.com" required autocomplete="email">
                   </div>
                 </div>
 
@@ -63,27 +50,20 @@
                 <div class="form-group">
                   <label for="admin-password" class="form-label">Password</label>
                   <div class="form-input-wrapper">
-                    <svg class="form-input-icon form-input-icon-left-position w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    <svg class="form-input-icon form-input-icon-left-position w-5 h-5" fill="none" stroke="currentColor"
+                      viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                      </path>
                     </svg>
-                    <input 
-                      type="password"
-                      id="admin-password"
-                      v-model="formData.password" 
-                      class="form-input !pl-10 pr-10" 
-                      placeholder="Enter your password"
-                      required
-                      autocomplete="current-password"
-                    >
+                    <input type="password" id="admin-password" v-model="formData.password"
+                      class="form-input !pl-10 pr-10" placeholder="Enter your password" required
+                      autocomplete="current-password">
                   </div>
                 </div>
 
                 <!-- Submit Button -->
-                <button 
-                  type="submit" 
-                  class="btn btn-primary w-full"
-                  :disabled="loading"
-                >
+                <button type="submit" class="btn btn-primary w-full" :disabled="loading">
                   <span v-if="loading" class="spinner spinner-sm mr-2"></span>
                   {{ loading ? 'Signing in...' : 'Sign In' }}
                 </button>
@@ -93,11 +73,14 @@
               <div class="mt-6 p-4 bg-warning-50 border border-warning-200 rounded-lg">
                 <div class="flex gap-3">
                   <svg class="w-5 h-5 text-warning-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd"
+                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                      clip-rule="evenodd"></path>
                   </svg>
                   <div class="text-sm">
                     <p class="font-medium text-warning-900">Secure Admin Access</p>
-                    <p class="text-warning-700 mt-1">This portal is for authorized administrators only. All access attempts are logged and monitored.</p>
+                    <p class="text-warning-700 mt-1">This portal is for authorized administrators only. All access
+                      attempts are logged and monitored.</p>
                   </div>
                 </div>
               </div>
@@ -136,7 +119,7 @@ export default {
       try {
         const adminAuthStore = useAdminAuthStore()
         await adminAuthStore.login(this.formData)
-        
+
         // Redirect to admin dashboard on success
         this.$router.push('/admin/dashboard')
       } catch (err) {

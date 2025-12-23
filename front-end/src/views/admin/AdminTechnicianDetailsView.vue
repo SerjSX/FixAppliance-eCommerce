@@ -137,7 +137,7 @@
                         <div class="card">
                             <div class="card-body text-center">
                                 <div class="text-3xl font-bold text-purple-600">{{ technician.Service_Areas_Count || 0
-                                }}</div>
+                                    }}</div>
                                 <div class="text-sm text-neutral-600 mt-1">Service Areas</div>
                             </div>
                         </div>

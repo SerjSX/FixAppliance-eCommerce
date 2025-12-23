@@ -139,7 +139,7 @@
           <span>Manage All Technicians</span>
         </router-link>
 
-        <!-- Profile & Logout -->
+        <!--Logout -->
         <div class="pt-4 pb-2 px-4 border-t border-error-600 mt-4">
           <p class="text-xs font-semibold text-error-200 uppercase tracking-wider">Account</p>
         </div>

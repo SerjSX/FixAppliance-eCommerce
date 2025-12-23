@@ -47,21 +47,6 @@ export const useAdminAuthStore = defineStore('adminAuth', {
       } finally {
         this.loading = false
       }
-    },
-
-    // Initialize admin auth from cookie
-    initializeAuth(adminData) {
-      if (adminData) {
-        this.admin = adminData
-        this.isAuthenticated = true
-      }
-    },
-
-    // Clear auth state
-    clearAuth() {
-      this.admin = null
-      this.isAuthenticated = false
-      this.error = null
     }
   }
 })

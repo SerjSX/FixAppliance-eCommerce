@@ -22,44 +22,25 @@
               <!-- Register Form -->
               <form @submit.prevent="handleRegister" class="space-y-6" ref="formTop">
                 <!-- Error Alert -->
-                <AlertMessage 
-                  v-if="error" 
-                  type="error" 
-                  :message="error"
-                  @dismiss="error = null"
-                />
+                <AlertMessage v-if="error" type="error" :message="error" @dismiss="error = null" />
 
                 <!-- Personal Information Section -->
                 <div class="form-section">
                   <h3 class="form-section-title">Personal Information</h3>
-                  
+
                   <div class="form-row">
                     <!-- First Name -->
                     <div class="form-group">
                       <label for="first-name" class="form-label form-label-required">First Name</label>
-                      <input 
-                        type="text" 
-                        id="first-name" 
-                        v-model="form.firstName"
-                        class="form-input" 
-                        placeholder="John"
-                        autocomplete="given-name"
-                        required
-                      >
+                      <input type="text" id="first-name" v-model="form.firstName" class="form-input" placeholder="John"
+                        autocomplete="given-name" required>
                     </div>
 
                     <!-- Last Name -->
                     <div class="form-group">
                       <label for="last-name" class="form-label form-label-required">Last Name</label>
-                      <input 
-                        type="text" 
-                        id="last-name" 
-                        v-model="form.lastName"
-                        class="form-input" 
-                        placeholder="Doe"
-                        autocomplete="family-name"
-                        required
-                      >
+                      <input type="text" id="last-name" v-model="form.lastName" class="form-input" placeholder="Doe"
+                        autocomplete="family-name" required>
                     </div>
                   </div>
 
@@ -67,15 +48,8 @@
                     <!-- Email -->
                     <div class="form-group">
                       <label for="register-email" class="form-label form-label-required">Email Address</label>
-                      <input 
-                        type="email" 
-                        id="register-email" 
-                        v-model="form.email"
-                        class="form-input" 
-                        placeholder="name@example.com"
-                        autocomplete="email"
-                        required
-                      >
+                      <input type="email" id="register-email" v-model="form.email" class="form-input"
+                        placeholder="name@example.com" autocomplete="email" required>
                     </div>
 
                     <!-- Phone -->
@@ -83,15 +57,8 @@
                       <label for="phone" class="form-label form-label-required">Phone Number</label>
                       <div class="input-group">
                         <span class="input-group-text">+961</span>
-                        <input 
-                          type="tel" 
-                          id="phone" 
-                          v-model="form.phone"
-                          class="form-input" 
-                          placeholder="71 234 567"
-                          autocomplete="tel"
-                          required
-                        >
+                        <input type="tel" id="phone" v-model="form.phone" class="form-input" placeholder="71 234 567"
+                          autocomplete="tel" required>
                       </div>
                     </div>
                   </div>
@@ -101,46 +68,27 @@
                 <div class="form-section">
                   <h3 class="form-section-title">Address</h3>
                   <p class="form-section-description">Your address helps technicians locate you for service visits</p>
-                  
+
                   <!-- Street Address -->
                   <div class="form-group">
                     <label for="street-address" class="form-label form-label-required">Street Address</label>
-                    <input 
-                      type="text" 
-                      id="street-address" 
-                      v-model="form.streetAddress"
-                      class="form-input" 
-                      placeholder="123 Main Street"
-                      autocomplete="street-address"
-                      required
-                    >
+                    <input type="text" id="street-address" v-model="form.streetAddress" class="form-input"
+                      placeholder="123 Main Street" autocomplete="street-address" required>
                   </div>
 
                   <div class="form-row">
                     <!-- Building Name -->
                     <div class="form-group">
                       <label for="building-name" class="form-label form-label-required">Building Name</label>
-                      <input 
-                        type="text" 
-                        id="building-name" 
-                        v-model="form.buildingName"
-                        class="form-input" 
-                        placeholder="Sunset Tower"
-                        required
-                      >
+                      <input type="text" id="building-name" v-model="form.buildingName" class="form-input"
+                        placeholder="Sunset Tower" required>
                     </div>
 
                     <!-- Floor -->
                     <div class="form-group">
                       <label for="floor" class="form-label form-label-required">Floor</label>
-                      <input 
-                        type="text" 
-                        id="floor" 
-                        v-model="form.floor"
-                        class="form-input" 
-                        placeholder="3rd Floor"
-                        required
-                      >
+                      <input type="text" id="floor" v-model="form.floor" class="form-input" placeholder="3rd Floor"
+                        required>
                     </div>
                   </div>
 
@@ -166,15 +114,8 @@
                     <!-- Postal Code -->
                     <div class="form-group">
                       <label for="postal-code" class="form-label form-label-required">Postal Code</label>
-                      <input 
-                        type="text" 
-                        id="postal-code" 
-                        v-model="form.postalCode"
-                        class="form-input" 
-                        placeholder="1234"
-                        autocomplete="postal-code"
-                        required
-                      >
+                      <input type="text" id="postal-code" v-model="form.postalCode" class="form-input"
+                        placeholder="1234" autocomplete="postal-code" required>
                     </div>
                   </div>
                 </div>
@@ -182,36 +123,22 @@
                 <!-- Password Section -->
                 <div class="form-section">
                   <h3 class="form-section-title">Create Password</h3>
-                  
+
                   <div class="form-row">
                     <!-- Password -->
                     <div class="form-group">
                       <label for="register-password" class="form-label form-label-required">Password</label>
                       <div class="form-input-wrapper">
-                        <input 
-                          type="password" 
-                          id="register-password" 
-                          v-model="form.password"
-                          class="form-input" 
-                          placeholder="Create a strong password"
-                          autocomplete="new-password"
-                          required
-                        >
+                        <input type="password" id="register-password" v-model="form.password" class="form-input"
+                          placeholder="Create a strong password" autocomplete="new-password" required>
                       </div>
                     </div>
 
                     <!-- Confirm Password -->
                     <div class="form-group">
                       <label for="confirm-password" class="form-label form-label-required">Confirm Password</label>
-                      <input 
-                        type="password" 
-                        id="confirm-password" 
-                        v-model="form.confirmPassword"
-                        class="form-input" 
-                        placeholder="Confirm your password"
-                        autocomplete="new-password"
-                        required
-                      >
+                      <input type="password" id="confirm-password" v-model="form.confirmPassword" class="form-input"
+                        placeholder="Confirm your password" autocomplete="new-password" required>
                     </div>
                   </div>
                 </div>
@@ -224,14 +151,15 @@
 
               <!-- Login Link -->
               <p class="text-center text-sm text-neutral-600 mt-6">
-                Already have an account? 
+                Already have an account?
                 <router-link to="/login" class="text-primary-600 font-medium hover:underline">Sign in</router-link>
               </p>
 
               <!-- Technician Register Link -->
               <div class="mt-6 pt-6 border-t border-neutral-200 text-center">
                 <p class="text-sm text-neutral-500 mb-2">Are you a technician looking to join our platform?</p>
-                <router-link to="/technician-register" class="text-sm text-primary-600 font-medium hover:underline">Register as a Technician →</router-link>
+                <router-link to="/technician-register"
+                  class="text-sm text-primary-600 font-medium hover:underline">Register as a Technician →</router-link>
               </div>
             </div>
           </div>
